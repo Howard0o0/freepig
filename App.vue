@@ -1,19 +1,61 @@
 <script>
-	export default {
-		onLaunch: function() {
-			console.log('App Launch')
+import common from './common/common.js';
+export default {
+
+	onLaunch: function () {
+		// this.GetToken()
+		this.fn();
+		this.initHttpConf()
+		this.getToken()
+
+		console.log('App Launch')
+	},
+	onShow: function () {
+		console.log('App Show')
+	},
+	onHide: function () {
+		console.log('App Hide')
+	},
+	methods: {
+		fn() {
+			console.log("heihei")
 		},
-		onShow: function() {
-			console.log('App Show')
+		initHttpConf() {
+			uni.$u.http.setConfig((config) => {
+				config.baseURL = common.baseURL;
+				config.header = {
+					'content-type': 'application/x-www-form-urlencoded'
+				}
+				return config
+			})
 		},
-		onHide: function() {
-			console.log('App Hide')
+		getToken() {
+			uni.login({
+				provider: 'weixin',
+			}).then(res => {
+				var wx_login_code = res[1].code
+				uni.request({
+					url: common.baseURL + "/login/by-wx-account",
+					data: {
+						wx_login_code: wx_login_code
+					},
+					method: "POST",
+					header: {
+						"content-type": "application/x-www-form-urlencoded"
+					},
+					success: (res) => {
+						console.log(res.data);
+					}
+				})
+			});
 		}
 	}
+
+}
 </script>
 
 <style lang="scss">
-	/*每个页面公共css */
-    /* 注意要写在第一行，同时给style标签加入lang="scss"属性 */
-    @import "@/uni_modules/uview-ui/index.scss";
+/*每个页面公共css */
+/* 注意要写在第一行，同时给style标签加入lang="scss"属性 */
+@import "@/uni_modules/uview-ui/index.scss";
 </style>

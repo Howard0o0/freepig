@@ -12,9 +12,12 @@ export default {
 		}
 	},
 	onLoad() {
-
+		this.fn()
 	},
 	methods: {
+		fn() {
+			console.log("haha")
+		}
 	}
 }
 </script>
