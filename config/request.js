@@ -10,7 +10,7 @@ module.exports = (vm) => {
     uni.$u.http.interceptors.request.use((config) => { // 可使用async await 做异步操作
         config.data = config.data || {}
         // 可以在此通过vm引用vuex中的变量，具体值在vm.$store.state中
-        config.header['Authorization'] = vm.$store.state.vuex_user.token
+        config.header['Authorization'] = vm.$store.state.vuex_token
         config.header['Content-Type'] = 'application/x-www-form-urlencoded'
         return config
     }, config => { // 可使用async await 做异步操作

@@ -1,11 +1,11 @@
 <script>
 import common from './common/common.js';
-import { getTokenFromServer } from './config/api.js';
+import { getTokenFromServer, getUserInfoFromServer } from './config/api.js';
 export default {
 
-	onLaunch: function () {
-		this.getToken()
-
+	onLaunch: async function () {
+		await this.getToken()
+		await this.getUserInfo()
 		console.log('App Launch')
 	},
 	onShow: function () {
@@ -20,8 +20,14 @@ export default {
 			var wx_login_code = response[1].code
 			console.log("[DEBUG] wx_login_code: ", wx_login_code)
 			var resp = await getTokenFromServer({wx_login_code: wx_login_code})	
-			this.$u.vuex('vuex_user.token', resp.token);
-			console.log("[DEBUG] token: ", this.$store.state.vuex_user.token)
+			this.$u.vuex('vuex_token', resp.token);
+			console.log("[DEBUG] token: ", this.$store.state.vuex_token)
+		},
+
+		async getUserInfo() {
+			var resp = await getUserInfoFromServer()	
+			this.$u.vuex('vuex_user', resp);
+			console.log("[DEBUG] user info: ", this.$store.state.vuex_user)
 		}
 	}
 
