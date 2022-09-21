@@ -19,7 +19,7 @@ module.exports = (vm) => {
 
     // 响应拦截
     uni.$u.http.interceptors.response.use((response) => { /* 对响应成功做点什么 可使用async await 做异步操作*/
-        console.log('response from server: ', response)
+        console.log('[DEBUG] [response interceptor] response from server: ', response)
         const responseFromServer = response.data
 
         // 自定义参数
