@@ -1,11 +1,12 @@
 <script>
 import common from './common/common.js';
+import { getTokenFromServer } from './config/api.js';
 export default {
 
 	onLaunch: function () {
 		// this.GetToken()
 		this.fn();
-		this.initHttpConf()
+		// this.initHttpConf()
 		this.getToken()
 
 		console.log('App Launch')
@@ -29,25 +30,32 @@ export default {
 				return config
 			})
 		},
-		getToken() {
-			uni.login({
-				provider: 'weixin',
-			}).then(res => {
-				var wx_login_code = res[1].code
-				uni.request({
-					url: common.baseURL + "/login/by-wx-account",
-					data: {
-						wx_login_code: wx_login_code
-					},
-					method: "POST",
-					header: {
-						"content-type": "application/x-www-form-urlencoded"
-					},
-					success: (res) => {
-						console.log(res.data);
-					}
-				})
-			});
+		async getToken() {
+			var response = await uni.login({provider: 'weixin'})
+			var wx_login_code = response[1].code
+			console.log("wx_login_code: ", wx_login_code)
+			var token = await getTokenFromServer({wx_login_code: wx_login_code})	
+			console.log("token: ", token)
+			this.$u.vuex('vuex_user.token', token);
+
+			// uni.login({
+			// 	provider: 'weixin',
+			// }).then(res => {
+			// 	var wx_login_code = res[1].code
+			// 	uni.request({
+			// 		url: common.baseURL + "/login/by-wx-account",
+			// 		data: {
+			// 			wx_login_code: wx_login_code
+			// 		},
+			// 		method: "POST",
+			// 		header: {
+			// 			"content-type": "application/x-www-form-urlencoded"
+			// 		},
+			// 		success: (res) => {
+			// 			console.log(res.data);
+			// 		}
+			// 	})
+			// });
 		}
 	}
 
