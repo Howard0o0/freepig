@@ -1,15 +1,7 @@
 <template>
 	<view>
-		<view class="user-box">
-			<view class="nav-tab">
-				<view :class="isActive ==0 ?'tab-item-active tab-item': 'tab-item'" @click="changeTabBtn(0)">聊天记录</view>
-				<view :class="isActive ==1 ?'tab-item-active tab-item1': 'tab-item1'" @click="changeTabBtn(1)">好友列表</view>
-				<view class="out-login" @click="outLoginBtn()"> 注 销</view>
-				<view class="clear-box"></view>
-			</view>
-		</view>
 		<!-- 聊天记录 会话列表 -->
-		<view class="conversition-box" v-if="isActive ==0">
+		<view class="conversition-box">
 			<view class="list-box" v-if="userAddConversationList.length>0">
 				<view class="item-box" v-for="(item,index) in userAddConversationList" :key="index" @click="toRoom(item)">
 					<view class="item-img">
