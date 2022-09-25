@@ -41,6 +41,12 @@
                 "text": "首页"
             },
             {
+                "pagePath": "pages/tim/record",
+                "iconPath": "static/tab_msg_unselected.png",
+                "selectedIconPath": "static/tab_msg_selected.png",
+                "text": "消息"
+            },
+            {
                 "pagePath": "pages/mine/mine",
                 "iconPath": "static/tab_mine_unselected.png",
                 "selectedIconPath": "static/tab_mine_selected.png",

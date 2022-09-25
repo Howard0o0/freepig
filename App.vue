@@ -20,6 +20,7 @@ export default {
 	onLaunch: async function () {
 		await this.getToken()
 		await this.getUserInfo()
+		this.TIMLogin('1', 'eJwtzEELgjAYxvHvsnPIu*kmCl2K6NKhmLquyma8Rm1so4Tou2fq8fk98P*Q6iSTl-GkJCwBspk3avOM2OPMdMWg761zqElJM4Cc5SIvlseMDr2ZnHPOAGDRiI*-CZGBKFLG1wrepqZNg3fR7qvUXAdfh0sdVT-uhrccqOq6g2rs8RybUbbZlnx-NZIw4Q__')
 		console.log('App Launch')
 	},
 	onShow: function () {
@@ -51,11 +52,32 @@ export default {
 			//sdk ready 后  肯定完成了登录操作    这里可以获取用户存储在im的基础信息/离线消息/黑名单列表
 		},
 
+		//根据消息列表请求聊天对象的用户信息 并完成数据拼接
 		onReceiveMessage({ data: messageList }) {
 			// this.handleAt(messageList);
 			this.$store.commit("pushCurrentMessageList", messageList);
 		},
-		//根据消息列表请求聊天对象的用户信息 并完成数据拼接
+
+		TIMLogin(userID, userSig) {
+			var userInfo = {
+				userID: userID,
+				userSig: userSig
+			}
+			let promise = this.tim.login({
+				userID: userID,
+				userSig: userSig
+			});
+			promise.then((res) => {
+				//登录成功后 更新登录状态
+				this.$store.commit("toggleIsLogin", true);
+				//自己平台的用户基础信息
+				uni.setStorageSync('userInfo', JSON.stringify(userInfo))
+				//tim 返回的用户信息
+				uni.setStorageSync('userTIMInfo', JSON.stringify(res.data))
+			}).catch((err) => {
+				console.warn('login error:', err); // 登录失败的相关信息
+			});
+		},
 	}
 
 }
