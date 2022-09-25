@@ -54,5 +54,26 @@
             }
         ]
     },
+    "subPackages": [
+        {
+            "root": "page_subject",
+            "pages": [ 
+                {
+                    "path": "pages/auth",
+                    "style": {
+                        "navigationBarTitleText": "身份认证"
+                    }
+                }
+            ],
+            "preloadRule": {
+                "page_subject/pages/auth": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                }
+            }
+        }
+    ],
     "uniIdRouter": {}
 }

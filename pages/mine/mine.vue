@@ -46,8 +46,9 @@ export default {
 		gridItemOnClick(e) {
 			console.log("grid item clicked: ", e)
 			switch (e.detail.index) {
-				case 1:
-					uni.navigateTo({url: 'HM-hand/HM-hand'})
+				case 0:
+					console.log("jumping to auth page")
+					uni.navigateTo({url: '../../page_subject/pages/auth'})
 			}
 		}
 	}
