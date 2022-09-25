@@ -12,6 +12,18 @@
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
+        },
+        {
+            "path": "pages/tim/record",
+            "style": {
+                "navigationBarTitleText": "uni-app"
+            }
+        },
+        {
+            "path": "pages/tim/room",
+            "style": {
+                "navigationBarTitleText": "聊天室"
+            }
         }
     ],
     "globalStyle": {
