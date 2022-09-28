@@ -6,7 +6,7 @@
                 </u--input>
             </u-form-item>
             <u-form-item label="学校" labelWidth="80" borderBottom>
-                <u--text :text="formData.selectedCampus.name" align="center"></u--text>
+                <u--text :text="formData.selectedCampus.name" align="center" @click="pickCampusOnClick"></u--text>
             </u-form-item>
             <u-form-item label="专业" labelWidth="80" borderBottom>
                 <uni-data-select v-model="formData.selectedMajor.id" :localdata="majorList"></uni-data-select>
@@ -71,9 +71,12 @@ export default {
         }
     },
     onLoad() {
-
     },
     methods: {
+        pickCampusOnClick() {
+            uni.navigateTo({ url: 'pick_campus' })
+            console.log('haha')
+        }
     }
 }
 </script>
