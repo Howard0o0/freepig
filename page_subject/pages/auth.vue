@@ -76,6 +76,10 @@ export default {
         pickCampusOnClick() {
             uni.navigateTo({ url: 'pick_campus' })
             console.log('haha')
+        },
+        setSelectedCampusID(campusID) {
+            this.formData.selectedCampus.id = campusID
+            console.log('[DEBUG] selected campusID: ', this.formData.selectedCampus.id)
         }
     }
 }

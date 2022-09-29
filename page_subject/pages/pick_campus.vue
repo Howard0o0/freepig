@@ -49,7 +49,11 @@ export default {
     },
     methods: {
         campusItemOnClick(campusID) {
-            console.log('choosed campusID: ', campusID)
+            console.log('[DEBUG] choosed campusID: ', campusID)
+            var pages = getCurrentPages();
+            var prevPage = pages[pages.length - 2];
+            prevPage.$vm.setSelectedCampusID(campusID);
+            uni.navigateBack();
         },
 
         onSearchContentChangeImpl(content) {
