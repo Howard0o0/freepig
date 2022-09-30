@@ -10,7 +10,7 @@
 
 <script>
 
-import { getCampusFullList } from '../../config/api.js';
+import { utils } from '../../config/api.js';
 
 export default {
     data() {
@@ -42,7 +42,7 @@ export default {
         },
 
         async refreshCampusListToShow(keyword) {
-            var campusFullList = await getCampusFullList(keyword)
+            var campusFullList = await utils.getCampusFullList(keyword)
             this.campusListToShow = this.clipCampusList(campusFullList)
         },
 
