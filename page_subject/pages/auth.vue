@@ -56,8 +56,8 @@ export default {
                     id: 0,
                     name: ""
                 },
-                selectedDegree: "本科",
-                selectedKickoffYear: 2015,
+                selectedDegree: "",
+                selectedKickoffYear: 0,
             },
             majorList: [
                 { value: 1, text: "计算机" },
@@ -93,6 +93,54 @@ export default {
 
         authByEmailBtnOnClick() {
             console.log('[DEBUG] formData: ', this.formData)
+            if (!this.checkFormData()) {
+                return
+            }
+            uni.navigateTo({ url: 'auth_by_certification' })
+        },
+
+        checkFormData() {
+            if (this.formData.realname == "") {
+                uni.showToast({
+                    title: '真实姓名要填呀',
+                    icon: 'error',
+                    duration: 1000
+                });
+                return false
+            }
+            if (this.formData.selectedCampus.id == 0) {
+                uni.showToast({
+                    title: '要选学校呀',
+                    icon: 'error',
+                    duration: 1000
+                });
+                return false
+            }
+            if (this.formData.selectedMajor.id == 0) {
+                uni.showToast({
+                    title: '要选专业呀',
+                    icon: 'error',
+                    duration: 1000
+                });
+                return false
+            }
+            if (this.formData.selectedDegree == "") {
+                uni.showToast({
+                    title: '要选学历呀',
+                    icon: 'error',
+                    duration: 1000
+                });
+                return false
+            }
+            if (this.formData.selectedKickoffYear == 0) {
+                uni.showToast({
+                    title: '要选入学年份呀',
+                    icon: 'error',
+                    duration: 1000
+                });
+                return false
+            }
+            return true
         },
 
         refreshKickoffYealList() {
