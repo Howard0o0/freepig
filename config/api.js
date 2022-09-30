@@ -4,10 +4,14 @@ export const getTokenFromServer = (params, config = {}) => uni.$u.http.post('/lo
 export const getUserInfoFromServer = () => uni.$u.http.get('/user', {})
 export const getCampusList = (keyword) => uni.$u.http.get('/info/campus', { params: { keyword: keyword } })
 export const getMajorList = (campusID) => uni.$u.http.get('/info/major', { params: { campus_id: campusID } })
+export const getEmailVerifyCode = (email) => uni.$u.http.get('/auth/emailcode', { params: { email: email } })
+export const SUCCESS_CODE = 200
 
 export const api = {
+    SUCCESS_CODE,
     getTokenFromServer,
     getUserInfoFromServer,
     getCampusList,
     getMajorList,
+    getEmailVerifyCode,
 }

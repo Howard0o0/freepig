@@ -25,11 +25,7 @@ module.exports = (vm) => {
         // 自定义参数
         const custom = response.config?.custom
         if (responseFromServer.code !== 200) {
-            // 如果没有显式定义custom的toast参数为false的话，默认对报错进行toast弹出提示
-            if (custom.toast !== false) {
-                uni.$u.toast(responseFromServer.message)
-            }
-            uni.$u.toast("http request fail. reason: ", responseFromServer.msg)
+            console.log("http request fail. reason: ", responseFromServer.msg)
 
             // 如果需要catch返回，则进行reject
             if (custom?.catch) {
@@ -39,7 +35,7 @@ module.exports = (vm) => {
                 return new Promise(() => { })
             }
         }
-        return responseFromServer.data === undefined ? {} : responseFromServer.data
+        return responseFromServer
     }, (response) => {
         // 对响应错误做点什么 （statusCode !== 200）
         uni.$u.toast("http request fail. error code: ", response.statusCode)

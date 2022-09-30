@@ -42,7 +42,8 @@ export default {
         },
 
         async refreshCampusListToShow(keyword) {
-            var campusFullList = await api.getCampusList(keyword)
+            var resp = await api.getCampusList(keyword)
+            var campusFullList = resp.data
             this.campusListToShow = this.clipCampusList(campusFullList)
         },
 

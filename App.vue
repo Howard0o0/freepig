@@ -35,13 +35,13 @@ export default {
 			var wx_login_code = response[1].code
 			console.log("[DEBUG] wx_login_code: ", wx_login_code)
 			var resp = await getTokenFromServer({ wx_login_code: wx_login_code })
-			this.$u.vuex('vuex_token', resp.token);
+			this.$u.vuex('vuex_token', resp.data.token);
 			console.log("[DEBUG] token: ", this.$store.state.vuex_token)
 		},
 
 		async getUserInfo() {
 			var resp = await getUserInfoFromServer()
-			this.$u.vuex('vuex_user', resp);
+			this.$u.vuex('vuex_user', resp.data);
 			console.log("[DEBUG] user info: ", this.$store.state.vuex_user)
 		},
 

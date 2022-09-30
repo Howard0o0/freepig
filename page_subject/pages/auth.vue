@@ -173,7 +173,8 @@ export default {
         },
 
         async refreshMajorList(campusID) {
-            var majorList = await api.getMajorList(campusID)
+            var resp = await api.getMajorList(campusID)
+            var majorList = resp.data
             this.majorList = []
 
             var i
