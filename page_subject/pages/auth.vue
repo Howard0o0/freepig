@@ -12,7 +12,7 @@
                 <uni-data-select v-model="formData.selectedMajor.id" :localdata="majorList"></uni-data-select>
             </u-form-item>
             <u-form-item label="学历" labelWidth="80" borderBottom>
-                <uni-data-select v-model="formData.selectedDegreeid" :localdata="degreeList"></uni-data-select>
+                <uni-data-select v-model="formData.selectedDegree" :localdata="degreeList"></uni-data-select>
             </u-form-item>
             <u-form-item label="入学年份" labelWidth="80" borderBottom>
                 <uni-data-select v-model="formData.selectedKickoffYear" :localdata="kickoffYearList"></uni-data-select>
@@ -64,30 +64,48 @@ export default {
                 { value: 2, text: "数学" },
             ],
             degreeList: [
-                { value: 1, text: "专科" },
-                { value: 2, text: "本科" },
+                { value: "专科", text: "专科" },
+                { value: "本科", text: "本科" },
+                { value: "硕士研究生", text: "硕士研究生" },
+                { value: "博士研究生", text: "博士研究生" },
             ],
             kickoffYearList: [
-                { value: 1, text: "2015" },
-                { value: 2, text: "2016" },
+                { value: 2015, text: "2015" },
             ],
         }
     },
+
     onLoad() {
+        this.refreshKickoffYealList()
     },
+
     methods: {
         pickCampusOnClick() {
             uni.navigateTo({ url: 'pick_campus' })
         },
+
         setSelectedCampus(campus) {
             this.formData.selectedCampus = campus
             console.log('[DEBUG] selected campus: ', this.formData.selectedCampus)
             // refresh majorList
             this.refreshMajorList(this.formData.selectedCampus.id)
         },
+
         authByEmailBtnOnClick() {
             console.log('[DEBUG] formData: ', this.formData)
         },
+
+        refreshKickoffYealList() {
+            var kickoffYearList = []
+            var date = new Date();
+            var currYear = date.getFullYear();
+            var startYear = 2010
+            for (var i = startYear; i <= currYear; i++) {
+                kickoffYearList.push({ value: i, text: i })
+            }
+            this.kickoffYearList = kickoffYearList
+        },
+
         async refreshMajorList(campusID) {
             var majorList = await api.getMajorList(campusID)
             this.majorList = []
