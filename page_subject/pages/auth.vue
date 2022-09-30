@@ -96,7 +96,12 @@ export default {
             if (!this.checkFormData()) {
                 return
             }
-            uni.navigateTo({ url: 'auth_by_certification' })
+            uni.navigateTo({ url: 'auth_by_certification?realname=' + this.formData.realname 
+                            + '&campus_id=' + this.formData.selectedCampus.id 
+                            + '&major_id=' + this.formData.selectedMajor.id 
+                            + '&degree=' + this.formData.selectedDegree.id 
+                            + '&kickoff_year=' + this.formData.selectedKickoffYear.id 
+            })
         },
 
         authByEmailBtnOnClick() {
@@ -104,7 +109,12 @@ export default {
             if (!this.checkFormData()) {
                 return
             }
-            uni.navigateTo({ url: 'auth_by_email' })
+            uni.navigateTo({ url: 'auth_by_email?realname=' + this.formData.realname 
+                            + '&campus_id=' + this.formData.selectedCampus.id 
+                            + '&major_id=' + this.formData.selectedMajor.id 
+                            + '&degree=' + this.formData.selectedDegree
+                            + '&kickoff_year=' + this.formData.selectedKickoffYear 
+            })
         },
 
         checkFormData() {
