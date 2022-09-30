@@ -30,7 +30,7 @@
                 <view class="demo-uni-col"></view>
             </uni-col>
             <uni-col :span="9">
-                <u-button type="primary" size="normal" text="学生证认证"></u-button>
+                <u-button type="primary" size="normal" text="学生证认证" @click="authByCertificationBtnOnClick"></u-button>
             </uni-col>
             <uni-col :span="2">
                 <view class="demo-uni-col"></view>
@@ -91,12 +91,20 @@ export default {
             this.refreshMajorList(this.formData.selectedCampus.id)
         },
 
-        authByEmailBtnOnClick() {
+        authByCertificationBtnOnClick() {
             console.log('[DEBUG] formData: ', this.formData)
             if (!this.checkFormData()) {
                 return
             }
             uni.navigateTo({ url: 'auth_by_certification' })
+        },
+
+        authByEmailBtnOnClick() {
+            console.log('[DEBUG] formData: ', this.formData)
+            if (!this.checkFormData()) {
+                return
+            }
+            uni.navigateTo({ url: 'auth_by_email' })
         },
 
         checkFormData() {
