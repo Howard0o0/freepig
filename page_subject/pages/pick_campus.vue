@@ -38,7 +38,7 @@ export default {
             if (content == "") {
                 return
             }
-            this.$u.debounce(() => this.onSearchContentChangeImpl(content))
+            this.$u.debounce(() => this.onSearchContentChangeImpl(content), 500, false)
         },
 
         async refreshCampusListToShow(keyword) {
