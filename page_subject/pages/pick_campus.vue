@@ -10,42 +10,15 @@
 
 <script>
 
+import { getCampusFullList } from '../../config/api.js';
+
 export default {
     data() {
         return {
-            campusListToShow: [
-                {
-                    id: 1,
-                    name: "清华大学"
-                },
-                {
-                    id: 2,
-                    name: "武汉大学"
-                },
-                {
-                    id: 3,
-                    name: "武汉理工大学"
-                }
-            ],
-            campusFullListkey: [
-                {
-                    id: 1,
-                    name: "清华大学"
-                },
-                {
-                    id: 2,
-                    name: "武汉大学"
-                },
-                {
-                    id: 3,
-                    name: "武汉理工大学"
-                }
-            ],
+            campusListToShow: []
         }
     },
-    onLoad() {
-        // fill the campusFullListkey if empty
-        // then fill the campusListToShow using ycampusFullListkey 
+    async onLoad() {
     },
     methods: {
         campusItemOnClick(campusID) {
@@ -62,20 +35,25 @@ export default {
         },
 
         onSearchContentChange(content) {
+            if (content == "") {
+                return
+            }
             this.$u.debounce(() => this.onSearchContentChangeImpl(content))
         },
 
-        refreshCampusListToShow(keyword) {
-            var campusListToShow = []
+        async refreshCampusListToShow(keyword) {
+            var campusFullList = await getCampusFullList(keyword)
+            this.campusListToShow = this.clipCampusList(campusFullList)
+        },
+
+        clipCampusList(campusList) {
+            var clippedCampusList = []
             var i
-            for (i in this.campusFullListkey) {
-                var campus = this.campusFullListkey[i]
-                if (campus.name.indexOf(keyword) == -1) {
-                    continue
-                }
-                campusListToShow.push(campus)
+            for (i in campusList) {
+                var campus = campusList[i]
+                clippedCampusList.push({ id: campus.id, name: campus.name })
             }
-            this.campusListToShow = campusListToShow
+            return clippedCampusList
         }
     }
 }

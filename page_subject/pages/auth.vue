@@ -24,7 +24,7 @@
                 <view class="demo-uni-col"></view>
             </uni-col>
             <uni-col :span="9">
-                <u-button type="primary" size="normal" text="学校邮箱认证"></u-button>
+                <u-button type="primary" size="normal" text="学校邮箱认证" @click="authByEmailBtnOnClick"></u-button>
             </uni-col>
             <uni-col :span="2">
                 <view class="demo-uni-col"></view>
@@ -80,6 +80,9 @@ export default {
         setSelectedCampusID(campusID) {
             this.formData.selectedCampus.id = campusID
             console.log('[DEBUG] selected campusID: ', this.formData.selectedCampus.id)
+        },
+        authByEmailBtnOnClick() {
+            console.log('[DEBUG] formData: ', this.formData)
         }
     }
 }
