@@ -40,6 +40,9 @@
 </template>
 
 <script>
+
+import { api } from '../../config/api.js';
+
 export default {
     data() {
         return {
@@ -75,14 +78,28 @@ export default {
     methods: {
         pickCampusOnClick() {
             uni.navigateTo({ url: 'pick_campus' })
-            console.log('haha')
         },
-        setSelectedCampusID(campusID) {
-            this.formData.selectedCampus.id = campusID
-            console.log('[DEBUG] selected campusID: ', this.formData.selectedCampus.id)
+        setSelectedCampus(campus) {
+            this.formData.selectedCampus = campus
+            console.log('[DEBUG] selected campus: ', this.formData.selectedCampus)
+            // refresh majorList
+            this.refreshMajorList(this.formData.selectedCampus.id)
         },
         authByEmailBtnOnClick() {
             console.log('[DEBUG] formData: ', this.formData)
+        },
+        async refreshMajorList(campusID) {
+            var majorList = await api.getMajorList(campusID)
+            this.majorList = []
+
+            var i
+            for (i in majorList) {
+                var major = majorList[i]
+                this.majorList.push({
+                    value: major.id,
+                    text: major.name,
+                })
+            }
         }
     }
 }

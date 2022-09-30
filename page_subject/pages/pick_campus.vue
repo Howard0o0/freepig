@@ -3,14 +3,14 @@
         <u-search placeholder="可输入学校关键字" @change="onSearchContentChange" :showAction="false"></u-search>
         <uni-list>
             <uni-list-item v-for="(item,index) in campusListToShow" :key="index" :title="item.name" clickable
-                @click="campusItemOnClick(item.id)"></uni-list-item>
+                @click="campusItemOnClick(item)"></uni-list-item>
         </uni-list>
     </view>
 </template>
 
 <script>
 
-import { utils } from '../../config/api.js';
+import { api } from '../../config/api.js';
 
 export default {
     data() {
@@ -21,11 +21,11 @@ export default {
     async onLoad() {
     },
     methods: {
-        campusItemOnClick(campusID) {
-            console.log('[DEBUG] choosed campusID: ', campusID)
+        campusItemOnClick(campus) {
+            console.log('[DEBUG] choosed campus: ', campus)
             var pages = getCurrentPages();
             var prevPage = pages[pages.length - 2];
-            prevPage.$vm.setSelectedCampusID(campusID);
+            prevPage.$vm.setSelectedCampus(campus);
             uni.navigateBack();
         },
 
@@ -42,7 +42,7 @@ export default {
         },
 
         async refreshCampusListToShow(keyword) {
-            var campusFullList = await utils.getCampusFullList(keyword)
+            var campusFullList = await api.getCampusList(keyword)
             this.campusListToShow = this.clipCampusList(campusFullList)
         },
 
