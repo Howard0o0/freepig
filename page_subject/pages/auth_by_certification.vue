@@ -1,7 +1,17 @@
 <template>
 	<view>
-		<u--image showLoading="false" src="/static/choose_image.png" width="300rpx" height="300rpx"
-			@click="chooseCertificationImageBtnOnClick"></u--image>
+
+		<u-row justify="space-between" customStyle="margin-bottom: 10px">
+			<u-col span="6">
+				<u--image showLoading="false" src="/static/choose_image.png" width="300rpx" height="300rpx"
+					@click="chooseCertificationImageBtnOnClick"></u--image>
+			</u-col>
+			<u-col span="6">
+				<u--image showLoading="false" :src="formData.selectedImageFilePath" width="300rpx" height="300rpx"
+					bgColor="#ffffff">
+				</u--image>
+			</u-col>
+		</u-row>
 
 		<u-button type="primary" size="normal" text="OK" @click="submitBtnOnclick"></u-button>
 	</view>
@@ -49,13 +59,13 @@ export default {
 				this.formData.authInfo.degree
 			)
 			if (resp.code != api.SUCCESS_CODE) {
-				return 
+				return
 			}
-            uni.showToast({
-                title: '上传成功,审核结果将在1日内返回',
-                icon: 'none',
-                duration: 1000
-            });
+			uni.showToast({
+				title: '上传成功,审核结果将在1日内返回',
+				icon: 'none',
+				duration: 1000
+			});
 			utils.refreshUserInfo()
 			uni.reLaunch({ url: '../../pages/mine/mine' })
 		}
