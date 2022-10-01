@@ -5,8 +5,8 @@
 				<u--input v-model="formData.email" placeholder="只能用学校的edu邮箱噢" inputAlign="left" border="none">
 				</u--input>
 			</u-form-item>
-			<u-form-item label="学校邮箱" labelWidth="80" borderBottom>
-				<u-input placeholder="请输入邮箱验证码">
+			<u-form-item label="邮箱验证码" labelWidth="80" borderBottom>
+				<u-input placeholder="请输入邮箱验证码" v-model="formData.verifyCode">
 					<template slot="suffix">
 						<u-code ref="uCode" @change="codeChange" seconds="20" changeText="X秒后重新获取"></u-code>
 						<u-button @tap="getCode" :text="tips" type="success" size="mini"></u-button>
@@ -31,17 +31,57 @@ export default {
 			value: '',
 			formData: {
 				email: '',
+				verifyCode: '',
+				authInfo: null,
 			}
 		}
 	},
 
 	onLoad(option) {
 		console.log('params: ', option)
+		this.formData.authInfo = option
 	},
 
 	methods: {
-		submitBtnOnclick() {
+		async submitBtnOnclick() {
+			if (!this.checkFormData()) {
+				return false
+			}
+			await api.identifyByEmail(
+				this.formData.email,
+				this.formData.verifyCode,
+				this.formData.authInfo.realname,
+				this.formData.authInfo.campus_id,
+				this.formData.authInfo.major_id,
+				this.formData.authInfo.kickoff_year,
+				this.formData.authInfo.degree
+			)
+			uni.showToast({
+				title: '认证成功',
+				icon: 'success',
+				duration: 1000
+			});
+            uni.reLaunch({ url: '../../pages/mine/mine' })
+		},
 
+		checkFormData() {
+			if (this.formData.verifyCode == "") {
+				uni.showToast({
+					title: '验证码还没填呢',
+					icon: 'error',
+					duration: 1000
+				});
+				return false
+			}
+			if (this.formData.email == "") {
+				uni.showToast({
+					title: '邮箱呢',
+					icon: 'error',
+					duration: 1000
+				});
+				return false
+			}
+			return true
 		},
 
 		codeChange(text) {
