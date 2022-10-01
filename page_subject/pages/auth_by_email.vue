@@ -63,7 +63,7 @@ export default {
 				duration: 1000
 			});
 			utils.refreshUserInfo()
-            uni.reLaunch({ url: '../../pages/mine/mine' })
+			uni.reLaunch({ url: '../../pages/mine/mine' })
 		},
 
 		checkFormData() {

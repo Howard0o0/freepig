@@ -93,9 +93,9 @@ export default {
 
         authByCertificationBtnOnClick() {
             console.log('[DEBUG] formData: ', this.formData)
-            if (!this.checkFormData()) {
-                return
-            }
+            // if (!this.checkFormData()) {
+            //     return
+            // }
             uni.navigateTo({ url: 'auth_by_certification?realname=' + this.formData.realname 
                             + '&campus_id=' + this.formData.selectedCampus.id 
                             + '&major_id=' + this.formData.selectedMajor.id 
