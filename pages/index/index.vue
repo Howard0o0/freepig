@@ -8,6 +8,8 @@
 			琵琶行的作者为{{vuex_user.name}}
 		</view>
 		<u-button @click="modifyVuex">修改变量</u-button>
+
+		<uni-fab ref="fab" horizontal="right" vertical="bottom" @fabClick="createGoodsBtnOnClick" />
 	</view>
 </template>
 
@@ -25,10 +27,16 @@ export default {
 		fn() {
 			console.log("haha")
 		},
+
 		modifyVuex() {
 			this.$u.vuex('vuex_version', '1.0.1');
 			// 修改对象的形式，中间用"."分隔
 			this.$u.vuex('vuex_user.name', '诗圣');
+		},
+
+		createGoodsBtnOnClick() {
+			console.log('createGoodsBtnOnClick')
+			uni.navigateTo({ url: '../../page_subject/pages/publish_goods' })
 		}
 	}
 }

@@ -83,6 +83,13 @@
                         "navigationBarTitleText": "",
                         "enablePullDownRefresh": false
                     }
+                },
+                {
+                    "path": "pages/publish_goods",
+                    "style": {
+                        "navigationBarTitleText": "",
+                        "enablePullDownRefresh": false
+                    }
                 }
             ],
             "preloadRule": {
@@ -105,6 +112,12 @@
                     ]
                 },
                 "page_subject/pages/auth_by_certification": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/publish_goods": {
                     "network": "all",
                     "packages": [
                         "__APP__"
