@@ -14,7 +14,10 @@
 </template>
 
 <script>
+
 import store from '@/store/index.js';
+import { utils } from '../../common/common.js';
+
 export default {
 	data() {
 		return {
@@ -27,6 +30,9 @@ export default {
 	},
 	onLoad() {
 		this.refreshAuthTag()
+	},
+	onShow() {
+		utils.refreshUserInfo()
 	},
 	methods: {
 		refreshAuthTag() {
@@ -48,7 +54,7 @@ export default {
 			switch (e.detail.index) {
 				case 0:
 					console.log("jumping to auth page")
-					uni.navigateTo({url: '../../page_subject/pages/auth'})
+					uni.navigateTo({ url: '../../page_subject/pages/auth' })
 			}
 		}
 	}

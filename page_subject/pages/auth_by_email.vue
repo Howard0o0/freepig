@@ -60,10 +60,13 @@ export default {
 			uni.showToast({
 				title: '认证成功',
 				icon: 'success',
-				duration: 1000
+				duration: 2000
 			});
 			utils.refreshUserInfo()
-			uni.reLaunch({ url: '../../pages/mine/mine' })
+
+			setTimeout(function () {
+				uni.reLaunch({ url: '../../pages/mine/mine' })
+			}, 2000)
 		},
 
 		checkFormData() {

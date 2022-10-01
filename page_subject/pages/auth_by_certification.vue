@@ -58,16 +58,15 @@ export default {
 				this.formData.authInfo.kickoff_year,
 				this.formData.authInfo.degree
 			)
-			if (resp.code != api.SUCCESS_CODE) {
-				return
-			}
 			uni.showToast({
 				title: '上传成功,审核结果将在1日内返回',
 				icon: 'none',
-				duration: 1000
+				duration: 2000
 			});
 			utils.refreshUserInfo()
-			uni.reLaunch({ url: '../../pages/mine/mine' })
+			setTimeout(function () {
+				uni.reLaunch({ url: '../../pages/mine/mine' })
+			}, 2000)
 		}
 	}
 }
