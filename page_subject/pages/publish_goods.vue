@@ -5,6 +5,10 @@
 		<u-album :urls="choosedImageURLs"></u-album>
 		<u--image showLoading="false" src="/page_subject/static/add_pic_btn.png" width="200rpx" height="200rpx"
 			@click="addPictureBtnOnClick"></u--image>
+
+		<view class="uni-px-5">
+			<uni-data-checkbox mode="tag" v-model="selectedClassification" :localdata="classificationList"></uni-data-checkbox>
+		</view>
 	</view>
 </template>
 
@@ -18,7 +22,17 @@ export default {
 		return {
 			goodsDesc: "",
 			goodsDescPlaceHolder: "在这里描述下宝贝的转手原因、入手渠道、规格以及新旧程度和使用感受吧, 会有助于更快的转手喔~ ^o^",
-			choosedImageURLs: ["", "", "", "", "", ""]
+			choosedImageURLs: ["", "", "", "", "", ""],
+			classificationList: [
+				{
+					text: '服鞋',
+					value: '服鞋',
+				}, {
+					text: '电子产品',
+					value: '电子产品',
+				}
+			],
+			selectedClassification: ""
 		}
 	},
 	methods: {
@@ -49,5 +63,10 @@ export default {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+}
+
+.uni-px-5 {
+	padding-left: 10px;
+	padding-right: 10px;
 }
 </style>
