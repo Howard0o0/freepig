@@ -21,6 +21,7 @@
 <script>
 
 import { api } from '../../config/api.js';
+import { utils } from '../../common/common.js';
 
 export default {
 	data() {
@@ -61,6 +62,7 @@ export default {
 				icon: 'success',
 				duration: 1000
 			});
+			utils.refreshUserInfo()
             uni.reLaunch({ url: '../../pages/mine/mine' })
 		},
 
