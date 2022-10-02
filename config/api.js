@@ -63,6 +63,12 @@ export const identifyByCertification = (certificationImageFilePath, realname, ca
     }
 })
 
+export const getTagList = () => uni.$u.http.get('/goods/tag', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const SUCCESS_CODE = 200
 
 export const api = {
@@ -74,4 +80,5 @@ export const api = {
     getEmailVerifyCode,
     identifyByEmail,
     identifyByCertification,
+    getTagList,
 }
