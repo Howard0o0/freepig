@@ -1,37 +1,58 @@
 <template>
 	<view>
-		<view>index</view>
-		<view>
-			版本号为：{{vuex_version}}
-		</view>
-		<view>
-			琵琶行的作者为{{vuex_user.name}}
-		</view>
-		<u-button @click="modifyVuex">修改变量</u-button>
+		<v-tabs pills="true" activeColor="#fff" fontSize="40rpx" v-model="currTabIndex" :tabs="tabNameList" @change="tabOnChange"></v-tabs>
+		<u-divider text="为你推荐"></u-divider>
 
 		<uni-fab ref="fab" horizontal="right" vertical="bottom" @fabClick="createGoodsBtnOnClick" />
 	</view>
 </template>
 
 <script>
+
+import { api } from '../../config/api.js';
+import { utils } from '../../common/common.js';
+
 export default {
 	data() {
 		return {
-			title: 'Hello',
+			currTabIndex: 0,
+			tabNameList: ['军事', '国内', '新闻', '军事', '国内', '新闻', '军事', '国内', '新闻'],
+			tagList: [],
 		}
 	},
+
 	onLoad() {
-		this.fn()
+		this.renderTabNameList()
 	},
+
 	methods: {
-		fn() {
-			console.log("haha")
+		async renderTabNameList() {
+			var resp = await api.getTagList()
+			if (resp.code != api.SUCCESS_CODE) { return false }
+			this.tagList = resp.data
+
+			var tabNameList = []
+			for (var i = 0; i < resp.data.length; i++) {
+				var tag = resp.data[i]
+				tabNameList.push(tag.name)
+			}
+			this.tabNameList = tabNameList
+
+			return true
+		},
+
+		getTagIDByTabIndex(tabIndex) {
+			return this.tagList[tabIndex].id
 		},
 
 		modifyVuex() {
 			this.$u.vuex('vuex_version', '1.0.1');
 			// 修改对象的形式，中间用"."分隔
 			this.$u.vuex('vuex_user.name', '诗圣');
+		},
+
+		tabOnChange(index) {
+			console.log('[DEBUG] selected tag id: ' + this.getTagIDByTabIndex(index))
 		},
 
 		createGoodsBtnOnClick() {
