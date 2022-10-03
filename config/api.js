@@ -48,7 +48,7 @@ export const identifyByEmail = (email, emailVerifyCode, realname, campusID, majo
 })
 
 export const identifyByCertification = (certificationImageFilePath, realname, campusID, majorID, kickoffYear, degree) => uni.$u.http.upload('/auth/campus-identity-by-student-credential', {
-    FormData: {
+    formData: {
         realname: realname,
         campus_id: campusID,
         major_id: majorID,
@@ -69,6 +69,33 @@ export const getTagList = () => uni.$u.http.get('/goods/tag', {
     }
 })
 
+export const getUUID = () => uni.$u.http.get('/info/uuid', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
+export const uploadImageOfGoods = (goodsID, imageFilePath) => uni.$u.http.upload('/info/image', {
+    formData: {
+        goods_id: goodsID
+    },
+    filePath: imageFilePath,
+    name: "images",
+})
+
+export const publishGoods = (goodsID, goodsDesc, tagID, price, imageURLs) => uni.$u.http.post('/goods', {
+    goods_id: goodsID,
+    description: goodsDesc,
+    price: price,
+    cost: 0,
+    images: imageURLs,
+    tag_id: tagID,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const SUCCESS_CODE = 200
 
 export const api = {
@@ -81,4 +108,7 @@ export const api = {
     identifyByEmail,
     identifyByCertification,
     getTagList,
+    getUUID,
+    uploadImageOfGoods,
+    publishGoods,
 }

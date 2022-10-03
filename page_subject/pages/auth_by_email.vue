@@ -48,7 +48,7 @@ export default {
 			if (!this.checkFormData()) {
 				return false
 			}
-			await api.identifyByEmail(
+			var resp = await api.identifyByEmail(
 				this.formData.email,
 				this.formData.verifyCode,
 				this.formData.authInfo.realname,
@@ -57,6 +57,8 @@ export default {
 				this.formData.authInfo.kickoff_year,
 				this.formData.authInfo.degree
 			)
+			if (resp.code != api.SUCCESS_CODE) { return }
+
 			uni.showToast({
 				title: '认证成功',
 				icon: 'success',

@@ -29,7 +29,7 @@ module.exports = (vm) => {
             uni.showToast({
                 title: responseFromServer.msg,
                 icon: 'none',
-                duration: 1000
+                duration: 2000
             });
 
             // 如果需要catch返回，则进行reject

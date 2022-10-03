@@ -15,6 +15,8 @@
 				<u--input v-model="price" placeholder="0.00" inputAlign="right" border="none" />
 			</u-form-item>
 		</u--form>
+
+		<u-button type="primary" text="发布" size="normal" @click="confirmBtnOnClick" />
 	</view>
 </template>
 
@@ -28,7 +30,7 @@ export default {
 		return {
 			goodsDesc: "",
 			goodsDescPlaceHolder: "在这里描述下宝贝的转手原因、入手渠道、规格以及新旧程度和使用感受吧, 会有助于更快的转手喔~ ^o^",
-			choosedImageURLs: ["", "", "", "", "", ""],
+			choosedImageURLs: [""],
 			tagList: [
 				{
 					text: '服鞋',
@@ -40,10 +42,12 @@ export default {
 			],
 			selectedTag: "",
 			price: 0.00,
+			goodsID: "",
 		}
 	},
 	methods: {
 		async onLoad() {
+			// get tag list from server
 			var tagList = []
 			var resp = await api.getTagList()
 			for (var i = 0; i < resp.data.length; i++) {
@@ -54,10 +58,91 @@ export default {
 				})
 			}
 			this.tagList = tagList
+
+			// get uuid from server and set it as goods_id
+			var resp = await api.getUUID()
+			this.goodsID = resp.data
+			console.log("[DEBUG] goodsID: ", this.goodsID)
 		},
 
-		confirmBtnOnClick() {
+		async confirmBtnOnClick() {
+			if (!this.checkFormData()) { return }
 
+			var imageURLs = await this.uploadImages()
+			console.log('uploaded image urls: ', imageURLs)
+			if (imageURLs == "") { return }
+
+			var resp = await api.publishGoods(this.goodsID, this.goodsDesc, this.selectedTag, this.price, imageURLs)
+			if (resp.code != api.SUCCESS_CODE) { return }
+
+			uni.showToast({
+				title: '发布成功',
+				icon: 'success',
+				duration: 2000
+			});
+
+			setTimeout(function () {
+				uni.navigateBack({
+					delta: 1
+				});
+			}, 2000)
+		},
+
+		checkFormData() {
+			if (this.goodsDesc == "") {
+				uni.showToast({
+					title: '要描述下宝贝呀',
+					icon: 'none',
+					duration: 1000
+				});
+				return false
+			}
+			var choosedImageURLs = this.choosedImageURLs
+			if (choosedImageURLs.length == 0 || choosedImageURLs[0] == "") {
+				uni.showToast({
+					title: '上传下宝贝相关的图片吧',
+					icon: 'none',
+					duration: 1000
+				});
+				return false
+			}
+			if (this.selectedTag == "") {
+				uni.showToast({
+					title: '要选下标签呀',
+					icon: 'none',
+					duration: 1000
+				});
+				return false
+			}
+			if (this.price == 0) {
+				uni.showToast({
+					title: '哈 价格都没填呢',
+					icon: 'error',
+					duration: 1000
+				});
+				return false
+			}
+			if (this.goodsID == "") {
+				uni.showToast({
+					title: '重新进入下该页面吧, 网络不佳',
+					icon: 'none',
+					duration: 1000
+				});
+				return false
+			}
+			return true
+		},
+
+		async uploadImages() {
+			var imageURLs = ""
+			var choosedImageURLs = this.choosedImageURLs
+			for (var i = 0; i < choosedImageURLs.length; i++) {
+				if (choosedImageURLs[i] == "") { continue }
+				var resp = await api.uploadImageOfGoods(this.goodsID, choosedImageURLs[i])
+				if (resp.code != api.SUCCESS_CODE) { return "" }
+				imageURLs += "," + resp.data.image_urls
+			}
+			return imageURLs.substring(1)
 		},
 
 		async addPictureBtnOnClick() {
@@ -89,4 +174,9 @@ export default {
 	padding-left: 10px;
 	padding-right: 10px;
 }
+
+/* .margin-left-right-side {
+	margin-left: 10px;
+	margin-right: 10px;
+} */
 </style>
