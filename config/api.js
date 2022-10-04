@@ -96,6 +96,13 @@ export const publishGoods = (goodsID, goodsDesc, tagID, price, imageURLs) => uni
     }
 })
 
+export const getGoodsList = (tagID = 0, keyword = "", pageIndex = 0, pageSize = 30) => uni.$u.http.get('/goods/', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
+
 export const SUCCESS_CODE = 200
 
 export const api = {

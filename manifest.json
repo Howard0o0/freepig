@@ -52,12 +52,16 @@
     "mp-weixin": {
         "appid": "wxd5047b52773dd57d",
         "setting": {
-            "urlCheck": false
+            "urlCheck": false,
+            "minified": true
         },
         "optimization": {
             "subPackages": true
         },
         "permission": {
+            "scope.getLocation": {
+                "desc": "小程序将使用定位功能"
+            },
             "scope.userLocation": {
                 "desc": "需要获取当前位置才能获取附近宝贝呀"
             }

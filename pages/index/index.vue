@@ -48,21 +48,25 @@ export default {
 				{ goods_id: 8, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
 				{ goods_id: 9, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' }
 			],
+			goodsParam: {
+				currPageIndex: 0,
+				currPageSize: 30,
+				keyword: "",
+				tagID: 0,
+			},
 			loadingText: "正在加载...",
 
 			currLocation: {
-				Longitude: 0,
-				Latitude: 0,
-				Province: null,
-				City: null,
-				District: null,
+				longitude: 0,
+				latitude: 0,
 			}
 		}
 	},
 
 	async onLoad() {
-		this.renderTabNameList()
 		await this.getCurrentCoordinate()
+		this.renderTabNameList()
+
 		console.log('[DEBUG] page index loaded')
 	},
 
@@ -102,27 +106,6 @@ export default {
 			// });
 		},
 
-		async getCurrentCoordinate() {
-			const that = this
-			uni.authorize({
-				scope: 'scope.userLocation',
-				success() {
-					uni.getLocation({
-						type: 'gcj02',
-						success: function (res) {
-							console.log('当前位置: ' + res.longitude + "," + res.latitude);
-							that.currLocation.Longitude = res.longitude
-							that.currLocation.Latitude = res.latitude
-						},
-						fail: function (res) {
-							console.log('get location fail: ', res)
-						}
-					});
-				}
-			})
-
-		},
-
 		async renderTabNameList() {
 			var resp = await api.getTagList()
 			if (resp.code != api.SUCCESS_CODE) { return false }
@@ -142,20 +125,77 @@ export default {
 			return this.tagList[tabIndex].id
 		},
 
-		modifyVuex() {
-			this.$u.vuex('vuex_version', '1.0.1');
-			// 修改对象的形式，中间用"."分隔
-			this.$u.vuex('vuex_user.name', '诗圣');
+		tabOnChange(index) {
+			this.resetGoodsParam()
+			this.goodsParam.tagID = this.getTagIDByTabIndex(index)
+			console.log('[DEBUG] selected tag id: ' + this.goodsParam.tagID)
+			this.clearGoodsList()
+			this.refreshGoodsList()
 		},
 
-		tabOnChange(index) {
-			console.log('[DEBUG] selected tag id: ' + this.getTagIDByTabIndex(index))
+		clearGoodsList() {
+			this.goodsList = []
+		},
+
+		resetGoodsParam() {
+			this.goodsParam = {
+				currPageIndex: 0,
+				currPageSize: 30,
+				keyword: "",
+				tagID: 0,
+			}
 		},
 
 		createGoodsBtnOnClick() {
 			console.log('createGoodsBtnOnClick')
 			uni.navigateTo({ url: '../../page_subject/pages/publish_goods' })
+		},
+
+		refreshGoodsList() {
+			uni.showToast({ title: '正在加载' });
+
+		},
+
+		async getCurrentCoordinate() {
+			try {
+				await uni.authorize({
+					scope: 'scope.userLocation',
+				})
+			} catch (error) {
+				console.log("[ERROR] authorize fail: " + err)
+			}
+
+			var res = await this.promiseGetLocation()
+			this.currLocation.Longitude = res.longitude
+			this.currLocation.Latitude = res.latitude
+			console.log('[DEBUG] 当前位置: ' + this.currLocation.Longitude + "," + this.currLocation.Latitude);
+			// uni.getLocation({
+			// 	type: 'gcj02',
+			// 	success: function (res) {
+			// 		that.currLocation.Longitude = res.longitude
+			// 		that.currLocation.Latitude = res.latitude
+			// 		console.log('[DEBUG] 当前位置: ' + that.currLocation.Longitude + "," + that.currLocation.Latitude);
+			// 	},
+			// 	fail: function (res) {
+			// 		console.log('[ERROR] get location fail: ', res)
+			// 	}
+			// });
+		},
+		promiseGetLocation: () => {
+			return new Promise((resolve, reject) => {
+				uni.getLocation({
+					type: 'gcj02',
+					success: function (res) {
+						resolve(res)
+					},
+					fail: function (err) {
+						console.log('[ERROR] get location fail: ', err)
+						reject(err)
+					}
+				});
+			})
 		}
+
 	}
 }
 </script>
