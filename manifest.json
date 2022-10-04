@@ -54,7 +54,17 @@
         "setting": {
             "urlCheck": false
         },
-        "optimization":{"subPackages":true},
+        "optimization": {
+            "subPackages": true
+        },
+        "permission": {
+            "scope.userLocation": {
+                "desc": "需要获取当前位置才能获取附近宝贝呀"
+            }
+        },
+        "requiredPrivateInfos": [
+            "getLocation"
+        ],
         "usingComponents": true
     },
     "mp-alipay": {

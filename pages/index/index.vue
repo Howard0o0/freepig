@@ -49,11 +49,21 @@ export default {
 				{ goods_id: 9, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' }
 			],
 			loadingText: "正在加载...",
+
+			currLocation: {
+				Longitude: 0,
+				Latitude: 0,
+				Province: null,
+				City: null,
+				District: null,
+			}
 		}
 	},
 
-	onLoad() {
+	async onLoad() {
 		this.renderTabNameList()
+		await this.getCurrentCoordinate()
+		console.log('[DEBUG] page index loaded')
 	},
 
 	//下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
@@ -90,6 +100,27 @@ export default {
 			// uni.navigateTo({
 			// 	url: '../goods'
 			// });
+		},
+
+		async getCurrentCoordinate() {
+			const that = this
+			uni.authorize({
+				scope: 'scope.userLocation',
+				success() {
+					uni.getLocation({
+						type: 'gcj02',
+						success: function (res) {
+							console.log('当前位置: ' + res.longitude + "," + res.latitude);
+							that.currLocation.Longitude = res.longitude
+							that.currLocation.Latitude = res.latitude
+						},
+						fail: function (res) {
+							console.log('get location fail: ', res)
+						}
+					});
+				}
+			})
+
 		},
 
 		async renderTabNameList() {
