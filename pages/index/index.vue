@@ -8,11 +8,12 @@
 		<view class="goods-list">
 			<view class="product-list">
 				<view class="product" v-for="(goods) in goodsList" :key="goods.goods_id" @tap="toGoods(goods)">
-					<image mode="widthFix" :src="goods.img"></image>
-					<view class="name">{{goods.name}}</view>
+					<image mode="widthFix" :src="getGoodsFirstImage(goods.goods_images)"></image>
+					<view class="name">{{goods.goods_description}}</view>
 					<view class="info">
-						<view class="price">{{goods.price}}</view>
-						<view class="slogan">{{goods.slogan}}</view>
+						<view class="price">{{goods.goods_price}}</view>
+						<!-- <u-icon :name="goods.user_gender == 'MALE' ? man : woman" size="28"></u-icon> -->
+						<u-icon :name="toGenderIconStr(goods.user_gender)" size="20" color="#2979ff"></u-icon>
 					</view>
 				</view>
 			</view>
@@ -37,16 +38,16 @@ export default {
 			tagList: [],
 
 			goodsList: [
-				{ goods_id: 0, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				{ goods_id: 1, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				{ goods_id: 2, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				{ goods_id: 3, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				{ goods_id: 4, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				{ goods_id: 5, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				{ goods_id: 6, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				{ goods_id: 7, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				{ goods_id: 8, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				{ goods_id: 9, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' }
+				// { goods_id: 0, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
+				// { goods_id: 1, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
+				// { goods_id: 2, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
+				// { goods_id: 3, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
+				// { goods_id: 4, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
+				// { goods_id: 5, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
+				// { goods_id: 6, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
+				// { goods_id: 7, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
+				// { goods_id: 8, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
+				// { goods_id: 9, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' }
 			],
 			goodsParam: {
 				currPageIndex: 0,
@@ -67,6 +68,11 @@ export default {
 		await this.getCurrentCoordinate()
 		this.renderTabNameList()
 
+		this.resetGoodsParam()
+		this.clearGoodsList()
+		await this.refreshGoodsList()
+
+		console.log('[DEBUG] goods list: ', this.goodsList)
 		console.log('[DEBUG] page index loaded')
 	},
 
@@ -98,12 +104,22 @@ export default {
 
 	methods: {
 
+		toGenderIconStr(gender) {
+			return gender == 'MALE' ? 'man' : 'woman'
+		},
+
 		//商品跳转
 		toGoods(e) {
 			uni.showToast({ title: '商品' + e.goods_id, icon: "none" });
 			// uni.navigateTo({
 			// 	url: '../goods'
 			// });
+		},
+
+		getGoodsFirstImage(imageURLs) {
+			const tokens = imageURLs.split(',');
+			if (tokens.length == 0) { return "" }
+			return tokens[1]
 		},
 
 		async renderTabNameList() {
@@ -151,9 +167,15 @@ export default {
 			uni.navigateTo({ url: '../../page_subject/pages/publish_goods' })
 		},
 
-		refreshGoodsList() {
-			uni.showToast({ title: '正在加载' });
-
+		async refreshGoodsList() {
+			uni.showToast({ title: '正在加载', duration: 1000 })
+			const resp = await api.getGoodsList(this.currLocation.longitude, this.currLocation.latitude, this.goodsParam.tagID, this.goodsParam.keyword, this.goodsParam.currPageIndex, this.goodsParam.currPageSize)
+			const goodsList = resp.data
+			for (var i in goodsList) {
+				const goods = goodsList[i]
+				this.goodsList.push(goods)
+			}
+			this.goodsParam.currPageIndex++
 		},
 
 		async getCurrentCoordinate() {
@@ -169,17 +191,6 @@ export default {
 			this.currLocation.Longitude = res.longitude
 			this.currLocation.Latitude = res.latitude
 			console.log('[DEBUG] 当前位置: ' + this.currLocation.Longitude + "," + this.currLocation.Latitude);
-			// uni.getLocation({
-			// 	type: 'gcj02',
-			// 	success: function (res) {
-			// 		that.currLocation.Longitude = res.longitude
-			// 		that.currLocation.Latitude = res.latitude
-			// 		console.log('[DEBUG] 当前位置: ' + that.currLocation.Longitude + "," + that.currLocation.Latitude);
-			// 	},
-			// 	fail: function (res) {
-			// 		console.log('[ERROR] get location fail: ', res)
-			// 	}
-			// });
 		},
 		promiseGetLocation: () => {
 			return new Promise((resolve, reject) => {

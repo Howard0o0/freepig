@@ -96,9 +96,18 @@ export const publishGoods = (goodsID, goodsDesc, tagID, price, imageURLs) => uni
     }
 })
 
-export const getGoodsList = (tagID = 0, keyword = "", pageIndex = 0, pageSize = 30) => uni.$u.http.get('/goods/', {
+export const getGoodsList = (longitude = 0, latitude = 0, tagID = 0, keyword = "", pageIndex = 0, pageSize = 30) => uni.$u.http.get('/goods/', {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: {
+        'longitude': longitude,
+        'latitude': latitude,
+        'tag_id': tagID,
+        'keyword': keyword,
+        'page_index': pageIndex,
+        'page_size': pageSize,
+        'keyword': keyword,
     }
 })
 
@@ -118,4 +127,5 @@ export const api = {
     getUUID,
     uploadImageOfGoods,
     publishGoods,
+    getGoodsList,
 }
