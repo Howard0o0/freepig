@@ -18,6 +18,10 @@
 						<view class="price">{{goods.goods_price}}</view>
 						<u-icon :name="toGenderIconStr(goods.user_gender)" size="20" color="#2979ff"></u-icon>
 					</view>
+					<view class="info">
+						<image class="avatar" :src="goods.user_avatar_url" mode="scaleToFill"></image>
+						<view class="nickname">{{goods.user_nickname}}</view>
+					</view>
 				</view>
 			</view>
 			<view class="loading-text">{{loadingText}}</view>
@@ -327,6 +331,21 @@ export default {
 				font-size: 30upx;
 			}
 
+			.nickname {
+				width: 70%;
+				height: 50rpx;
+				text-align: left;
+				overflow: hidden;
+				text-overflow: ellipsis; //溢出用省略号显示
+				white-space: nowrap; //溢出不换行
+				font-size: 30upx;
+			}
+
+			.avatar {
+				width: 50rpx;
+				height: 50rpx;
+			}
+
 			.info {
 				display: flex;
 				justify-content: space-between;
@@ -336,7 +355,7 @@ export default {
 
 				.price {
 					color: #e65339;
-					font-size: 30upx;
+					font-size: 32upx;
 					font-weight: 600;
 				}
 
