@@ -18,6 +18,10 @@
 						<view class="price">{{goods.goods_price}}</view>
 						<u-icon :name="toGenderIconStr(goods.user_gender)" size="20" color="#2979ff"></u-icon>
 					</view>
+					<view class="campus-info">
+						<view class="nickname">{{goods.campus}}</view>
+						<view class="nickname">{{goods.major}}</view>
+					</view>
 					<view class="info">
 						<image class="avatar" :src="goods.user_avatar_url" mode="scaleToFill"></image>
 						<view class="nickname">{{goods.user_nickname}}</view>
@@ -339,6 +343,12 @@ export default {
 				text-overflow: ellipsis; //溢出用省略号显示
 				white-space: nowrap; //溢出不换行
 				font-size: 30upx;
+			}
+
+			.campus-info {
+				color: #8f8f94;
+				width: 92%;
+				padding: 10upx 4% 10upx 4%;
 			}
 
 			.avatar {
