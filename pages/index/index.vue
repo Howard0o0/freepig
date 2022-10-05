@@ -1,8 +1,12 @@
 <template>
 	<view>
+		<!-- 搜索栏 -->
+		<uni-search-bar @confirm="SearchBtnOnClick" v-model="goodsParam.keyword" />
+
 		<!-- 商品标签 -->
-		<v-tabs pills="true" activeColor="#fff" fontSize="40rpx" v-model="currTabIndex" :tabs="tabNameList"
-			@change="tabOnChange"></v-tabs>
+		<v-tabs pills=" true" activeColor="#fff" fontSize="40rpx" v-model="currTabIndex" :tabs="tabNameList"
+			@change="tabOnChange">
+		</v-tabs>
 
 		<!-- 商品列表 -->
 		<view class="goods-list">
@@ -12,7 +16,6 @@
 					<view class="name">{{goods.goods_description}}</view>
 					<view class="info">
 						<view class="price">{{goods.goods_price}}</view>
-						<!-- <u-icon :name="goods.user_gender == 'MALE' ? man : woman" size="28"></u-icon> -->
 						<u-icon :name="toGenderIconStr(goods.user_gender)" size="20" color="#2979ff"></u-icon>
 					</view>
 				</view>
@@ -37,18 +40,7 @@ export default {
 			tabNameList: ['军事', '国内', '新闻', '军事', '国内', '新闻', '军事', '国内', '新闻'],
 			tagList: [],
 
-			goodsList: [
-				// { goods_id: 0, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				// { goods_id: 1, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				// { goods_id: 2, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				// { goods_id: 3, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				// { goods_id: 4, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				// { goods_id: 5, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				// { goods_id: 6, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				// { goods_id: 7, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				// { goods_id: 8, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' },
-				// { goods_id: 9, img: '/static/choose_image.png', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' }
-			],
+			goodsList: [],
 			goodsParam: {
 				currPageIndex: 0,
 				currPageSize: 5,
@@ -77,17 +69,15 @@ export default {
 		}, 1000);
 	},
 	//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
-	onReachBottom() {
+	async onReachBottom() {
 		uni.showToast({ title: '刷新中..' });
-		let len = this.goodsList.length;
+		await this.refreshGoodsList()
 		if (this.noMoreGoods) {
 			this.loadingText = "hoops 木有更多啦";
 			return false;
 		} else {
 			this.loadingText = "正在加载...";
 		}
-
-		this.refreshGoodsList()
 	},
 
 	methods: {
@@ -180,6 +170,14 @@ export default {
 				this.goodsList.push(goods)
 			}
 			this.goodsParam.currPageIndex++
+		},
+
+		SearchBtnOnClick(searchInput) {
+			console.log('[DEBUG] SearchBtnOnClick')
+			this.resetGoodsParam()
+			this.clearGoodsList()
+			this.goodsParam.keyword = searchInput.value
+			this.refreshGoodsList()
 		},
 
 		async getCurrentCoordinate() {
