@@ -17,6 +17,10 @@ export default {
 		});
 	},
 
+	globalData: {
+		selectedGoodsToShowInDetail: null,
+	},
+
 	onLaunch: async function () {
 		await this.getToken()
 		await utils.refreshUserInfo()

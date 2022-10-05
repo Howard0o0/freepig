@@ -15,7 +15,7 @@
 					<image mode="widthFix" :src="getGoodsFirstImage(goods.goods_images)"></image>
 					<view class="name">{{goods.goods_description}}</view>
 					<view class="info">
-						<view class="price">{{goods.goods_price}}</view>
+						<view class="price">￥{{goods.goods_price}}</view>
 						<u-icon :name="toGenderIconStr(goods.user_gender)" size="20" color="#2979ff"></u-icon>
 					</view>
 					<view class="campus-info">
@@ -108,9 +108,11 @@ export default {
 		//商品跳转
 		toGoods(e) {
 			uni.showToast({ title: '商品' + e.goods_id, icon: "none" });
-			// uni.navigateTo({
-			// 	url: '../goods'
-			// });
+			getApp().globalData.selectedGoodsToShowInDetail = e
+			uni.navigateTo({
+				url: '/page_subject/pages/goods_detail'
+			});
+
 		},
 
 		getGoodsFirstImage(imageURLs) {
