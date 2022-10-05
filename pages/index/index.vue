@@ -51,11 +51,12 @@ export default {
 			],
 			goodsParam: {
 				currPageIndex: 0,
-				currPageSize: 30,
+				currPageSize: 5,
 				keyword: "",
 				tagID: 0,
 			},
 			loadingText: "正在加载...",
+			noMoreGoods: false,
 
 			currLocation: {
 				longitude: 0,
@@ -65,15 +66,7 @@ export default {
 	},
 
 	async onLoad() {
-		await this.getCurrentCoordinate()
-		this.renderTabNameList()
-
-		this.resetGoodsParam()
-		this.clearGoodsList()
-		await this.refreshGoodsList()
-
-		console.log('[DEBUG] goods list: ', this.goodsList)
-		console.log('[DEBUG] page index loaded')
+		await this.reload()
 	},
 
 	//下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
@@ -85,24 +78,30 @@ export default {
 	},
 	//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 	onReachBottom() {
-		uni.showToast({ title: '触发上拉加载' });
+		uni.showToast({ title: '刷新中..' });
 		let len = this.goodsList.length;
-		if (len >= 40) {
-			this.loadingText = "到底了";
+		if (this.noMoreGoods) {
+			this.loadingText = "hoops 木有更多啦";
 			return false;
 		} else {
 			this.loadingText = "正在加载...";
 		}
-		// TODO: append some goods into goodsList
-		// let end_goods_id = this.goodsList[len - 1].goods_id;
-		// for (let i = 1; i <= 10; i++) {
-		// 	let goods_id = end_goods_id + i;
-		// 	let p = { goods_id: goods_id, img: '/static/img/goods/p' + (goods_id % 10 == 0 ? 10 : goods_id % 10) + '.jpg', name: '商品名称商品名称商品名称商品名称商品名称', price: '￥168', slogan: '1235人付款' };
-		// 	this.goodsList.push(p);
-		// }
+
+		this.refreshGoodsList()
 	},
 
 	methods: {
+		async reload() {
+			await this.getCurrentCoordinate()
+			this.renderTabNameList()
+
+			this.resetGoodsParam()
+			this.clearGoodsList()
+			await this.refreshGoodsList()
+
+			console.log('[DEBUG] goods list: ', this.goodsList)
+			console.log('[DEBUG] page index loaded')
+		},
 
 		toGenderIconStr(gender) {
 			return gender == 'MALE' ? 'man' : 'woman'
@@ -154,9 +153,10 @@ export default {
 		},
 
 		resetGoodsParam() {
+			this.noMoreGoods = false
 			this.goodsParam = {
 				currPageIndex: 0,
-				currPageSize: 30,
+				currPageSize: this.goodsParam.currPageSize,
 				keyword: "",
 				tagID: 0,
 			}
@@ -171,6 +171,10 @@ export default {
 			uni.showToast({ title: '正在加载', duration: 1000 })
 			const resp = await api.getGoodsList(this.currLocation.longitude, this.currLocation.latitude, this.goodsParam.tagID, this.goodsParam.keyword, this.goodsParam.currPageIndex, this.goodsParam.currPageSize)
 			const goodsList = resp.data
+			if (goodsList == null || goodsList.length == 0) {
+				this.noMoreGoods = true
+				return
+			}
 			for (var i in goodsList) {
 				const goods = goodsList[i]
 				this.goodsList.push(goods)
