@@ -17,6 +17,8 @@
 import { api } from '../../config/api.js';
 import { utils } from '../../common/common.js';
 
+const NICKNAME_MAX_LENGH = 6
+
 export default {
 	data() {
 		return {
@@ -46,16 +48,46 @@ export default {
 	},
 
 	methods: {
-		confirmBtnOnClick() {
+		async confirmBtnOnClick() {
 			if (!this.checkFormData()) {
 				return false
 			}
+
+			let avatar_url = this.userInfo.avatar_url
+			if (this.formData.avatarImageFilePath != this.userInfo.avatar_url) {
+				// if the user choose a new avatar image, use the new one
+				let resp = await api.uploadImage(0, this.formData.avatarImageFilePath)
+				if (resp.code != api.SUCCESS_CODE) { return }
+				avatar_url = resp.data.image_urls
+			}
+
+			let resp = await api.setUserInfo(avatar_url, this.formData.nickname, this.formData.gender)
+			if (resp.code != api.SUCCESS_CODE) { return }
+
+			uni.showToast({
+				title: '修改成功',
+				icon: 'success',
+				duration: 2000
+			});
+			utils.refreshUserInfo()
+
+			setTimeout(function () {
+				uni.reLaunch({ url: '../../pages/mine/mine' })
+			}, 2000)
 		},
 
 		checkFormData() {
 			if (this.formData.nickname == "") {
 				uni.showToast({
 					title: '昵称不可为空呀',
+					icon: 'none',
+					duration: 1000
+				});
+				return false
+			}
+			if (this.formData.nickname.length > NICKNAME_MAX_LENGH) {
+				uni.showToast({
+					title: '昵称最长' + NICKNAME_MAX_LENGH + '个字哟',
 					icon: 'none',
 					duration: 1000
 				});

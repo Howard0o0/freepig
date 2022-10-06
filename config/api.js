@@ -82,7 +82,7 @@ export const getUUID = () => uni.$u.http.get('/info/uuid', {
     }
 })
 
-export const uploadImageOfGoods = (goodsID, imageFilePath) => uni.$u.http.upload('/info/image', {
+export const uploadImage = (goodsID, imageFilePath) => uni.$u.http.upload('/info/image', {
     formData: {
         goods_id: goodsID
     },
@@ -97,6 +97,16 @@ export const publishGoods = (goodsID, goodsDesc, tagID, price, imageURLs) => uni
     cost: 0,
     images: imageURLs,
     tag_id: tagID,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
+export const setUserInfo = (avatar_url, nickname, gender) => uni.$u.http.post('/user', {
+    avatar_url: avatar_url,
+    gender: gender,
+    nickname: nickname,
 }, {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -132,8 +142,9 @@ export const api = {
     identifyByCertification,
     getTagList,
     getUUID,
-    uploadImageOfGoods,
+    uploadImage,
     publishGoods,
     getGoodsList,
     getTIMSig,
+    setUserInfo,
 }

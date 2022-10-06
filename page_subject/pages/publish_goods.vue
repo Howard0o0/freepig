@@ -138,7 +138,7 @@ export default {
 			var choosedImageURLs = this.choosedImageURLs
 			for (var i = 0; i < choosedImageURLs.length; i++) {
 				if (choosedImageURLs[i] == "") { continue }
-				var resp = await api.uploadImageOfGoods(this.goodsID, choosedImageURLs[i])
+				var resp = await api.uploadImage(this.goodsID, choosedImageURLs[i])
 				if (resp.code != api.SUCCESS_CODE) { return "" }
 				imageURLs += "," + resp.data.image_urls
 			}
