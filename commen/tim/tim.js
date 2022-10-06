@@ -1,4 +1,5 @@
 import TIM from 'tim-js-sdk';
+import TIMUploadPlugin from 'tim-upload-plugin';
 // import COS from "cos-js-sdk-v5";
 
 
@@ -10,6 +11,7 @@ const tim = TIM.create(options); // SDK 实例通常用 tim 表示
 const TIMData = TIM
 // 注册 COS SDK 插件
 // tim.registerPlugin({'cos-js-sdk': COS});
+tim.registerPlugin({'tim-upload-plugin': TIMUploadPlugin});
 
 
 
