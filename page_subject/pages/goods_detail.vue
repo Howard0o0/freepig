@@ -6,7 +6,7 @@
                 <view class="nickname user-info">{{selectedGoodsToShowInDetail.user_nickname}}</view>
                 <view class="campus-info user-info">武汉大学</view>
             </view>
-            <u-icon name="chat" size="30" color="#2979ff" />
+            <u-icon name="chat" size="30" color="#2979ff" @click="sendMessageBtnOnClick" />
         </view>
         <view class="price">￥{{selectedGoodsToShowInDetail.goods_price}}</view>
         <textarea :value="selectedGoodsToShowInDetail.goods_description" disabled="true" auto-height="true"></textarea>
@@ -23,6 +23,9 @@
 <script>
 
 import { utils } from '../../common/common.js';
+import {
+    mapState
+} from "vuex";
 
 export default {
     data() {
@@ -39,6 +42,13 @@ export default {
     onShow() {
     },
     methods: {
+        sendMessageBtnOnClick() {
+            console.log('[DEBUG] create conversation with user ', this.selectedGoodsToShowInDetail.user_id)
+            this.$store.commit('createConversationActive', this.selectedGoodsToShowInDetail.user_id)
+            uni.navigateTo({
+                url: '/pages/tim/room'
+            })
+        },
     }
 }
 </script>
