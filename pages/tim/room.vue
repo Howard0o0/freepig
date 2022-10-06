@@ -291,7 +291,7 @@ export default {
 		},
 		// 接受消息(定位消息)
 		screenMsg(newVal, oldVal) {
-			if (newVal[0].ID && oldVal[0].ID) {
+			if (newVal && oldVal && newVal.length > 0 && oldVal.length > 0 && newVal[0].ID && oldVal[0].ID) {
 				if (newVal[0].ID != oldVal[0].ID && newVal.length >= this.count) {
 					this.$nextTick(() => { this.scrollToView = oldVal[0].ID });
 				} else {
@@ -331,6 +331,7 @@ export default {
 				this.$store.commit('pushCurrentMessageList', res.data.messageList)
 				this.nextReqMessageID = res.data.nextReqMessageID // 用于续拉，分页续拉时需传入该字段。
 				this.isCompleted = res.data.isCompleted
+				if (res.data.messageList.length <= 0) { return }
 				this.scrollToView = res.data.messageList[res.data.messageList.length - 1].ID
 				console.log(this.nextReqMessageID)
 			});
