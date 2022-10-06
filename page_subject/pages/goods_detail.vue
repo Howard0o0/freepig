@@ -1,5 +1,5 @@
 <template>
-    <view>
+    <view class=".left-rigth-margin">
         <view class="multi-columns">
             <image class="avatar" :src="selectedGoodsToShowInDetail.user_avatar_url" mode="scaleToFill"></image>
             <view>
@@ -9,6 +9,14 @@
             <u-icon name="chat" size="30" color="#2979ff" />
         </view>
         <view class="price">￥{{selectedGoodsToShowInDetail.goods_price}}</view>
+        <textarea :value="selectedGoodsToShowInDetail.goods_description" disabled="true" auto-height="true"></textarea>
+        <view class="swiper-box">
+            <swiper indicator-dots="true" circular="true" autoplay="true">
+                <swiper-item v-for="image in swipImages" :key="image">
+                    <image :src="image"></image>
+                </swiper-item>
+            </swiper>
+        </view>
     </view>
 </template>
 
@@ -20,11 +28,13 @@ export default {
     data() {
         return {
             selectedGoodsToShowInDetail: null,
+            swipImages: [],
         }
     },
     onLoad(option) {
         console.log('[DBUEG] selectedGoodsToShowInDetail in detail: ', getApp().globalData.selectedGoodsToShowInDetail)
         this.selectedGoodsToShowInDetail = getApp().globalData.selectedGoodsToShowInDetail
+        this.swipImages = this.selectedGoodsToShowInDetail.goods_images.split(",")
     },
     onShow() {
     },
@@ -78,5 +88,43 @@ export default {
     font-size: 50rpx;
     font-weight: 600;
     margin: 10rpx 4% 10rpx 4%;
+}
+
+.left-rigth-margin {
+    margin-left: 4%;
+    margin-right: 4%;
+}
+
+.swiper-box {
+    position: relative;
+    width: 100%;
+    height: 100vw;
+
+    swiper {
+        width: 100%;
+        height: 100vw;
+
+        swiper-item {
+            image {
+                width: 100%;
+                height: 100vw;
+            }
+        }
+    }
+
+    .indicator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 25upx;
+        height: 40upx;
+        border-radius: 40upx;
+        font-size: 22upx;
+        position: absolute;
+        bottom: 20upx;
+        right: 20upx;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
 }
 </style>
