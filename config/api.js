@@ -13,6 +13,12 @@ export const getUserInfoFromServer = (params = {}) => uni.$u.http.get('/user', {
     }
 })
 
+export const getTIMSig = () => uni.$u.http.get('/user/tim-sig', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const getCampusList = (keyword) => uni.$u.http.get('/info/campus', {
     params: { keyword: keyword },
     header: {
@@ -129,4 +135,5 @@ export const api = {
     uploadImageOfGoods,
     publishGoods,
     getGoodsList,
+    getTIMSig,
 }

@@ -1,5 +1,6 @@
 <script>
 import utils from './common/common.js';
+import { api } from '@/config/api.js';
 import { getTokenFromServer, getUserInfoFromServer } from './config/api.js';
 export default {
 	mounted() {
@@ -24,7 +25,9 @@ export default {
 	onLaunch: async function () {
 		await this.getToken()
 		await utils.refreshUserInfo()
-		this.TIMLogin('1', 'eJwtzEELgjAYxvHvsnPIu*kmCl2K6NKhmLquyma8Rm1so4Tou2fq8fk98P*Q6iSTl-GkJCwBspk3avOM2OPMdMWg761zqElJM4Cc5SIvlseMDr2ZnHPOAGDRiI*-CZGBKFLG1wrepqZNg3fR7qvUXAdfh0sdVT-uhrccqOq6g2rs8RybUbbZlnx-NZIw4Q__')
+		const resp = await api.getTIMSig()
+		if (resp.code != api.SUCCESS_CODE) { return }
+		this.TIMLogin(this.$store.state.vuex_user.id.toString(), resp.data.tim_sig)
 		console.log('App Launch')
 	},
 	onShow: function () {
