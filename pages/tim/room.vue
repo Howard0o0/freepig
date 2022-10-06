@@ -310,7 +310,7 @@ export default {
 				} else {
 					this.$nextTick(() => { this.scrollToView = this.generateMessageViewID(newVal[newVal.length - 1].ID) });
 				}
-			} else {
+			} else if (newVal && newVal.length > 0) {
 				this.$nextTick(() => { this.scrollToView = this.generateMessageViewID(newVal[newVal.length - 1].ID) });
 			}
 		},
