@@ -152,6 +152,12 @@
 import userList from '../../commen/tim/user.js'
 import { mapState } from "vuex";
 
+const TIM_MESSAGE_TYPE = {
+	"TEXT": 1,
+	"IMAGE": 2,
+	"VOICE": 3,
+}
+
 export default {
 	data() {
 		return {
@@ -398,6 +404,7 @@ export default {
 		getImage(type) {
 			this.hideDrawer();
 			uni.chooseImage({
+				count: 1,
 				sourceType: [type],
 				sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 				success: (res) => {
@@ -408,7 +415,7 @@ export default {
 								console.log(image.width);
 								console.log(image.height);
 								let msg = { url: res.tempFilePaths[i], w: image.width, h: image.height };
-								this.sendMsg(msg, 'img');
+								this.sendMsg(res, TIM_MESSAGE_TYPE.IMAGE);
 							}
 						});
 					}
@@ -445,7 +452,7 @@ export default {
 			let content = this.replaceEmoji(this.textMsg);
 			let msg = { text: content }
 			console.log('[DEBUG] sending text message: ', this.textMsg, " to user ", this.toUserId_)
-			this.sendMsg(msg, 'text');
+			this.sendMsg(msg, TIM_MESSAGE_TYPE.TEXT);
 			this.textMsg = '';//清空输入框
 		},
 		//替换表情符号为图片
@@ -472,13 +479,27 @@ export default {
 
 		// 发送消息
 		sendMsg(content, type) {
-			let message = this.tim.createTextMessage({
-				to: this.toUserId_,
-				conversationType: 'C2C',
-				payload: {
-					text: content.text
-				}
-			});
+			let message = null
+			if (type == TIM_MESSAGE_TYPE.TEXT) {
+				message = this.tim.createTextMessage({
+					to: this.toUserId_,
+					conversationType: 'C2C',
+					payload: {
+						text: content.text
+					}
+				});
+			} else if (type == TIM_MESSAGE_TYPE.IMAGE) {
+				message = this.tim.createImageMessage({
+					to: this.toUserId_,
+					conversationType: 'C2C',
+					payload: {
+						file: content
+					}
+				});
+			} else {
+				throw "unsupported TIM message type: " + type
+			}
+
 			console.log('[DEBUG] sending message: ', message)
 			this.$store.commit('pushCurrentMessageList', message)
 			let pomise = this.tim.sendMessage(message)
@@ -659,7 +680,7 @@ export default {
 				min = min < 10 ? '0' + min : min;
 				sec = sec < 10 ? '0' + sec : sec;
 				msg.length = min + ':' + sec;
-				this.sendMsg(msg, 'voice');
+				this.sendMsg(msg, TIM_MESSAGE_TYPE.VOICE);
 			} else {
 				console.log('取消发送录音');
 			}
