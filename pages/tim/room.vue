@@ -32,14 +32,14 @@
 							</view>
 							<!-- 右-头像 -->
 							<view class="right">
-								<image :src="userInfo.img"></image>
+								<image :src="userInfo.avatar_url"></image>
 							</view>
 						</view>
 						<!-- 别人发出的消息 -->
 						<view class="other" v-else>
 							<!-- 左-头像 -->
 							<view class="left">
-								<image :src="toUserInfo.img"></image>
+								<image :src="toUserInfo.avatar_url"></image>
 							</view>
 							<!-- 右-用户名称-时间-消息 -->
 							<view class="right">
@@ -244,7 +244,9 @@ export default {
 	},
 	onLoad(option) {
 
-		this.userInfo = JSON.parse(uni.getStorageSync('userInfo'))
+		this.userInfo = this.$store.state.vuex_user
+		console.log('[DEBUG] self userinfo: ', this.userInfo)
+		// this.userInfo = JSON.parse(uni.getStorageSync('userInfo'))
 		this.toUserId_ = this.$store.state.toUserId
 		this.conversationActive_ = this.$store.state.conversationActive
 		this.TIM = this.$TIM
