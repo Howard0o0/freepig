@@ -14,7 +14,7 @@
 						<view class="rect5"></view>
 					</view>
 				</view>
-				<view class="row" v-for="(item,index) in msgList" :key="index" :id="item.ID">
+				<view class="row" v-for="(item,index) in msgList" :key="index" :id="generateMessageViewID(item.ID)">
 					<!-- 用户消息 -->
 					<block>
 						<!-- 自己发出的消息 -->
