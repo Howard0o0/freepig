@@ -23,7 +23,7 @@
         {
             "path": "pages/tim/room",
             "style": {
-                "navigationBarTitleText": "聊天室"
+                "navigationBarTitleText": ""
             }
         }
     ],

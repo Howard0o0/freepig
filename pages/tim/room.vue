@@ -44,7 +44,7 @@
 							<!-- 右-用户名称-时间-消息 -->
 							<view class="right">
 								<view class="username">
-									<view class="name">{{toUserInfo.user}}</view>
+									<view class="name">{{toUserInfo.nickname}}</view>
 									<view class="time">{{timeFliter(item.time)}}</view>
 								</view>
 
@@ -158,8 +158,8 @@
 </template>
 
 <script>
-import userList from '../../commen/tim/user.js'
 import { mapState } from "vuex";
+import { api } from '@/config/api.js';
 
 const TIM_MESSAGE_TYPE = {
 	"TEXT": 1,
@@ -242,7 +242,7 @@ export default {
 			this.screenMsg(newVal, oldVal)
 		},
 	},
-	onLoad(option) {
+	async onLoad(option) {
 
 		this.userInfo = this.$store.state.vuex_user
 		console.log('[DEBUG] self userinfo: ', this.userInfo)
@@ -252,17 +252,12 @@ export default {
 		this.TIM = this.$TIM
 
 		//获取聊天对象的用户信息
-		// userList.forEach(item => {
-		// 	if (this.toUserId_ == item.userId) {
-		// 		this.toUserInfo = item
-		// 	}
-		// })
-		this.toUserInfo = {
-			user: this.toUserId_,
-			userId: '2',
-			img: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2262632647,543198910&fm=26&gp=0.jpg',
-			userSig: 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zIhwlDB4pTsxIKCzBQlK0MTAwNzI3Mzc0uITGpFQWZRKlDc1NTUyMDAACJakpkLEjMzMzEwszQ2MIeakpkONNOnyrLI0MUn0CsnwCfbPau0IKoiOMMgyjA7xSkqMDcwzTclMq0gKNfRoyzZVqkWABkmMD8_'
-		}
+		const resp = await api.getUserInfoFromServer({ user_id: this.toUserId_ })
+		this.toUserInfo = resp.data
+		uni.setNavigationBarTitle({
+			title: this.toUserInfo.nickname
+		})
+		console.log('[DEBUG] toUserInfo: ', this.toUserInfo)
 
 		this.getMsgList();
 		//语音自然播放结束

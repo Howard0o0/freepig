@@ -6,7 +6,8 @@ export const getTokenFromServer = (params, config = {
     }
 }) => uni.$u.http.post('/login/by-wx-account', params, config)
 
-export const getUserInfoFromServer = () => uni.$u.http.get('/user', {
+export const getUserInfoFromServer = (params = {}) => uni.$u.http.get('/user', {
+    params: params,
     header: {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
