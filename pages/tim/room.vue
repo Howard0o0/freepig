@@ -293,12 +293,12 @@ export default {
 		screenMsg(newVal, oldVal) {
 			if (newVal && oldVal && newVal.length > 0 && oldVal.length > 0 && newVal[0].ID && oldVal[0].ID) {
 				if (newVal[0].ID != oldVal[0].ID && newVal.length >= this.count) {
-					this.$nextTick(() => { this.scrollToView = oldVal[0].ID });
+					this.$nextTick(() => { this.scrollToView = this.generateMessageViewID(oldVal[0].ID) });
 				} else {
-					this.$nextTick(() => { this.scrollToView = newVal[newVal.length - 1].ID });
+					this.$nextTick(() => { this.scrollToView = this.generateMessageViewID(newVal[newVal.length - 1].ID) });
 				}
 			} else {
-				this.$nextTick(() => { this.scrollToView = newVal[newVal.length - 1].ID });
+				this.$nextTick(() => { this.scrollToView = this.generateMessageViewID(newVal[newVal.length - 1].ID) });
 			}
 		},
 		//触发滑动到顶部(加载历史信息记录)
@@ -314,7 +314,7 @@ export default {
 			});
 			//这段代码很重要，不然每次加载历史数据都会跳到顶部
 			this.$nextTick(function () {
-				this.scrollToView = this.nextReqMessageID;//跳转上次的第一行信息位置
+				this.scrollToView = this.generateMessageViewID(this.nextReqMessageID);//跳转上次的第一行信息位置
 				this.$nextTick(function () {
 					this.scrollAnimation = true;//恢复滚动动画
 				});
@@ -332,7 +332,7 @@ export default {
 				this.nextReqMessageID = res.data.nextReqMessageID // 用于续拉，分页续拉时需传入该字段。
 				this.isCompleted = res.data.isCompleted
 				if (res.data.messageList.length <= 0) { return }
-				this.scrollToView = res.data.messageList[res.data.messageList.length - 1].ID
+				this.scrollToView = this.generateMessageViewID(res.data.messageList[res.data.messageList.length - 1].ID)
 				console.log(this.nextReqMessageID)
 			});
 			// 滚动到底部
@@ -485,9 +485,14 @@ export default {
 			pomise.then(res => {
 				this.$nextTick(() => {
 					// 滚动到底
-					this.scrollToView = res.data.message.ID
+					this.scrollToView = this.generateMessageViewID(res.data.message.ID)
+					console.log('[DEBUG] message sent')
 				});
 			})
+		},
+
+		generateMessageViewID(messageID) {
+			return "messageID-" + messageID
 		},
 
 		// 添加文字消息到列表
