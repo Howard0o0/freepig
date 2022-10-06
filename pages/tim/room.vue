@@ -234,27 +234,34 @@ export default {
 		this.conversationActive_ = this.$store.state.conversationActive
 		this.TIM = this.$TIM
 
-		// //获取聊天对象的用户信息
+		//获取聊天对象的用户信息
 		// userList.forEach(item => {
 		// 	if (this.toUserId_ == item.userId) {
 		// 		this.toUserInfo = item
 		// 	}
 		// })
-		// this.getMsgList();
-		// //语音自然播放结束
-		// this.AUDIO.onEnded((res) => {
-		// 	this.playMsgid = null;
-		// });
-		// // #ifndef H5
-		// //录音开始事件
-		// this.RECORDER.onStart((e) => {
-		// 	this.recordBegin(e);
-		// })
-		// //录音结束事件
-		// this.RECORDER.onStop((e) => {
-		// 	this.recordEnd(e);
-		// })
-		// // #endif
+		this.toUserInfo = {
+			user: this.toUserId_,
+			userId: '2',
+			img: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2262632647,543198910&fm=26&gp=0.jpg',
+			userSig: 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zIhwlDB4pTsxIKCzBQlK0MTAwNzI3Mzc0uITGpFQWZRKlDc1NTUyMDAACJakpkLEjMzMzEwszQ2MIeakpkONNOnyrLI0MUn0CsnwCfbPau0IKoiOMMgyjA7xSkqMDcwzTclMq0gKNfRoyzZVqkWABkmMD8_'
+		}
+
+		this.getMsgList();
+		//语音自然播放结束
+		this.AUDIO.onEnded((res) => {
+			this.playMsgid = null;
+		});
+		// #ifndef H5
+		//录音开始事件
+		this.RECORDER.onStart((e) => {
+			this.recordBegin(e);
+		})
+		//录音结束事件
+		this.RECORDER.onStop((e) => {
+			this.recordEnd(e);
+		})
+		// #endif
 	},
 	onShow() {
 		this.scrollTop = 9999999;
@@ -436,6 +443,7 @@ export default {
 			}
 			let content = this.replaceEmoji(this.textMsg);
 			let msg = { text: content }
+			console.log('[DEBUG] sending text message: ', this.textMsg, " to user ", this.toUserId_)
 			this.sendMsg(msg, 'text');
 			this.textMsg = '';//清空输入框
 		},
@@ -470,6 +478,7 @@ export default {
 					text: content.text
 				}
 			});
+			console.log('[DEBUG] sending message: ', message)
 			this.$store.commit('pushCurrentMessageList', message)
 			let pomise = this.tim.sendMessage(message)
 			pomise.then(res => {

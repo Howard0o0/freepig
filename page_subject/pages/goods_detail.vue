@@ -44,7 +44,7 @@ export default {
     methods: {
         sendMessageBtnOnClick() {
             console.log('[DEBUG] create conversation with user ', this.selectedGoodsToShowInDetail.user_id)
-            this.$store.commit('createConversationActive', this.selectedGoodsToShowInDetail.user_id)
+            this.$store.commit('createConversationActive', this.selectedGoodsToShowInDetail.user_id.toString())
             uni.navigateTo({
                 url: '/pages/tim/room'
             })
