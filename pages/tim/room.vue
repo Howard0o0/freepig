@@ -170,6 +170,7 @@ const TIM_MESSAGE_TYPE = {
 export default {
 	data() {
 		return {
+
 			//TIM变量
 			conversationActive_: null,
 			toUserId_: '',
