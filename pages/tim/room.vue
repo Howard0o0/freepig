@@ -25,6 +25,10 @@
 								<view v-if="item.type==TIM.TYPES.MSG_TEXT" class="bubble">
 									<rich-text :nodes="nodesFliter(item.payload.text)"></rich-text>
 								</view>
+								<!-- 图片消息 -->
+								<view v-else-if="item.type==TIM.TYPES.MSG_IMAGE" class="bubble">
+									<image :src="item.payload.imageInfoArray[0].url"></image>
+								</view>
 							</view>
 							<!-- 右-头像 -->
 							<view class="right">
@@ -47,6 +51,10 @@
 								<!-- 文字消息 -->
 								<view v-if="item.type==TIM.TYPES.MSG_TEXT" class="bubble">
 									<rich-text :nodes="nodesFliter(item.payload.text)"></rich-text>
+								</view>
+								<!-- 图片消息 -->
+								<view v-else-if="item.type==TIM.TYPES.MSG_IMAGE" class="bubble">
+									<image :src="item.payload.imageInfoArray[0].url"></image>
 								</view>
 							</view>
 						</view>
@@ -148,6 +156,7 @@
 		</view>
 	</view>
 </template>
+
 <script>
 import userList from '../../commen/tim/user.js'
 import { mapState } from "vuex";
@@ -416,6 +425,7 @@ export default {
 								console.log(image.height);
 								let msg = { url: res.tempFilePaths[i], w: image.width, h: image.height };
 								this.sendMsg(res, TIM_MESSAGE_TYPE.IMAGE);
+								console.log('[DEBUG] sending message: ', res)
 							}
 						});
 					}
