@@ -93,6 +93,13 @@
                     }
                 },
                 {
+                    "path": "pages/set_userinfo",
+                    "style": {
+                        "navigationBarTitleText": "",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
                     "path": "pages/publish_goods",
                     "style": {
                         "navigationBarTitleText": "",
@@ -126,6 +133,12 @@
                     ]
                 },
                 "page_subject/pages/goods_detail": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/set_userinfo": {
                     "network": "all",
                     "packages": [
                         "__APP__"

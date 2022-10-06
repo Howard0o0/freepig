@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<uni-card :title="vuex_user.nickname" :sub-title="vuex_user.campus" :extra="authTag"
-			:thumbnail="vuex_user.avatar_url"></uni-card>
+			:thumbnail="vuex_user.avatar_url" @click="userInfoCardOnClick"></uni-card>
 		<uni-grid :column="4" :highlight="true" :showBorder="false" :square="false" @change="gridItemOnClick">
 			<uni-grid-item v-for="(item, index) in grids" :index="index" :key="index">
 				<view class="grid-item-box" style="background-color: #fff;">
@@ -35,6 +35,10 @@ export default {
 		utils.refreshUserInfo()
 	},
 	methods: {
+		userInfoCardOnClick() {
+			uni.navigateTo({ url: '../../page_subject/pages/set_userinfo' })
+		},
+
 		refreshAuthTag() {
 			switch (store.state.vuex_user.role) {
 				case "STUDENT":
