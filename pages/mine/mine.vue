@@ -5,7 +5,7 @@
 		<uni-grid :column="4" :highlight="true" :showBorder="false" :square="false" @change="gridItemOnClick">
 			<uni-grid-item v-for="(item, index) in grids" :index="index" :key="index">
 				<view class="grid-item-box" style="background-color: #fff;">
-					<u-icon size="40" name="/static/mine/grid-auth.png"></u-icon>
+					<u-icon size="40" :name="item.icon"></u-icon>
 					<view>{{item.text}}</view>
 				</view>
 			</uni-grid-item>
@@ -22,10 +22,16 @@ export default {
 	data() {
 		return {
 			authTag: '未认证',
-			grids: [{
-				icon: "/static/mine/grid-auth.png",
-				text: "身份认证",
-			}]
+			grids: [
+				{
+					icon: "/static/mine/grid-auth.png",
+					text: "身份认证",
+				},
+				{
+					icon: "/static/mine/grid-mygoods.png",
+					text: "我的宝贝",
+				},
+			]
 		}
 	},
 	onLoad() {
@@ -59,6 +65,9 @@ export default {
 				case 0:
 					console.log("jumping to auth page")
 					uni.navigateTo({ url: '../../page_subject/pages/auth' })
+				case 1:
+					console.log("jumping to mygoods page")
+					uni.navigateTo({ url: '../../page_subject/pages/my_goods' })
 			}
 		}
 	}
