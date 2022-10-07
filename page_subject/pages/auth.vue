@@ -1,5 +1,5 @@
 <template>
-    <view>
+    <view class="left-rigth-margin">
         <u--form labelPosition="left" :model="formData">
             <u-form-item label="真实姓名" labelWidth="80" borderBottom>
                 <u--input v-model="formData.realname" placeholder="仅用于身份认证" inputAlign="center" border="none">
@@ -19,23 +19,26 @@
             </u-form-item>
         </u--form>
 
-        <uni-row class="demo-uni-row " :width=730>
-            <uni-col :span="2">
-                <view class="demo-uni-col"></view>
-            </uni-col>
-            <uni-col :span="9">
-                <u-button type="primary" size="normal" text="学校邮箱认证" @click="authByEmailBtnOnClick"></u-button>
-            </uni-col>
-            <uni-col :span="2">
-                <view class="demo-uni-col"></view>
-            </uni-col>
-            <uni-col :span="9">
-                <u-button type="primary" size="normal" text="学生证认证" @click="authByCertificationBtnOnClick"></u-button>
-            </uni-col>
-            <uni-col :span="2">
-                <view class="demo-uni-col"></view>
-            </uni-col>
-        </uni-row>
+        <view class="demo-uni-row">
+            <uni-row width=730>
+                <uni-col :span="2">
+                    <view class="demo-uni-col"></view>
+                </uni-col>
+                <uni-col :span="9">
+                    <u-button type="primary" size="normal" text="学校邮箱认证" @click="authByEmailBtnOnClick"></u-button>
+                </uni-col>
+                <uni-col :span="2">
+                    <view class="demo-uni-col"></view>
+                </uni-col>
+                <uni-col :span="9">
+                    <u-button type="primary" size="normal" text="学生证认证" @click="authByCertificationBtnOnClick">
+                    </u-button>
+                </uni-col>
+                <uni-col :span="2">
+                    <view class="demo-uni-col"></view>
+                </uni-col>
+            </uni-row>
+        </view>
     </view>
 </template>
 
@@ -96,11 +99,12 @@ export default {
             if (!this.checkFormData()) {
                 return
             }
-            uni.navigateTo({ url: 'auth_by_certification?realname=' + this.formData.realname 
-                            + '&campus_id=' + this.formData.selectedCampus.id 
-                            + '&major_id=' + this.formData.selectedMajor.id 
-                            + '&degree=' + this.formData.selectedDegree
-                            + '&kickoff_year=' + this.formData.selectedKickoffYear
+            uni.navigateTo({
+                url: 'auth_by_certification?realname=' + this.formData.realname
+                    + '&campus_id=' + this.formData.selectedCampus.id
+                    + '&major_id=' + this.formData.selectedMajor.id
+                    + '&degree=' + this.formData.selectedDegree
+                    + '&kickoff_year=' + this.formData.selectedKickoffYear
             })
         },
 
@@ -109,11 +113,12 @@ export default {
             if (!this.checkFormData()) {
                 return
             }
-            uni.navigateTo({ url: 'auth_by_email?realname=' + this.formData.realname 
-                            + '&campus_id=' + this.formData.selectedCampus.id 
-                            + '&major_id=' + this.formData.selectedMajor.id 
-                            + '&degree=' + this.formData.selectedDegree
-                            + '&kickoff_year=' + this.formData.selectedKickoffYear 
+            uni.navigateTo({
+                url: 'auth_by_email?realname=' + this.formData.realname
+                    + '&campus_id=' + this.formData.selectedCampus.id
+                    + '&major_id=' + this.formData.selectedMajor.id
+                    + '&degree=' + this.formData.selectedDegree
+                    + '&kickoff_year=' + this.formData.selectedKickoffYear
             })
         },
 
@@ -192,12 +197,8 @@ export default {
 
 <style>
 .demo-uni-row {
-    margin-bottom: 10px;
-    /* QQ、字节小程序文档写有 :host，但实测不生效 */
-    /* 百度小程序没有 :host，需要设置block */
-    /* #ifdef MP-TOUTIAO || MP-QQ || MP-BAIDU */
+    margin-top: 20rpx;
     display: block;
-    /* #endif */
 }
 
 .demo-uni-col {
