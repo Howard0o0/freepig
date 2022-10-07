@@ -1,6 +1,5 @@
 <template>
-	<view>
-
+	<view class="left-rigth-margin">
 		<u-row justify="space-between" customStyle="margin-bottom: 10px">
 			<u-col span="6">
 				<u--image showLoading="false" src="/static/choose_image.png" width="300rpx" height="300rpx"
