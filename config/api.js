@@ -103,6 +103,18 @@ export const publishGoods = (goodsID, goodsDesc, tagID, price, imageURLs) => uni
     }
 })
 
+export const updateGoodsInfo = (params = {}) => uni.$u.http.post('/goods', params, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
+export const setGoodsStatus = (goodsID, status) => uni.$u.http.post('/goods/status', { goods_id: goodsID, status: status }, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const setUserInfo = (avatar_url, nickname, gender) => uni.$u.http.post('/user', {
     avatar_url: avatar_url,
     gender: gender,
@@ -128,6 +140,11 @@ export const getGoodsList = (longitude = 0, latitude = 0, tagID = 0, keyword = "
     }
 })
 
+export const getMyGoodsList = () => uni.$u.http.get('/goods/by-user', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
 
 export const SUCCESS_CODE = 200
 
@@ -144,7 +161,10 @@ export const api = {
     getUUID,
     uploadImage,
     publishGoods,
+    updateGoodsInfo,
+    setGoodsStatus,
     getGoodsList,
+    getMyGoodsList,
     getTIMSig,
     setUserInfo,
 }

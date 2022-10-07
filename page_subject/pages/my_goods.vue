@@ -20,9 +20,11 @@
 
 					<view class="btns">
 						<block>
-							<view v-if="row.status=='OPEN'" class="default" @tap="updateGoodsStatusBtnOnClick(row, 'CLOSE')">下架
+							<view v-if="row.status=='OPEN'" class="default"
+								@tap="updateGoodsStatusBtnOnClick(row, 'CLOSE')">下架
 							</view>
-							<view v-if="row.status=='CLOSE'" class="pay" @tap="updateGoodsStatusBtnOnClick(row, 'OPEN')">上架</view>
+							<view v-if="row.status=='CLOSE'" class="pay"
+								@tap="updateGoodsStatusBtnOnClick(row, 'OPEN')">上架</view>
 						</block>
 					</view>
 				</view>
@@ -78,6 +80,7 @@ export default {
 	},
 
 	onLoad(option) {
+		this.refreshMyGoodsList()
 	},
 
 	methods: {
@@ -86,9 +89,29 @@ export default {
 			if (tokens.length == 0) { return "" }
 			return tokens[1]
 		},
-		updateGoodsStatusBtnOnClick(goods, newStatus) {
 
-		}
+		async updateGoodsStatusBtnOnClick(goods, newStatus) {
+			uni.showToast({
+				title: '更新中',
+				icon: 'loading',
+				duration: 2000
+			});
+
+			const resp = await api.setGoodsStatus(goods.id, newStatus)
+			if (resp.code != api.SUCCESS_CODE) { return }
+			uni.showToast({
+				title: 'OK',
+				icon: 'success',
+				duration: 1000
+			});
+			this.refreshMyGoodsList()
+		},
+
+		async refreshMyGoodsList() {
+			const resp = await api.getMyGoodsList()
+			if (resp.code != api.SUCCESS_CODE) { return }
+			this.myGoodsList = resp.data
+		},
 	}
 }
 </script>
