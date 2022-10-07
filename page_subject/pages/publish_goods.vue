@@ -1,5 +1,5 @@
 <template>
-	<view class="centerAlign">
+	<view class="centerAlign left-rigth-margin">
 		<uni-easyinput type="textarea" autoHeight="true" v-model="goodsDesc" :placeholder="goodsDescPlaceHolder"
 			inputBorder="false" />
 		<u-album :urls="choosedImageURLs"></u-album>
@@ -12,7 +12,7 @@
 
 		<u--form labelPosition="left">
 			<u-form-item leftIcon="rmb-circle-fill" label="价格" labelWidth="80">
-				<u--input v-model="price" placeholder="0.00" inputAlign="right" border="none" />
+				<u--input type="digit" v-model="price" placeholder="0.00" inputAlign="right" border="none" />
 			</u-form-item>
 		</u--form>
 
@@ -52,6 +52,7 @@ export default {
 			var resp = await api.getTagList()
 			for (var i = 0; i < resp.data.length; i++) {
 				var tag = resp.data[i]
+				if (tag.name == '全部') { continue }
 				tagList.push({
 					text: tag.name,
 					value: tag.id,
