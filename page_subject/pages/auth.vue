@@ -39,6 +39,8 @@
                 </uni-col>
             </uni-row>
         </view>
+
+        <uni-notice-bar class="bottom-notice-bar" text="认证成功后, 每年仅有一次机会重新认证, 请谨慎操作呀" />
     </view>
 </template>
 
