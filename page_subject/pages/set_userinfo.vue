@@ -117,6 +117,11 @@ export default {
 			let res = await uni.chooseImage({
 				count: 1,
 				sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+				crop: {
+					width: 500,
+					height: 500,
+					resize: false,
+				}
 			});
 			let selectedImageFile = res[1].tempFiles[0]
 			console.log('[DEBUG] avatar image choosed: ', selectedImageFile)

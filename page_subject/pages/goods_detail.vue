@@ -59,31 +59,30 @@ export default {
     justify-content: space-between;
     align-items: flex-end;
     width: 92%;
-    padding: 10rpx 4% 10rpx 4%;
+    // padding: 10rpx 4% 10rpx 8%;
 }
 
 .nickname {
-    width: 70%;
     height: 50rpx;
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis; //溢出用省略号显示
     white-space: nowrap; //溢出不换行
-    font-size: 35rpx;
+    font-size: 32rpx;
 }
 
 .user-info {
-    width: 70%;
+    width: 450rpx;
     height: 50rpx;
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis; //溢出用省略号显示
     white-space: nowrap; //溢出不换行
     font-size: 30rpx;
+    margin-left: 10rpx;
 }
 
 .avatar {
-    text-align: left;
     width: 100rpx;
     height: 100rpx;
 }
@@ -97,7 +96,7 @@ export default {
     color: #e65339;
     font-size: 50rpx;
     font-weight: 600;
-    margin: 10rpx 4% 10rpx 4%;
+    margin: 10rpx 4% 10rpx 0;
 }
 
 .left-rigth-margin {

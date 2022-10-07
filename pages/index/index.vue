@@ -168,7 +168,7 @@ export default {
 		},
 
 		async refreshGoodsList() {
-			uni.showToast({ title: '正在加载', duration: 1000 })
+			uni.showToast({ title: '正在加载', duration: 1000, icon: 'loading' })
 			const resp = await api.getGoodsList(this.currLocation.longitude, this.currLocation.latitude, this.goodsParam.tagID, this.goodsParam.keyword, this.goodsParam.currPageIndex, this.goodsParam.currPageSize)
 			const goodsList = resp.data
 			if (goodsList == null || goodsList.length == 0) {
