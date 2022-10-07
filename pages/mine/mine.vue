@@ -5,7 +5,7 @@
 		<uni-grid :column="4" :highlight="true" :showBorder="false" :square="false" @change="gridItemOnClick">
 			<uni-grid-item v-for="(item, index) in grids" :index="index" :key="index">
 				<view class="grid-item-box" style="background-color: #fff;">
-					<u-icon size="40" :name="item.icon"></u-icon>
+					<u-icon size="30" :name="item.icon"></u-icon>
 					<view>{{item.text}}</view>
 				</view>
 			</uni-grid-item>
@@ -98,5 +98,6 @@ export default {
 	align-items: center;
 	justify-content: center;
 	padding: 15px 0;
+	font-size: 30rpx;
 }
 </style>
