@@ -3,7 +3,7 @@
         {
             "path": "pages/index/index",
             "style": {
-                "navigationBarTitleText": "uni-app",
+                "navigationBarTitleText": "广场",
                 "enablePullDownRefresh": true
             }
         },
@@ -17,7 +17,7 @@
         {
             "path": "pages/tim/record",
             "style": {
-                "navigationBarTitleText": "uni-app"
+                "navigationBarTitleText": "消息列表"
             }
         },
         {

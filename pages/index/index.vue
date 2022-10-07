@@ -4,8 +4,8 @@
 		<uni-search-bar @confirm="SearchBtnOnClick" v-model="goodsParam.keyword" />
 
 		<!-- 商品标签 -->
-		<v-tabs pills=" true" activeColor="#fff" fontSize="40rpx" v-model="currTabIndex" :tabs="tabNameList"
-			@change="tabOnChange">
+		<v-tabs class="left-rigth-margin" pills="false" activeColor="#fff" fontSize="40rpx" v-model="currTabIndex"
+			:tabs="tabNameList" @change="tabOnChange">
 		</v-tabs>
 
 		<!-- 商品列表 -->
@@ -45,7 +45,7 @@ export default {
 	data() {
 		return {
 			currTabIndex: 0,
-			tabNameList: ['军事', '国内', '新闻', '军事', '国内', '新闻', '军事', '国内', '新闻'],
+			tabNameList: [],
 			tagList: [],
 
 			goodsList: [],
@@ -379,5 +379,10 @@ export default {
 		}
 
 	}
+}
+
+.left-rigth-margin {
+	margin-left: 4%;
+	margin-right: 4%;
 }
 </style>
