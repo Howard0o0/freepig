@@ -164,7 +164,7 @@ export default {
 
 		createGoodsBtnOnClick() {
 			console.log('createGoodsBtnOnClick')
-			uni.navigateTo({ url: '../../page_subject/pages/publish_goods' })
+			uni.navigateTo({ url: '/page_subject/pages/publish_goods' })
 		},
 
 		async refreshGoodsList() {

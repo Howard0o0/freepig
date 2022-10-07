@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { utils } from "@/common/common"
 import userList from '../../commen/tim/user.js'
 import { api } from '@/config/api.js'
 import {
@@ -127,24 +128,28 @@ export default {
 		toRoom(item) {
 			this.$store.commit('updateConversationActive', item)
 			uni.navigateTo({
-				url: './room'
+				url: '/pages/tim/room'
 			})
 		},
 		//选择用户聊天
 		checkUserToRoom(toUserInfo) {
 			this.$store.commit('createConversationActive', toUserInfo.id)
 			uni.navigateTo({
-				url: './room'
+				url: '/pages/tim/room'
 			})
 		}
 
 	},
 	onShow() {
+		if (this.$store.state.vuex_user.role != "STUDENT") {
+			utils.interceptUnauthorizedPageCallback()
+			return
+		}
 		if (this.isSDKReady) {
-			console.log('2222')
+			console.log('TIM SDK is ready')
 			this.getConversationList()
 		} else {
-			console.log('333333')
+			console.log('TIM SDK is not ready')
 		}
 	},
 	onLoad() {

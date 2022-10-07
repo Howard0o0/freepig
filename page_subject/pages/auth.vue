@@ -86,7 +86,7 @@ export default {
 
     methods: {
         pickCampusOnClick() {
-            uni.navigateTo({ url: 'pick_campus' })
+            uni.navigateTo({ url: '/page_subject/pages/pick_campus' })
         },
 
         setSelectedCampus(campus) {
@@ -102,7 +102,7 @@ export default {
                 return
             }
             uni.navigateTo({
-                url: 'auth_by_certification?realname=' + this.formData.realname
+                url: '/page_subject/pages/auth_by_certification?realname=' + this.formData.realname
                     + '&campus_id=' + this.formData.selectedCampus.id
                     + '&major_id=' + this.formData.selectedMajor.id
                     + '&degree=' + this.formData.selectedDegree
@@ -116,7 +116,7 @@ export default {
                 return
             }
             uni.navigateTo({
-                url: 'auth_by_email?realname=' + this.formData.realname
+                url: '/page_subject/pages/auth_by_email?realname=' + this.formData.realname
                     + '&campus_id=' + this.formData.selectedCampus.id
                     + '&major_id=' + this.formData.selectedMajor.id
                     + '&degree=' + this.formData.selectedDegree

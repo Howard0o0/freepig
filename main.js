@@ -33,6 +33,7 @@ const app = new Vue({
 
 // 引入请求封装，将app参数传递到配置中
 require('./config/request.js')(app)
+require('./config/page_interceptor.js')(app)
 
 app.$mount()
     // #endif

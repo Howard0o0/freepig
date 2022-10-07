@@ -7,6 +7,21 @@ async function refreshUserInfo() {
     uni.$u.vuex('vuex_user', resp.data);
 }
 
+function interceptUnauthorizedPageCallback() {
+    console.log('[DEBUG] jumping to page mine')
+    uni.showToast({
+        title: '为了保证圈子的干净, 需要先认证噢',
+        icon: 'none',
+        duration: 1000
+    });
+
+    setTimeout(() => {
+        uni.reLaunch({
+            url: '/pages/mine/mine'
+        })
+    }, 1000);
+}
+
 export default {
     token,
     baseURL,
@@ -14,5 +29,6 @@ export default {
 }
 
 export const utils = {
-    refreshUserInfo
+    refreshUserInfo,
+    interceptUnauthorizedPageCallback,
 }

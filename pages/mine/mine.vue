@@ -42,9 +42,9 @@ export default {
 		}
 	},
 	onLoad() {
-		this.refreshAuthTag()
 	},
 	onShow() {
+		this.refreshAuthTag()
 		this.identifyFailNoticeShowTimeout = false
 		utils.refreshUserInfo()
 		this.userInfo = store.state.vuex_user
@@ -62,7 +62,7 @@ export default {
 		},
 
 		userInfoCardOnClick() {
-			uni.navigateTo({ url: '../../page_subject/pages/set_userinfo' })
+			uni.navigateTo({ url: '/page_subject/pages/set_userinfo' })
 		},
 
 		refreshAuthTag() {
@@ -87,10 +87,12 @@ export default {
 			switch (e.detail.index) {
 				case 0:
 					console.log("jumping to auth page")
-					uni.navigateTo({ url: '../../page_subject/pages/auth' })
+					uni.navigateTo({ url: '/page_subject/pages/auth' })
+					break
 				case 1:
 					console.log("jumping to mygoods page")
-					uni.navigateTo({ url: '../../page_subject/pages/my_goods' })
+					uni.navigateTo({ url: '/page_subject/pages/my_goods' })
+					break
 			}
 		}
 	}
