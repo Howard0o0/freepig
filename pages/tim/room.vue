@@ -248,7 +248,7 @@ export default {
 		this.userInfo = this.$store.state.vuex_user
 		console.log('[DEBUG] self userinfo: ', this.userInfo)
 		// this.userInfo = JSON.parse(uni.getStorageSync('userInfo'))
-		this.toUserId_ = this.$store.state.toUserId
+		this.toUserId_ = this.$store.state.toUserId.toString()
 		this.conversationActive_ = this.$store.state.conversationActive
 		this.TIM = this.$TIM
 
