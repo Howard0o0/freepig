@@ -10,6 +10,10 @@
 				</view>
 			</uni-grid-item>
 		</uni-grid>
+
+		<uni-notice-bar class="bottom-notice-bar"
+			v-if="userInfo.role=='VERIFY_BROKEN' && !identifyFailNoticeShowTimeout" :text="identifyFailReason" />
+
 	</view>
 </template>
 
@@ -31,16 +35,32 @@ export default {
 					icon: "/static/mine/grid-mygoods.png",
 					text: "我的宝贝",
 				},
-			]
+			],
+			identifyFailReason: "",
+			identifyFailNoticeShowTimeout: false,
+			userInfo: null,
 		}
 	},
 	onLoad() {
 		this.refreshAuthTag()
 	},
 	onShow() {
+		this.identifyFailNoticeShowTimeout = false
 		utils.refreshUserInfo()
+		this.userInfo = store.state.vuex_user
+		this.generateVerifyBrokenReason()
+		let that = this
+		setTimeout(function () {
+			that.identifyFailNoticeShowTimeout = true
+			console.log('[DEBUG] identifyFailNoticeShowTimeout')
+		}, 3000)
 	},
 	methods: {
+
+		generateVerifyBrokenReason() {
+			this.identifyFailReason = "身份审核失败: " + store.state.vuex_user.identify_fail_reason
+		},
+
 		userInfoCardOnClick() {
 			uni.navigateTo({ url: '../../page_subject/pages/set_userinfo' })
 		},
@@ -55,6 +75,9 @@ export default {
 					break
 				case "PENDING":
 					this.authTag = "审核中"
+					break
+				case "VERIFY_BROKEN":
+					this.authTag = "审核未通过"
 					break
 			}
 		},
@@ -99,5 +122,10 @@ export default {
 	justify-content: center;
 	padding: 15px 0;
 	font-size: 30rpx;
+}
+
+.bottom-notice-bar {
+	position: fixed;
+	bottom: 3rpx;
 }
 </style>
