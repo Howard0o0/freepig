@@ -1,6 +1,8 @@
 <template>
-	<view>
-		<image class="avatar" :src="formData.avatarImageFilePath" mode="scaleToFill" @click="avatarOnClick"></image>
+	<view class="left-rigth-margin">
+		<view class="centerAlign">
+			<image class="avatar" :src="formData.avatarImageFilePath" mode="scaleToFill" @click="avatarOnClick"></image>
+		</view>
 		<u-form-item label="昵称" labelWidth="80" borderBottom>
 			<u--input v-model="formData.nickname" :placeholder="userInfo.nickname" inputAlign="center"
 				border="surround" />
@@ -135,7 +137,16 @@ export default {
 <style>
 .avatar {
 	text-align: left;
-	width: 100rpx;
-	height: 100rpx;
+	width: 200rpx;
+	height: 200rpx;
+	flex-shrink: 0;
+	border: solid 1rpx #000;
+}
+
+.centerAlign {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 </style>
