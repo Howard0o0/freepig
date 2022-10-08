@@ -27,7 +27,9 @@ export default {
 			formData: {
 				selectedImageFilePath: "",
 				authInfo: null,
-			}
+			},
+			selectedImageFile: null,
+			MAX_IMAGE_SIZE_BYTES: (1 << 20),
 		}
 	},
 
@@ -41,14 +43,29 @@ export default {
 			var res = await uni.chooseImage({
 				count: 1,
 				sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+				crop: {
+					width: 500,
+					height: 500,
+				}
 			});
 			var selectedImageFile = res[1].tempFiles[0]
 			console.log('[DEBUG] image choosed: ', selectedImageFile)
 			this.formData.selectedImageFilePath = selectedImageFile.path
 			console.log('[DEBUG] image choosed filepath: ', this.formData.selectedImageFilePath)
+			this.selectedImageFile = selectedImageFile
 		},
 
 		async submitBtnOnclick() {
+
+			if (this.selectedImageFile.size > this.MAX_IMAGE_SIZE_BYTES) {
+				uni.showToast({
+					title: '图片太大啦, 裁剪到' + (this.MAX_IMAGE_SIZE_BYTES>>20) + "MB以下吧^ ^",
+					icon: 'none',
+					duration: 2000
+				});
+				return
+			}
+
 			var resp = await api.identifyByCertification(
 				this.formData.selectedImageFilePath,
 				this.formData.authInfo.realname,
