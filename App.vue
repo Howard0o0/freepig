@@ -27,6 +27,7 @@ export default {
 		await utils.refreshUserInfo()
 		const resp = await api.getTIMSig()
 		if (resp.code != api.SUCCESS_CODE) { return }
+		if (this.$store.state.vuex_user.role != "STUDENT") { return }
 		this.TIMLogin(this.$store.state.vuex_user.id.toString(), resp.data.tim_sig)
 		console.log('App Launch')
 	},
