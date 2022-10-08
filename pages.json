@@ -107,6 +107,13 @@
                     }
                 },
                 {
+                    "path": "pages/contact_us",
+                    "style": {
+                        "navigationBarTitleText": "联系我们",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
                     "path": "pages/publish_goods",
                     "style": {
                         "navigationBarTitleText": "",
@@ -152,6 +159,12 @@
                     ]
                 },
                 "page_subject/pages/my_goods": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/contact_us": {
                     "network": "all",
                     "packages": [
                         "__APP__"

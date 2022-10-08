@@ -35,6 +35,10 @@ export default {
 					icon: "/static/mine/grid-mygoods.png",
 					text: "我的宝贝",
 				},
+				{
+					icon: "/static/mine/grid-contact-us.png",
+					text: "联系我们",
+				},
 			],
 			identifyFailReason: "",
 			identifyFailNoticeShowTimeout: false,
@@ -92,6 +96,10 @@ export default {
 				case 1:
 					console.log("jumping to mygoods page")
 					uni.navigateTo({ url: '/page_subject/pages/my_goods' })
+					break
+				case 2:
+					console.log("jumping to contact-us page")
+					uni.navigateTo({ url: '/page_subject/pages/contact_us' })
 					break
 			}
 		}
