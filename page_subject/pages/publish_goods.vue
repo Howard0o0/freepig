@@ -43,6 +43,7 @@ export default {
 			selectedTag: "",
 			price: 0.00,
 			goodsID: "",
+			MAX_IMAGE_SIZE_BYTE: (1 << 20),
 		}
 	},
 	methods: {
@@ -155,6 +156,15 @@ export default {
 			console.log('[DEBUG] selected images: ', selectedImageFiles)
 			var choosedImageURLs = []
 			for (let i = 0; i < selectedImageFiles.length; i++) {
+				if (selectedImageFiles[i].size > this.MAX_IMAGE_SIZE_BYTE) {
+					uni.showToast({
+						title: '第' + (i + 1) + '张图太大啦, 单图大小限制' + (this.MAX_IMAGE_SIZE_BYTE >> 20) + 'MB呀',
+						icon: 'none',
+						duration: 2000
+					});
+					this.choosedImageURLs = []
+					return
+				}
 				choosedImageURLs.push(selectedImageFiles[i].path)
 			}
 			this.choosedImageURLs = choosedImageURLs
