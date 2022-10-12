@@ -2,9 +2,9 @@ module.exports = (vm) => {
     // 初始化请求配置
     uni.$u.http.setConfig((config) => {
         /* config 为默认全局配置*/
-        config.baseURL = 'https://127.0.0.1:8080/api/v1'; /* 根域名 */
+        // config.baseURL = 'http://127.0.0.1:8080/api/v1'; /* 根域名 */
         // config.baseURL = 'https://182.92.109.123:8080/api/v1'; /* 根域名 */
-        // config.baseURL = 'https://secondmarket.top:8080/api/v1'; /* 根域名 */
+        config.baseURL = 'https://secondmarket.top/api/v1'; /* 根域名 */
         return config
     })
 
@@ -44,7 +44,7 @@ module.exports = (vm) => {
         return responseFromServer
     }, (response) => {
         // 对响应错误做点什么 （statusCode !== 200）
-        uni.$u.toast("http request fail. error code: ", response.statusCode)
+        uni.$u.toast("http request fail. error code: "+ response.statusCode)
         return Promise.reject(response)
     })
 }
