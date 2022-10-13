@@ -1,6 +1,6 @@
 <template>
 	<view class="left-rigth-margin">
-		<image src="/page_subject/static/about_us.jpeg"></image>
+		<image src="/page_subject/static/about_us.jpeg" mode="aspectFit"></image>
 		<view>{{aboutFreePig}}</view>
 		<u-form-item leftIcon="email" >
 			<view>howardzz@foxmail.com</view>

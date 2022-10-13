@@ -1,7 +1,7 @@
 <template>
     <view class=".left-rigth-margin">
         <view class="multi-columns">
-            <image class="avatar" :src="selectedGoodsToShowInDetail.user_avatar_url" mode="scaleToFill"></image>
+            <image class="avatar" :src="selectedGoodsToShowInDetail.user_avatar_url" mode="aspectFit"></image>
             <view>
                 <view class="nickname user-info">{{selectedGoodsToShowInDetail.user_nickname}}</view>
                 <view class="campus-info user-info">武汉大学</view>

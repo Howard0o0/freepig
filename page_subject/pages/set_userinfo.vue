@@ -1,7 +1,7 @@
 <template>
 	<view class="left-rigth-margin">
 		<view class="centerAlign">
-			<image class="avatar" :src="formData.avatarImageFilePath" mode="scaleToFill" @click="avatarOnClick"></image>
+			<image class="avatar" :src="formData.avatarImageFilePath" @click="avatarOnClick" mode="aspectFit"></image>
 		</view>
 		<u-form-item label="昵称" labelWidth="80" borderBottom>
 			<u--input v-model="formData.nickname" :placeholder="userInfo.nickname" inputAlign="center"

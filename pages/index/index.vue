@@ -12,7 +12,7 @@
 		<view class="goods-list">
 			<view class="product-list">
 				<view class="product" v-for="(goods) in goodsList" :key="goods.goods_id" @tap="toGoods(goods)">
-					<image mode="widthFix" :src="getGoodsFirstImage(goods.goods_images)"></image>
+					<image :src="getGoodsFirstImage(goods.goods_images)" mode="aspectFit"></image>
 					<view class="name">{{goods.goods_description}}</view>
 					<view class="info">
 						<view class="price">￥{{goods.goods_price}}</view>
@@ -23,7 +23,7 @@
 						<view class="nickname">{{goods.major}}</view>
 					</view>
 					<view class="info">
-						<image class="avatar" :src="goods.user_avatar_url" mode="scaleToFill"></image>
+						<image class="avatar" :src="goods.user_avatar_url" mode="aspectFit"></image>
 						<view class="nickname">{{goods.user_nickname}}</view>
 					</view>
 				</view>

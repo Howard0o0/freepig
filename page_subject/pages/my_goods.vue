@@ -6,7 +6,7 @@
 
 					<view class="order-info">
 						<view class="left">
-							<image :src="getGoodsFirstImage(row.images)"></image>
+							<image :src="getGoodsFirstImage(row.images)" mode="aspectFit"></image>
 						</view>
 						<view class="right">
 							<view class="name">

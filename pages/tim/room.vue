@@ -27,19 +27,19 @@
 								</view>
 								<!-- 图片消息 -->
 								<view v-else-if="item.type==TIM.TYPES.MSG_IMAGE" class="bubble">
-									<image :src="item.payload.imageInfoArray[0].url"></image>
+									<image :src="item.payload.imageInfoArray[0].url" mode="aspectFit"></image>
 								</view>
 							</view>
 							<!-- 右-头像 -->
 							<view class="right">
-								<image :src="userInfo.avatar_url"></image>
+								<image :src="userInfo.avatar_url"  mode="aspectFit"></image>
 							</view>
 						</view>
 						<!-- 别人发出的消息 -->
 						<view class="other" v-else>
 							<!-- 左-头像 -->
 							<view class="left">
-								<image :src="toUserInfo.avatar_url"></image>
+								<image :src="toUserInfo.avatar_url" mode="aspectFit"></image>
 							</view>
 							<!-- 右-用户名称-时间-消息 -->
 							<view class="right">
@@ -54,7 +54,7 @@
 								</view>
 								<!-- 图片消息 -->
 								<view v-else-if="item.type==TIM.TYPES.MSG_IMAGE" class="bubble">
-									<image :src="item.payload.imageInfoArray[0].url"></image>
+									<image :src="item.payload.imageInfoArray[0].url" mode="aspectFit"></image>
 								</view>
 							</view>
 						</view>
@@ -68,7 +68,7 @@
 			<swiper class="emoji-swiper" :class="{hidden:hideEmoji}" indicator-dots="true" duration="150">
 				<swiper-item v-for="(page,pid) in emojiList" :key="pid">
 					<view v-for="(em,eid) in page" :key="eid" @tap="addEmoji(em)">
-						<image mode="widthFix" :src="'/static/img/emoji/'+em.url"></image>
+						<image :src="'/static/img/emoji/'+em.url" mode="aspectFit"></image>
 					</view>
 				</swiper-item>
 			</swiper>
