@@ -13,7 +13,7 @@
         <view class="swiper-box">
             <swiper indicator-dots="true" circular="true" autoplay="true">
                 <swiper-item v-for="image in swipImages" :key="image">
-                    <image :src="image"></image>
+                    <image :src="image" mode="aspectFit"></image>
                 </swiper-item>
             </swiper>
         </view>

@@ -1,28 +1,28 @@
 {
-    "name": "second-market",
-    "appid": "__UNI__C0B5037",
-    "description": "",
-    "versionName": "1.0.0",
-    "versionCode": "100",
-    "transformPx": false,
+    "name" : "second-market",
+    "appid" : "__UNI__C0B5037",
+    "description" : "",
+    "versionName" : "1.0.0",
+    "versionCode" : "100",
+    "transformPx" : false,
     /* 5+App特有相关 */
-    "app-plus": {
-        "usingComponents": true,
-        "nvueStyleCompiler": "uni-app",
-        "compilerVersion": 3,
-        "splashscreen": {
-            "alwaysShowBeforeRender": true,
-            "waiting": true,
-            "autoclose": true,
-            "delay": 0
+    "app-plus" : {
+        "usingComponents" : true,
+        "nvueStyleCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
         },
         /* 模块配置 */
-        "modules": {},
+        "modules" : {},
         /* 应用发布信息 */
-        "distribute": {
+        "distribute" : {
             /* android打包配置 */
-            "android": {
-                "permissions": [
+            "android" : {
+                "permissions" : [
                     "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
                     "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
@@ -41,47 +41,45 @@
                 ]
             },
             /* ios打包配置 */
-            "ios": {},
+            "ios" : {},
             /* SDK配置 */
-            "sdkConfigs": {}
+            "sdkConfigs" : {}
         }
     },
     /* 快应用特有相关 */
-    "quickapp": {},
+    "quickapp" : {},
     /* 小程序特有相关 */
-    "mp-weixin": {
-        "appid": "wxd5047b52773dd57d",
-        "setting": {
-            "urlCheck": false,
-            "minified": true
+    "mp-weixin" : {
+        "appid" : "wxd5047b52773dd57d",
+        "setting" : {
+            "urlCheck" : false,
+            "minified" : true
         },
-        "optimization": {
-            "subPackages": true
+        "optimization" : {
+            "subPackages" : true
         },
-        "permission": {
-            "scope.getLocation": {
-                "desc": "小程序将使用定位功能"
+        "permission" : {
+            "scope.getLocation" : {
+                "desc" : "小程序将使用定位功能"
             },
-            "scope.userLocation": {
-                "desc": "需要获取当前位置才能获取附近宝贝呀"
+            "scope.userLocation" : {
+                "desc" : "需要获取当前位置才能获取附近宝贝呀"
             }
         },
-        "requiredPrivateInfos": [
-            "getLocation"
-        ],
-        "usingComponents": true
+        "requiredPrivateInfos" : [ "getLocation" ],
+        "usingComponents" : true
     },
-    "mp-alipay": {
-        "usingComponents": true
+    "mp-alipay" : {
+        "usingComponents" : true
     },
-    "mp-baidu": {
-        "usingComponents": true
+    "mp-baidu" : {
+        "usingComponents" : true
     },
-    "mp-toutiao": {
-        "usingComponents": true
+    "mp-toutiao" : {
+        "usingComponents" : true
     },
-    "uniStatistics": {
-        "enable": false
+    "uniStatistics" : {
+        "enable" : false
     },
-    "vueVersion": "2"
+    "vueVersion" : "2"
 }

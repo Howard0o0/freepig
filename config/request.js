@@ -44,7 +44,7 @@ module.exports = (vm) => {
         return responseFromServer
     }, (response) => {
         // 对响应错误做点什么 （statusCode !== 200）
-        uni.$u.toast("http request fail. error code: "+ response.statusCode)
+        uni.$u.toast("http request fail. response: "+ response)
         return Promise.reject(response)
     })
 }
