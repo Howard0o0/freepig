@@ -27,12 +27,13 @@
 								</view>
 								<!-- 图片消息 -->
 								<view v-else-if="item.type==TIM.TYPES.MSG_IMAGE" class="bubble">
-									<image :src="item.payload.imageInfoArray[0].url" mode="aspectFit"></image>
+									<image :src="item.payload.imageInfoArray[0].url" mode="aspectFit"
+										@click="imagePreview(item.payload.imageInfoArray[0].url)"></image>
 								</view>
 							</view>
 							<!-- 右-头像 -->
 							<view class="right">
-								<image :src="userInfo.avatar_url"  mode="aspectFit"></image>
+								<image :src="userInfo.avatar_url" mode="aspectFit"></image>
 							</view>
 						</view>
 						<!-- 别人发出的消息 -->
@@ -54,7 +55,8 @@
 								</view>
 								<!-- 图片消息 -->
 								<view v-else-if="item.type==TIM.TYPES.MSG_IMAGE" class="bubble">
-									<image :src="item.payload.imageInfoArray[0].url" mode="aspectFit"></image>
+									<image :src="item.payload.imageInfoArray[0].url" mode="aspectFit"
+										@click="imagePreview(item.payload.imageInfoArray[0].url)"></image>
 								</view>
 							</view>
 						</view>
@@ -699,6 +701,15 @@ export default {
 			this.hideDrawer();
 			this.isVoice = this.isVoice ? false : true;
 		},
+
+		imagePreview(imageURL) {
+			uni.previewImage({
+				indicator: "number",
+				loop: true,
+				urls: [imageURL],
+			})
+		},
+
 		discard() {
 			return;
 		}
