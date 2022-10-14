@@ -2,7 +2,7 @@
 	<view>
 		<view class="order-list">
 			<view class="list">
-				<view class="row" v-for="(row,index) in myGoodsList" :key="index">
+				<view class="row" v-for="(row,index) in myGoodsList" :key="index" @tap="toGoods(row)">
 
 					<view class="order-info">
 						<view class="left">
@@ -20,12 +20,12 @@
 
 					<view class="btns">
 						<block>
-							<view class="onsale" @tap="modifyGoodsBtnOnClick(row)">编辑</view>
+							<view class="onsale" @tap.stop="modifyGoodsBtnOnClick(row)">编辑</view>
 							<view v-if="row.status=='OPEN'" class="outsale"
-								@tap="updateGoodsStatusBtnOnClick(row, 'CLOSE')">下架
+								@tap.stop="updateGoodsStatusBtnOnClick(row, 'CLOSE')">下架
 							</view>
 							<view v-if="row.status=='CLOSE'" class="onsale"
-								@tap="updateGoodsStatusBtnOnClick(row, 'OPEN')">上架</view>
+								@tap.stop="updateGoodsStatusBtnOnClick(row, 'OPEN')">上架</view>
 
 						</block>
 					</view>
@@ -89,6 +89,20 @@ export default {
 		modifyGoodsBtnOnClick(goods) {
 			getApp().globalData.selectedGoodsToModify = goods
 			uni.navigateTo({ url: '/page_subject/pages/modify_goods' })
+		},
+
+		toGoods(goods) {
+			getApp().globalData.selectedGoodsToShowInDetail = {
+				user_avatar_url: this.$store.state.vuex_user.avatar_url,
+				user_nickname: this.$store.state.vuex_user.nickname,
+				user_id: this.$store.state.vuex_user.id,
+				goods_price: goods.price,
+				goods_description: goods.description,
+				goods_images: goods.images,
+			}
+			uni.navigateTo({
+				url: '/page_subject/pages/goods_detail'
+			});
 		},
 
 		async refreshMyGoodsList() {
