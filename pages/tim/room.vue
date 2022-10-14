@@ -27,7 +27,7 @@
 								</view>
 								<!-- 图片消息 -->
 								<view v-else-if="item.type==TIM.TYPES.MSG_IMAGE" class="bubble">
-									<image :src="item.payload.imageInfoArray[0].url" mode="aspectFit"
+									<image class="img" :src="item.payload.imageInfoArray[0].url" mode="aspectFit"
 										@click="imagePreview(item.payload.imageInfoArray[0].url)"></image>
 								</view>
 							</view>

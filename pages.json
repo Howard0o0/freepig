@@ -103,13 +103,20 @@
                     "path": "pages/my_goods",
                     "style": {
                         "navigationBarTitleText": "朕的宝贝",
-                        "enablePullDownRefresh": false
+                        "enablePullDownRefresh": true
                     }
                 },
                 {
                     "path": "pages/contact_us",
                     "style": {
                         "navigationBarTitleText": "联系我们",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
+                    "path": "pages/modify_goods",
+                    "style": {
+                        "navigationBarTitleText": "",
                         "enablePullDownRefresh": false
                     }
                 },
@@ -165,6 +172,12 @@
                     ]
                 },
                 "page_subject/pages/contact_us": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/modify_goods": {
                     "network": "all",
                     "packages": [
                         "__APP__"

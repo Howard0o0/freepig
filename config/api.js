@@ -103,6 +103,19 @@ export const publishGoods = (goodsID, goodsDesc, tagID, price, imageURLs) => uni
     }
 })
 
+export const updateGoods = (goodsID, goodsDesc, tagID, price, imageURLs) => uni.$u.http.put('/goods', {
+    goods_id: goodsID,
+    description: goodsDesc,
+    price: price,
+    cost: 0,
+    images: imageURLs,
+    tag_id: tagID,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const updateGoodsInfo = (params = {}) => uni.$u.http.post('/goods', params, {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -167,4 +180,5 @@ export const api = {
     getMyGoodsList,
     getTIMSig,
     setUserInfo,
+    updateGoods, 
 }

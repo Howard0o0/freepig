@@ -20,6 +20,7 @@ export default {
 
 	globalData: {
 		selectedGoodsToShowInDetail: null,
+		selectedGoodsToModify: null,
 	},
 
 	onLaunch: async function () {

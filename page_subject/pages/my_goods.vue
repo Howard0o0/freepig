@@ -20,11 +20,13 @@
 
 					<view class="btns">
 						<block>
-							<view v-if="row.status=='OPEN'" class="default"
+							<view class="onsale" @tap="modifyGoodsBtnOnClick(row)">编辑</view>
+							<view v-if="row.status=='OPEN'" class="outsale"
 								@tap="updateGoodsStatusBtnOnClick(row, 'CLOSE')">下架
 							</view>
-							<view v-if="row.status=='CLOSE'" class="pay"
+							<view v-if="row.status=='CLOSE'" class="onsale"
 								@tap="updateGoodsStatusBtnOnClick(row, 'OPEN')">上架</view>
+
 						</block>
 					</view>
 				</view>
@@ -41,45 +43,22 @@ import { utils } from '../../common/common.js';
 export default {
 	data() {
 		return {
-			myGoodsList: [
-				{
-					"id": 1997,
-					"user_id": 1,
-					"title": "iPhone6s plus  64GB  金色",
-					"description": "iphone6s plus，64g，金色，指纹用不了了，使用痕迹如图，送一个h2work的手机壳，当时手机壳花了300多港币，屏幕一直贴的钢化膜，揭掉膜屏幕无伤无痕，拍后发前可拍照片，售出后不退不换 ",
-					"price": 380,
-					"cost": 5000,
-					"status": "OPEN",
-					"tag_id": 0,
-					"images": "https://127.0.0.1:8080/api/v1/static/image/316,https://127.0.0.1:8080/api/v1/static/image/317"
-				},
-				{
-					"id": 1998,
-					"user_id": 1,
-					"title": "iPhone6s plus  64GB  金色",
-					"description": "iphone6s plus，64g，金色，指纹用不了了，使用痕迹如图，送一个h2work的手机壳，当时手机壳花了300多港币，屏幕一直贴的钢化膜，揭掉膜屏幕无伤无痕，拍后发前可拍照片，售出后不退不换 ",
-					"price": 380,
-					"cost": 5000,
-					"status": "OPEN",
-					"tag_id": 0,
-					"images": "https://127.0.0.1:8080/api/v1/static/image/316,https://127.0.0.1:8080/api/v1/static/image/317"
-				},
-				{
-					"id": 1999,
-					"user_id": 1,
-					"title": "iPhone6s plus  64GB  金色",
-					"description": "iphone6s plus，64g，金色，指纹用不了了，使用痕迹如图，送一个h2work的手机壳，当时手机壳花了300多港币，屏幕一直贴的钢化膜，揭掉膜屏幕无伤无痕，拍后发前可拍照片，售出后不退不换 ",
-					"price": 380,
-					"cost": 5000,
-					"status": "CLOSE",
-					"tag_id": 0,
-					"images": "https://127.0.0.1:8080/api/v1/static/image/316,https://127.0.0.1:8080/api/v1/static/image/317"
-				},
-			],
+			myGoodsList: [],
 		}
 	},
 
+	onPullDownRefresh() {
+		setTimeout(() => {
+			this.refreshMyGoodsList()
+			uni.stopPullDownRefresh();
+		}, 1000);
+	},
+
 	onLoad(option) {
+		this.refreshMyGoodsList()
+	},
+
+	onBackPress(e) {
 		this.refreshMyGoodsList()
 	},
 
@@ -105,6 +84,11 @@ export default {
 				duration: 1000
 			});
 			this.refreshMyGoodsList()
+		},
+
+		modifyGoodsBtnOnClick(goods) {
+			getApp().globalData.selectedGoodsToModify = goods
+			uni.navigateTo({ url: '/page_subject/pages/modify_goods' })
 		},
 
 		async refreshMyGoodsList() {
@@ -296,12 +280,12 @@ page {
 					margin-left: 20upx;
 				}
 
-				.default {
+				.onsale {
 					border: solid 1upx #ccc;
 					color: #666;
 				}
 
-				.pay {
+				.outsale {
 					border: solid 1upx #ec652f;
 					color: #ec652f;
 				}

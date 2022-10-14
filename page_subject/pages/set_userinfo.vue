@@ -122,7 +122,7 @@ export default {
 				crop: {
 					width: 500,
 					height: 500,
-					resize: false,
+					resize: true,
 				}
 			});
 			let selectedImageFile = res[1].tempFiles[0]
