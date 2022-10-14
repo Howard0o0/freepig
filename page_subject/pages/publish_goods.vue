@@ -43,7 +43,7 @@ export default {
 			selectedTag: "",
 			price: 0.00,
 			goodsID: "",
-			MAX_IMAGE_SIZE_BYTE: (1 << 20),
+			MAX_IMAGE_SIZE_BYTE: (20 << 20),
 		}
 	},
 	methods: {
