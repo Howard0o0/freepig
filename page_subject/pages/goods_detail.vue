@@ -6,7 +6,7 @@
                 <view class="nickname user-info">{{selectedGoodsToShowInDetail.user_nickname}}</view>
                 <view class="campus-info user-info">武汉大学</view>
             </view>
-            <u-icon name="chat" size="30" color="#2979ff" @click="sendMessageBtnOnClick" />
+            <u-icon v-if="!(selectedGoodsToShowInDetail.user_id == userInfo.id)" name="chat" size="30" color="#2979ff" @click="sendMessageBtnOnClick" />
         </view>
         <view class="price">￥{{selectedGoodsToShowInDetail.goods_price}}</view>
         <textarea :value="selectedGoodsToShowInDetail.goods_description" disabled="true" auto-height="true"></textarea>
@@ -32,9 +32,11 @@ export default {
         return {
             selectedGoodsToShowInDetail: null,
             swipImages: [],
+            userInfo: null,
         }
     },
     onLoad(option) {
+        this.userInfo = this.$store.state.vuex_user
         console.log('[DBUEG] selectedGoodsToShowInDetail in detail: ', getApp().globalData.selectedGoodsToShowInDetail)
         this.selectedGoodsToShowInDetail = getApp().globalData.selectedGoodsToShowInDetail
         this.swipImages = this.selectedGoodsToShowInDetail.goods_images.split(",")
