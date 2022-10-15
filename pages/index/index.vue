@@ -3,6 +3,8 @@
 		<!-- 搜索栏 -->
 		<uni-search-bar @confirm="SearchBtnOnClick" v-model="goodsParam.keyword" />
 
+		<view class="loading-text">下拉刷新</view>
+
 		<!-- 商品标签 -->
 		<v-tabs class="left-rigth-margin" fontSize="35rpx" v-model="currTabIndex" :tabs="tabNameList"
 			@change="tabOnChange">
@@ -65,8 +67,8 @@ export default {
 		}
 	},
 
-	async onLoad() {
-		await this.reload()
+	onLoad() {
+		this.reload()
 	},
 
 	//下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
@@ -221,7 +223,7 @@ export default {
 			return new Promise((resolve, reject) => {
 				uni.getSetting({
 					success: (res) => {
-						if (!res.authSetting['scope.userLocation']) {
+						if (res.authSetting["scope.userLocation"] == undefined || !res.authSetting['scope.userLocation']) {
 							console.log(res)
 							uni.authorize({
 								scope: 'scope.userLocation',
@@ -231,6 +233,26 @@ export default {
 								},
 								fail: () => { //1.2 拒绝授权
 									console.log('[DEBUG] auth for userLocation is denied')
+
+									uni.showModal({
+										title: '555 没有位置的话没法用哇 求位置权限',
+										success(res) {
+											if (res.confirm) {
+												uni.openSetting({
+													success() {
+														console.log('[DEBUG] auth for userLocation is ok after denied')
+														resolve()
+													},
+													fail() {
+														console.log('二次开启位置权限失败');
+													}
+												});
+											} else if (res.cancel) {
+												console.log('连续拒绝位置权限');
+											}
+										}
+									});
+
 									reject()
 								}
 							})
@@ -328,16 +350,17 @@ export default {
 
 }
 
+.loading-text {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 60upx;
+	color: #979797;
+	font-size: 24upx;
+}
+
 .goods-list {
-	.loading-text {
-		width: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 60upx;
-		color: #979797;
-		font-size: 24upx;
-	}
 
 	.product-list {
 		width: 92%;
