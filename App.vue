@@ -40,6 +40,13 @@ export default {
 	},
 	methods: {
 		async getToken() {
+
+			uni.showToast({
+				title: '登录中',
+				icon: 'loading',
+				duration: 2000
+			});
+
 			var response = await uni.login({ provider: 'weixin' })
 			var wx_login_code = response[1].code
 			console.log("[DEBUG] wx_login_code: ", wx_login_code)

@@ -42,6 +42,13 @@ export default {
         },
 
         async refreshCampusListToShow(keyword) {
+
+			uni.showToast({
+				title: '',
+				icon: 'loading',
+				duration: 1000
+			});
+
             var resp = await api.getCampusList(keyword)
             var campusFullList = resp.data
             this.campusListToShow = this.clipCampusList(campusFullList)

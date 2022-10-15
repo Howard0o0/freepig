@@ -66,6 +66,12 @@ export default {
 				return
 			}
 
+			uni.showToast({
+				title: '提交中',
+				icon: 'loading',
+				duration: 2000
+			});
+
 			var resp = await api.identifyByCertification(
 				this.formData.selectedImageFilePath,
 				this.formData.authInfo.realname,

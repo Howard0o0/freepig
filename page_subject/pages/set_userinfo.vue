@@ -55,6 +55,11 @@ export default {
 				return false
 			}
 
+			uni.showToast({
+				title: '更新中',
+				icon: 'success',
+				duration: 2000
+			});
 			let avatar_url = this.userInfo.avatar_url
 			if (this.formData.avatarImageFilePath != this.userInfo.avatar_url) {
 				// if the user choose a new avatar image, use the new one
@@ -67,7 +72,7 @@ export default {
 			if (resp.code != api.SUCCESS_CODE) { return }
 
 			uni.showToast({
-				title: '修改成功',
+				title: 'OK',
 				icon: 'success',
 				duration: 2000
 			});

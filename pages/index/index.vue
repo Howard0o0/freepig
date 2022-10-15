@@ -4,8 +4,8 @@
 		<uni-search-bar @confirm="SearchBtnOnClick" v-model="goodsParam.keyword" />
 
 		<!-- 商品标签 -->
-		<v-tabs class="left-rigth-margin"  fontSize="35rpx" v-model="currTabIndex"
-			:tabs="tabNameList" @change="tabOnChange">
+		<v-tabs class="left-rigth-margin" fontSize="35rpx" v-model="currTabIndex" :tabs="tabNameList"
+			@change="tabOnChange">
 		</v-tabs>
 
 		<!-- 商品列表 -->
@@ -121,7 +121,7 @@ export default {
 		getGoodsFirstImage(imageURLs) {
 			const tokens = imageURLs.split(',');
 			if (tokens.length == 0) { return "" }
-			return tokens[1]
+			return tokens[0]
 		},
 
 		async renderTabNameList() {

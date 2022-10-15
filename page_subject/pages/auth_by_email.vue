@@ -48,6 +48,13 @@ export default {
 			if (!this.checkFormData()) {
 				return false
 			}
+
+			uni.showToast({
+				title: '验证中',
+				icon: 'loading',
+				duration: 2000
+			});
+
 			var resp = await api.identifyByEmail(
 				this.formData.email,
 				this.formData.verifyCode,

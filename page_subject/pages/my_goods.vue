@@ -66,7 +66,7 @@ export default {
 		getGoodsFirstImage(imageURLs) {
 			const tokens = imageURLs.split(',');
 			if (tokens.length == 0) { return "" }
-			return tokens[1]
+			return tokens[0]
 		},
 
 		async updateGoodsStatusBtnOnClick(goods, newStatus) {
@@ -106,7 +106,14 @@ export default {
 		},
 
 		async refreshMyGoodsList() {
+
+			uni.showToast({
+				title: '加载中',
+				icon: 'loading',
+				duration: 2000
+			});
 			const resp = await api.getMyGoodsList()
+			uni.hideToast()
 			if (resp.code != api.SUCCESS_CODE) { return }
 			this.myGoodsList = resp.data
 		},

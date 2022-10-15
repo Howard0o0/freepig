@@ -70,6 +70,12 @@ export default {
 		async confirmBtnOnClick() {
 			if (!this.checkFormData()) { return }
 
+			uni.showToast({
+				title: '发布中',
+				icon: 'success',
+				duration: 2000
+			});
+
 			var imageURLs = await this.uploadImages()
 			console.log('uploaded image urls: ', imageURLs)
 			if (imageURLs == "") { return }
@@ -78,7 +84,7 @@ export default {
 			if (resp.code != api.SUCCESS_CODE) { return }
 
 			uni.showToast({
-				title: '发布成功',
+				title: 'OK',
 				icon: 'success',
 				duration: 2000
 			});
