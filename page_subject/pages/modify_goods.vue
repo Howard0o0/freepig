@@ -31,6 +31,7 @@ export default {
 			goodsDesc: "",
 			goodsDescPlaceHolder: "在这里描述下宝贝的转手原因、入手渠道、规格以及新旧程度和使用感受吧, 会有助于更快的转手喔~ ^o^",
 			choosedImageURLs: [""],
+			imageURLsUpdated: false,
 			tagList: [
 				{
 					text: '加载中',
@@ -77,7 +78,7 @@ export default {
 			if (!this.checkFormData()) { return }
 
 			imageURLs = ""
-			if (this.choosedImageURLs.length == 0 || this.choosedImageURLs[0] == "") {
+			if (this.imageURLsUpdated) {
 				var imageURLs = await this.uploadImages()
 				console.log('uploaded image urls: ', imageURLs)
 				if (imageURLs == "") { return }
@@ -179,6 +180,7 @@ export default {
 				choosedImageURLs.push(selectedImageFiles[i].path)
 			}
 			this.choosedImageURLs = choosedImageURLs
+			this.imageURLsUpdated = true
 		}
 	}
 }

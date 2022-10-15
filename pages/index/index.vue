@@ -4,7 +4,7 @@
 		<uni-search-bar @confirm="SearchBtnOnClick" v-model="goodsParam.keyword" />
 
 		<!-- 商品标签 -->
-		<v-tabs class="left-rigth-margin" pills="false" activeColor="#fff" fontSize="40rpx" v-model="currTabIndex"
+		<v-tabs class="left-rigth-margin"  fontSize="35rpx" v-model="currTabIndex"
 			:tabs="tabNameList" @change="tabOnChange">
 		</v-tabs>
 
@@ -78,7 +78,10 @@ export default {
 	},
 	//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 	async onReachBottom() {
-		uni.showToast({ title: '刷新中..' });
+		uni.showToast({
+			title: '刷新中..',
+			icon: 'loading'
+		});
 		await this.refreshGoodsList()
 		if (this.noMoreGoods) {
 			this.loadingText = "hoops 木有更多啦";
@@ -108,7 +111,6 @@ export default {
 
 		//商品跳转
 		toGoods(e) {
-			uni.showToast({ title: '商品' + e.goods_id, icon: "none" });
 			getApp().globalData.selectedGoodsToShowInDetail = e
 			uni.navigateTo({
 				url: '/page_subject/pages/goods_detail'
@@ -169,7 +171,7 @@ export default {
 		},
 
 		async refreshGoodsList() {
-			// uni.showToast({ title: '正在加载', duration: 1000, icon: 'loading' })
+			uni.showToast({ title: '加载中...', duration: 1000, icon: 'loading' })
 			const resp = await api.getGoodsList(this.currLocation.longitude, this.currLocation.latitude, this.goodsParam.tagID, this.goodsParam.keyword, this.goodsParam.currPageIndex, this.goodsParam.currPageSize)
 			const goodsList = resp.data
 			if (goodsList == null || goodsList.length == 0) {
@@ -224,34 +226,21 @@ export default {
 							uni.authorize({
 								scope: 'scope.userLocation',
 								success: () => { //1.1 允许授权
-									uni.showToast({
-										title: '已授权',
-										duration: 2000,
-									});
+									console.log('[DEBUG] auth for userLocation ok')
 									resolve()
 								},
 								fail: () => { //1.2 拒绝授权
-									uni.showToast({
-										title: '授权拒绝..',
-										duration: 2000,
-									});
+									console.log('[DEBUG] auth for userLocation is denied')
 									reject()
 								}
 							})
 						} else {
-							uni.showToast({
-								title: '已有授权',
-								duration: 2000,
-							});
+							console.log('[DEBUG] already has auth for userLocation')
 							resolve()
 						}
 					},
 					fail: () => {
-						uni.showToast({
-							title: '获取授权信息失败',
-							icon: 'none',
-							duration: 2000,
-						});
+						console.log('[DEBUG] 获取授权信息失败')
 					}
 				})
 			});
