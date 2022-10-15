@@ -57,9 +57,19 @@ export default {
 		setTimeout(function () {
 			that.identifyFailNoticeShowTimeout = true
 			console.log('[DEBUG] identifyFailNoticeShowTimeout')
-		}, 3000)
+		}, 8000)
+
+		// this.toastVerifyBrokenIfNeed()
 	},
 	methods: {
+		toastVerifyBrokenIfNeed() {
+			if (userInfo.role != 'VERIFY_BROKEN') { return }
+			uni.showToast({
+				title: this.identifyFailReason,
+				icon: 'none',
+				duration: 8000
+			});
+		},
 
 		generateVerifyBrokenReason() {
 			this.identifyFailReason = "身份审核失败: " + store.state.vuex_user.identify_fail_reason
@@ -136,6 +146,8 @@ export default {
 
 .bottom-notice-bar {
 	position: fixed;
-	bottom: 3rpx;
+	// bottom: 3rpx;
+	// left: 50%;
+	top: 50%;
 }
 </style>

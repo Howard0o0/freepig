@@ -88,7 +88,7 @@ export default {
 			utils.refreshUserInfo()
 			setTimeout(function () {
 				uni.reLaunch({ url: '../../pages/mine/mine' })
-			}, 2000)
+			}, 1000)
 		}
 	}
 }
