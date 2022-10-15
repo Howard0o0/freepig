@@ -90,7 +90,8 @@ export default {
 
 	methods: {
 		async reload() {
-			await this.getCurrentCoordinate()
+			await this.updateLocation()
+
 			this.renderTabNameList()
 
 			this.resetGoodsParam()
@@ -168,7 +169,7 @@ export default {
 		},
 
 		async refreshGoodsList() {
-			uni.showToast({ title: '正在加载', duration: 1000, icon: 'loading' })
+			// uni.showToast({ title: '正在加载', duration: 1000, icon: 'loading' })
 			const resp = await api.getGoodsList(this.currLocation.longitude, this.currLocation.latitude, this.goodsParam.tagID, this.goodsParam.keyword, this.goodsParam.currPageIndex, this.goodsParam.currPageSize)
 			const goodsList = resp.data
 			if (goodsList == null || goodsList.length == 0) {
@@ -190,33 +191,75 @@ export default {
 			this.refreshGoodsList()
 		},
 
-		async getCurrentCoordinate() {
-			try {
-				await uni.authorize({
-					scope: 'scope.userLocation',
-				})
-			} catch (error) {
-				console.log("[ERROR] authorize fail: " + err)
-			}
-
-			var res = await this.promiseGetLocation()
-			this.currLocation.Longitude = res.longitude
-			this.currLocation.Latitude = res.latitude
-			console.log('[DEBUG] 当前位置: ' + this.currLocation.Longitude + "," + this.currLocation.Latitude);
-		},
-		promiseGetLocation: () => {
+		__updateLocation() {
+			var that = this
 			return new Promise((resolve, reject) => {
 				uni.getLocation({
 					type: 'gcj02',
 					success: function (res) {
+						that.currLocation.longitude = res.longitude
+						that.currLocation.latitude = res.latitude
+						console.log('[DEBUG] 当前位置: ' + that.currLocation.longitude + "," + that.currLocation.latitude);
 						resolve(res)
 					},
 					fail: function (err) {
 						console.log('[ERROR] get location fail: ', err)
+						uni.showToast({
+							title: '获取位置失败 ', err,
+							icon: 'none',
+							duration: 2000,
+						});
 						reject(err)
 					}
 				});
-			})
+			});
+		},
+
+		requestLocationAuth() {
+			return new Promise((resolve, reject) => {
+				uni.getSetting({
+					success: (res) => {
+						if (!res.authSetting['scope.userLocation']) {
+							console.log(res)
+							uni.authorize({
+								scope: 'scope.userLocation',
+								success: () => { //1.1 允许授权
+									uni.showToast({
+										title: '已授权',
+										duration: 2000,
+									});
+									resolve()
+								},
+								fail: () => { //1.2 拒绝授权
+									uni.showToast({
+										title: '授权拒绝..',
+										duration: 2000,
+									});
+									reject()
+								}
+							})
+						} else {
+							uni.showToast({
+								title: '已有授权',
+								duration: 2000,
+							});
+							resolve()
+						}
+					},
+					fail: () => {
+						uni.showToast({
+							title: '获取授权信息失败',
+							icon: 'none',
+							duration: 2000,
+						});
+					}
+				})
+			});
+		},
+
+		async updateLocation() {
+			await this.requestLocationAuth()
+			await this.__updateLocation()
 		}
 
 	}
