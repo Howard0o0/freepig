@@ -29,7 +29,7 @@ export default {
 				authInfo: null,
 			},
 			selectedImageFile: null,
-			MAX_IMAGE_SIZE_BYTES: (1 << 20),
+			MAX_IMAGE_SIZE_BYTES: (20 << 20),
 		}
 	},
 
@@ -66,10 +66,8 @@ export default {
 				return
 			}
 
-			uni.showToast({
+			uni.showLoading({
 				title: '提交中',
-				icon: 'loading',
-				duration: 2000
 			});
 
 			var resp = await api.identifyByCertification(

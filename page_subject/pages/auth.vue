@@ -9,8 +9,11 @@
                 <u--text :text="formData.selectedCampus.name" align="center" @click="pickCampusOnClick"></u--text>
             </u-form-item>
             <u-form-item label="专业" labelWidth="80" borderBottom>
-                <uni-data-select v-model="formData.selectedMajor.id" :localdata="majorList"></uni-data-select>
+                <u--text :text="formData.selectedMajor.name" align="center" @click="pickMajorOnClick"></u--text>
             </u-form-item>
+            <!-- <u-form-item label="专业" labelWidth="80" borderBottom>
+                <uni-data-select v-model="formData.selectedMajor.id" :localdata="majorList"></uni-data-select>
+            </u-form-item> -->
             <u-form-item label="学历" labelWidth="80" borderBottom>
                 <uni-data-select v-model="formData.selectedDegree" :localdata="degreeList"></uni-data-select>
             </u-form-item>
@@ -59,7 +62,7 @@ export default {
                 },
                 selectedMajor: {
                     id: 0,
-                    name: ""
+                    name: "请选择专业"
                 },
                 selectedDegree: "",
                 selectedKickoffYear: 0,
@@ -89,11 +92,29 @@ export default {
             uni.navigateTo({ url: '/page_subject/pages/pick_campus' })
         },
 
+        pickMajorOnClick() {
+            if (this.formData.selectedCampus.id == 0) {
+                uni.showToast({
+                    title: '哈.. 还没选学校咧',
+                    icon: "none",
+                    duration: 1000,
+                })
+                return;
+            }
+            let item = JSON.stringify(this.majorList);
+            uni.navigateTo({ url: '/page_subject/pages/pick_major?major_list=' + item })
+        },
+
         setSelectedCampus(campus) {
             this.formData.selectedCampus = campus
             console.log('[DEBUG] selected campus: ', this.formData.selectedCampus)
             // refresh majorList
             this.refreshMajorList(this.formData.selectedCampus.id)
+        },
+
+        setSelectedMajor(major) {
+            this.formData.selectedMajor = major
+            console.log('[DEBUG] selected major: ', this.formData.selectedMajor)
         },
 
         authByCertificationBtnOnClick() {
@@ -188,8 +209,8 @@ export default {
             for (i in majorList) {
                 var major = majorList[i]
                 this.majorList.push({
-                    value: major.id,
-                    text: major.name,
+                    id: major.id,
+                    name: major.name,
                 })
             }
         }

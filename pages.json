@@ -121,6 +121,13 @@
                     }
                 },
                 {
+                    "path": "pages/pick_major",
+                    "style": {
+                        "navigationBarTitleText": "",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
                     "path": "pages/publish_goods",
                     "style": {
                         "navigationBarTitleText": "",
@@ -160,6 +167,12 @@
                     ]
                 },
                 "page_subject/pages/set_userinfo": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/pick_major": {
                     "network": "all",
                     "packages": [
                         "__APP__"
