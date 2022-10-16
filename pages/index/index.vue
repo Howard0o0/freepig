@@ -18,7 +18,8 @@
 					<view class="name">{{goods.goods_description}}</view>
 					<view class="info">
 						<view class="price">￥{{goods.goods_price}}</view>
-						<u-icon :name="toGenderIconStr(goods.user_gender)" size="20" color="#2979ff"></u-icon>
+						<u-icon v-if="goods.user_gender=='MALE'" :name="man" size="20" color="#2979ff"></u-icon>
+						<u-icon v-if="goods.user_gender=='FEMALE'" :name="woman" size="20" color="#ffc0cb"></u-icon>
 					</view>
 					<view class="campus-info">
 						<view class="nickname">{{goods.campus}}</view>

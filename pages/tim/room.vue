@@ -83,9 +83,6 @@
 					<view class="box" @tap="camera">
 						<view class="icon paizhao"></view>
 					</view>
-					<view class="box" @tap="handRedEnvelopes">
-						<view class="icon hongbao"></view>
-					</view>
 				</view>
 			</view>
 		</view>
