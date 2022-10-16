@@ -66,11 +66,6 @@ export default {
 			)
 			if (resp.code != api.SUCCESS_CODE) { return }
 
-			uni.showToast({
-				title: '认证成功 请退出小程序再重新进入以激活聊天功能呀',
-				icon: 'none',
-				duration: 2000
-			});
 			utils.refreshUserInfo()
 
 			setTimeout(function () {

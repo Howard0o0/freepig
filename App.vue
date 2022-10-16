@@ -23,12 +23,31 @@ export default {
 		selectedGoodsToModify: null,
 	},
 
+	data() {
+		return {
+			timLoginTimer: null,
+		}
+	},
+
 	onLaunch: async function () {
 		await this.getToken()
 		await utils.refreshUserInfo()
 		const resp = await api.getTIMSig()
 		if (resp.code != api.SUCCESS_CODE) { return }
-		if (this.$store.state.vuex_user.role != "STUDENT") { return }
+		if (this.$store.state.vuex_user.role != "STUDENT") {
+			var that = this
+			this.timLoginTimer = setInterval(()=>{
+				if (that.$store.state.vuex_user.role != "STUDENT") return;
+				this.TIMLogin(this.$store.state.vuex_user.id.toString(), resp.data.tim_sig)
+                uni.showToast({
+                    title: '认证完成 enjoy!',
+                    icon: 'none',
+                    duration: 1500
+                });
+				clearInterval(this.timLoginTimer);
+			}, 1000);
+			return;
+		}
 		this.TIMLogin(this.$store.state.vuex_user.id.toString(), resp.data.tim_sig)
 		console.log('App Launch')
 	},
