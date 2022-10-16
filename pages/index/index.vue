@@ -18,8 +18,8 @@
 					<view class="name">{{goods.goods_description}}</view>
 					<view class="info">
 						<view class="price">￥{{goods.goods_price}}</view>
-						<u-icon v-if="goods.user_gender=='MALE'" :name="man" size="20" color="#2979ff"></u-icon>
-						<u-icon v-if="goods.user_gender=='FEMALE'" :name="woman" size="20" color="#ffc0cb"></u-icon>
+						<image v-if="goods.user_gender=='MALE'" class="avatar" src="/static/index/man.png" mode="aspectFit"></image>
+						<image v-else class="avatar" src="/static/index/woman.png" mode="aspectFit"></image>
 					</view>
 					<view class="campus-info">
 						<view class="nickname">{{goods.campus}}</view>
