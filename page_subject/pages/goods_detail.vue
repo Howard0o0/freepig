@@ -4,7 +4,7 @@
             <image class="avatar" :src="selectedGoodsToShowInDetail.user_avatar_url" mode="aspectFit"></image>
             <view>
                 <view class="nickname user-info">{{selectedGoodsToShowInDetail.user_nickname}}</view>
-                <view class="campus-info user-info">武汉大学</view>
+                <view class="campus-info user-info">{{selectedGoodsToShowInDetail.campus}}</view>
             </view>
             <u-icon v-if="!(selectedGoodsToShowInDetail.user_id == userInfo.id)" name="chat" size="30" color="#2979ff" @click="sendMessageBtnOnClick" />
         </view>
@@ -13,7 +13,7 @@
         <view class="swiper-box">
             <swiper indicator-dots="true" circular="true" autoplay="true">
                 <swiper-item v-for="image in swipImages" :key="image">
-                    <image :src="image" mode="aspectFit"></image>
+                    <image :src="image" mode="aspectFit" @click="imagePreview(image)"></image>
                 </swiper-item>
             </swiper>
         </view>
@@ -51,6 +51,15 @@ export default {
                 url: '/pages/tim/room'
             })
         },
+
+        imagePreview(imageURL) {
+			uni.previewImage({
+				indicator: "number",
+				loop: true,
+				urls: [imageURL],
+			})
+		},
+
     }
 }
 </script>
