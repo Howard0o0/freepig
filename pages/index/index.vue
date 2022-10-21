@@ -54,7 +54,7 @@ export default {
 			goodsList: [],
 			goodsParam: {
 				currPageIndex: 0,
-				currPageSize: 5,
+				currPageSize: 50,
 				keyword: "",
 				tagID: 0,
 			},

@@ -149,7 +149,6 @@ export const getGoodsList = (longitude = 0, latitude = 0, tagID = 0, keyword = "
         'keyword': keyword,
         'page_index': pageIndex,
         'page_size': pageSize,
-        'keyword': keyword,
     }
 })
 
