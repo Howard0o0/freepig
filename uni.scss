@@ -101,6 +101,14 @@ $uni-font-size-paragraph:15px;
 	position: fixed;
 	bottom: 3rpx;
 }
+
+.centerAlign {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
 // .row-items {
 //     flex-direction: row;
 //     flex-wrap: wrap;
