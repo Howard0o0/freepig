@@ -11,9 +11,6 @@
             <u-form-item label="专业" labelWidth="80" borderBottom>
                 <u--text :text="formData.selectedMajor.name" align="center" @click="pickMajorOnClick"></u--text>
             </u-form-item>
-            <!-- <u-form-item label="专业" labelWidth="80" borderBottom>
-                <uni-data-select v-model="formData.selectedMajor.id" :localdata="majorList"></uni-data-select>
-            </u-form-item> -->
             <u-form-item label="学历" labelWidth="80" borderBottom>
                 <uni-data-select v-model="formData.selectedDegree" :localdata="degreeList"></uni-data-select>
             </u-form-item>

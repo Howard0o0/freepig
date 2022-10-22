@@ -1,12 +1,20 @@
 <template>
-	<view class="left-rigth-margin centerAlign">
+	<view class="left-rigth-margin top-margin centerAlign">
+		<text>内推记录</text>
 		<scroll-view scroll-y="true" class="scroll-Y">
-			<view class="row" v-for="(user,index) in authUserList" :key="index">
-				<uni-list-chat :avatar-circle="false" :title="user.wx_nickname" :avatar="user.wx_avatar_url"
-					:note="joinCampusAndMajorInfo(user.campus_name, user.major_name)" :time="parseUserRole(user.role)" ></uni-list-chat>
+			<view class="row" v-for="(user,index) in recommendUserList" :key="index">
+				<uni-list-chat :avatar-circle="false" :title="user.nickname" :avatar="user.avatar_url"
+					:note="joinCampusAndMajorInfo(user.campus, user.major)" :time="parseUserRole(user.role)">
+				</uni-list-chat>
 			</view>
 		</scroll-view>
-		<button open-type="share" type="primary">生成内推链接</button>
+
+		<button open-type="share" type="primary" size="normal">生成内推链接</button>
+		<u--image v-if="isAbleToDraw" src="/page_subject/static/recommend-draw-btn.png" shape="circle" width="200rpx"
+			height="200rpx" @click="drawBtnOnclick"></u--image>
+
+		<uni-notice-bar text="点击查看幸运儿名单" @click="showPrizeResultBtnOnClick" />
+		<uni-notice-bar v-if="recommendRule" class="bottom-notice-bar" :text="recommendRule" />
 	</view>
 </template>
 
@@ -18,20 +26,19 @@ import { utils } from '../../common/common.js';
 export default {
 	data() {
 		return {
-			authUserList: [
-				{
-					wx_nickname: "wx_nickname",
-					wx_avatar_url: "https://ddp-freepig.oss-cn-beijing.aliyuncs.com/images/default-avatar.png",
-					gender: "MALE",
-					campus_name: "武汉大学",
-					major_name: "计算机",
-					role: "PENDING"
-				}
-			],
+			recommendUserList: [],
+			recommendRule: "内推活动规则",
+			isAbleToDraw: false,
 		}
 	},
 
 	onLoad(option) {
+
+	},
+
+	async onShow() {
+		await this.refreshRecommendUserList()
+		this.getRecommendRule()
 	},
 
 	onShareAppMessage(res) {
@@ -40,13 +47,45 @@ export default {
 		}
 		return {
 			title: '欢迎加入多啦白小集市',
-			path: '/page_subject/pages/auth?recommend-code=avc124'
+			path: '/page_subject/pages/auth?recommend-code=' + this.$store.state.vuex_user.wx_open_id,
+			imageUrl: '/page_subject/static/logo.png',
 		}
 	},
 
 	methods: {
+		drawBtnOnclick() {
+			console.log("[DEBUG] clicked draw btn")
+		},
+
+		showPrizeResultBtnOnClick() {
+			console.log("[DEBUG] clicked showPrizeResult btn")
+		},
+
 		joinCampusAndMajorInfo(campusName, majorName) {
 			return campusName + " | " + majorName
+		},
+
+		async refreshRecommendUserList() {
+			uni.showLoading({
+				title: '',
+			});
+			const resp = await api.getRecommendUserList()
+			console.log('[DEBUG] got recommend user list: ', resp)
+			if (resp.code != api.SUCCESS_CODE) { return }
+			this.recommendUserList = resp.data
+			uni.hideLoading();
+		},
+
+		async getRecommendRule() {
+			uni.showLoading({
+				title: '',
+			});
+			const resp = await api.getRecommendRule()
+			console.log('[DEBUG] got recommend rule: ', resp)
+			if (resp.code != api.SUCCESS_CODE) { return }
+			this.recommendRule = resp.data.rule
+			this.isAbleToDraw = this.recommendUserList.length >= resp.data.min_recommend_num
+			uni.hideLoading();
 		},
 
 		parseUserRole(role) {
@@ -66,8 +105,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .scroll-Y {
-	height: 300rpx;
+	height: 700rpx;
+	background: #eaeaea;
+}
+
+.fixed-top-right {
+	position: fixed;
+	top: 0rpx;
+	right: 0rpx;
 }
 </style>

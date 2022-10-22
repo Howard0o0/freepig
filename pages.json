@@ -117,7 +117,7 @@
                 {
                     "path": "pages/recommend",
                     "style": {
-                        "navigationBarTitleText": "内推活动",
+                        "navigationBarTitleText": "内推拿大奖",
                         "enablePullDownRefresh": false
                     }
                 },

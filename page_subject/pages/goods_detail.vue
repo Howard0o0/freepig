@@ -4,7 +4,7 @@
             <image class="avatar" :src="selectedGoodsToShowInDetail.user_avatar_url" mode="aspectFit"></image>
             <view>
                 <view class="nickname user-info">{{selectedGoodsToShowInDetail.user_nickname}}</view>
-                <view class="campus-info user-info">{{selectedGoodsToShowInDetail.campus}}</view>
+                <view class="campus-info user-info">{{joinCampusAndMajorInfo(selectedGoodsToShowInDetail.campus, selectedGoodsToShowInDetail.major)}}</view>
             </view>
             <u-icon v-if="!(selectedGoodsToShowInDetail.user_id == userInfo.id)" name="chat" size="30" color="#2979ff" @click="sendMessageBtnOnClick" />
         </view>
@@ -58,6 +58,10 @@ export default {
 				loop: true,
 				urls: [imageURL],
 			})
+		},
+
+        joinCampusAndMajorInfo(campusName, majorName) {
+			return campusName + " | " + majorName
 		},
 
     }

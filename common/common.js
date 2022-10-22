@@ -20,6 +20,10 @@ function interceptUnauthorizedPageCallback() {
     }, 1000);
 }
 
+function joinCampusAndMajorInfo(campusName, majorName) {
+    return campusName + " | " + majorName
+}
+
 export default {
     refreshUserInfo,
 }
@@ -27,4 +31,5 @@ export default {
 export const utils = {
     refreshUserInfo,
     interceptUnauthorizedPageCallback,
+    joinCampusAndMajorInfo,
 }

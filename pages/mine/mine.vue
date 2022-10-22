@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-card :title="vuex_user.nickname" :sub-title="vuex_user.campus" :extra="authTag"
+		<uni-card :title="vuex_user.nickname" :sub-title="joinCampusAndMajorInfo(vuex_user.campus, vuex_user.major)" :extra="authTag"
 			:thumbnail="vuex_user.avatar_url" @click="userInfoCardOnClick"></uni-card>
 		<uni-grid :column="4" :highlight="true" :showBorder="false" :square="false" @change="gridItemOnClick">
 			<uni-grid-item v-for="(item, index) in grids" :index="index" :key="index">
@@ -83,6 +83,10 @@ export default {
 	},
 
 	methods: {
+		joinCampusAndMajorInfo(campusName, majorName) {
+			return campusName + " | " + majorName
+		},
+
 		toastVerifyBrokenIfNeed() {
 			if (userInfo.role != 'VERIFY_BROKEN') { return }
 			uni.showToast({

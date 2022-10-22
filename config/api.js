@@ -19,6 +19,18 @@ export const getTIMSig = () => uni.$u.http.get('/user/tim-sig', {
     }
 })
 
+export const getRecommendUserList = () => uni.$u.http.get('/user/recommend-list', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
+export const getRecommendRule = () => uni.$u.http.get('/activity/recommend/rule', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const getCampusList = (keyword) => uni.$u.http.get('/info/campus', {
     params: { keyword: keyword },
     header: {
@@ -179,5 +191,7 @@ export const api = {
     getMyGoodsList,
     getTIMSig,
     setUserInfo,
-    updateGoods, 
+    updateGoods,
+    getRecommendUserList,
+    getRecommendRule,
 }
