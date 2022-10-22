@@ -39,6 +39,10 @@ export default {
 					icon: "/static/mine/grid-contact-us.png",
 					text: "联系我们",
 				},
+				{
+					icon: "/static/mine/grid-recommend.png",
+					text: "内推大奖",
+				},
 			],
 			identifyFailReason: "",
 			identifyFailNoticeShowTimeout: false,
@@ -46,6 +50,22 @@ export default {
 		}
 	},
 	onLoad() {
+		uni.share({
+			provider: 'weixin',
+			scene: "WXSceneSession",
+			type: 5,
+			imageUrl: 'https://bjetxgzv.cdn.bspapp.com/VKCEYUGU-uni-app-doc/962fc340-4f2c-11eb-bdc1-8bd33eb6adaa.png',
+			title: '欢迎体验uniapp',
+			miniProgram: {
+				id: 'gh_abcdefg',
+				path: 'pages/index/index',
+				type: 0,
+				webUrl: 'http://uniapp.dcloud.io'
+			},
+			success: ret => {
+				console.log(JSON.stringify(ret));
+			}
+		});
 	},
 	onShow() {
 		this.refreshAuthTag()
@@ -61,6 +81,7 @@ export default {
 
 		// this.toastVerifyBrokenIfNeed()
 	},
+
 	methods: {
 		toastVerifyBrokenIfNeed() {
 			if (userInfo.role != 'VERIFY_BROKEN') { return }
@@ -110,6 +131,10 @@ export default {
 				case 2:
 					console.log("jumping to contact-us page")
 					uni.navigateTo({ url: '/page_subject/pages/contact_us' })
+					break
+				case 3:
+					console.log("jumping to recommend page")
+					uni.navigateTo({ url: '/page_subject/pages/recommend' })
 					break
 			}
 		}

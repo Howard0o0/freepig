@@ -20,6 +20,10 @@
             <u-form-item label="入学年份" labelWidth="80" borderBottom>
                 <uni-data-select v-model="formData.selectedKickoffYear" :localdata="kickoffYearList"></uni-data-select>
             </u-form-item>
+            <u-form-item label="内推码" labelWidth="80" borderBottom>
+                <u--input v-model="formData.recommendCode" placeholder="没有则留空噢" inputAlign="center" border="none">
+                </u--input>
+            </u-form-item>
         </u--form>
 
         <view class="demo-uni-row">
@@ -66,6 +70,7 @@ export default {
                 },
                 selectedDegree: "",
                 selectedKickoffYear: 0,
+                recommendCode: "",
             },
             majorList: [
                 { value: 1, text: "计算机" },
@@ -83,8 +88,9 @@ export default {
         }
     },
 
-    onLoad() {
+    onLoad(option) {
         this.refreshKickoffYealList()
+        this.formData.recommendCode = option["recommend-code"]
     },
 
     methods: {

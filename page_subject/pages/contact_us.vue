@@ -19,7 +19,7 @@ import { utils } from '../../common/common.js';
 export default {
 	data() {
 		return {
-			aboutFreePigParagraph0: "多啦猪是由清华-武大的学生团队联合开发的便捷校园宝贝发布平台, 致力于打造一个可靠且方便的校园宝贝信息发布平台, 让大家在这里可以方便的发布手头上的闲置宝贝, 寻找心仪的优质宝贝",
+			aboutFreePigParagraph0: "多啦白是由清华-武大的学生团队联合开发的便捷校园宝贝发布平台, 致力于打造一个可靠且方便的校园宝贝信息发布平台, 让大家在这里可以方便的发布手头上的闲置宝贝, 寻找心仪的优质宝贝",
 			aboutFreePigParagraph1: "如果你对产品的使用有疑惑或不满, 以及相关的改进意见都欢迎骚扰呀, 嘿嘿",
 		}
 	},

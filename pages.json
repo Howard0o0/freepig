@@ -115,6 +115,13 @@
                     }
                 },
                 {
+                    "path": "pages/recommend",
+                    "style": {
+                        "navigationBarTitleText": "内推活动",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
                     "path": "pages/modify_goods",
                     "style": {
                         "navigationBarTitleText": "",
@@ -186,6 +193,12 @@
                     ]
                 },
                 "page_subject/pages/contact_us": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/recommend": {
                     "network": "all",
                     "packages": [
                         "__APP__"
