@@ -76,7 +76,8 @@ export default {
 				this.formData.authInfo.campus_id,
 				this.formData.authInfo.major_id,
 				this.formData.authInfo.kickoff_year,
-				this.formData.authInfo.degree
+				this.formData.authInfo.degree,
+				this.formData.authInfo.recommend_code
 			)
 			uni.showToast({
 				title: '上传成功,审核结果将在1日内返回',

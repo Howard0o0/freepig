@@ -62,7 +62,8 @@ export default {
 				this.formData.authInfo.campus_id,
 				this.formData.authInfo.major_id,
 				this.formData.authInfo.kickoff_year,
-				this.formData.authInfo.degree
+				this.formData.authInfo.degree,
+				this.formData.authInfo.recommend_code
 			)
 			if (resp.code != api.SUCCESS_CODE) { return }
 

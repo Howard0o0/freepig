@@ -59,20 +59,22 @@ export const identifyByEmail = (email, emailVerifyCode, realname, campusID, majo
     campus_id: campusID,
     major_id: majorID,
     kickoff_year: kickoffYear,
-    degree: degree
+    degree: degree,
+    recommend_code: recommendCode,
 }, {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
 })
 
-export const identifyByCertification = (certificationImageFilePath, realname, campusID, majorID, kickoffYear, degree) => uni.$u.http.upload('/auth/campus-identity-by-student-credential', {
+export const identifyByCertification = (certificationImageFilePath, realname, campusID, majorID, kickoffYear, degree, recommendCode) => uni.$u.http.upload('/auth/campus-identity-by-student-credential', {
     formData: {
         realname: realname,
         campus_id: campusID,
         major_id: majorID,
         kickoff_year: kickoffYear,
-        degree: degree
+        degree: degree,
+        recommend_code: recommendCode,
     },
     filePath: certificationImageFilePath,
     name: "credential_image",
@@ -170,6 +172,15 @@ export const getMyGoodsList = () => uni.$u.http.get('/goods/by-user', {
     }
 })
 
+export const verifyRecommendCode = (recommendCode) => uni.$u.http.get('/auth/verify-recommend-code', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: {
+        'recommend_code': recommendCode,
+    }
+})
+
 export const SUCCESS_CODE = 200
 
 export const api = {
@@ -194,4 +205,5 @@ export const api = {
     updateGoods,
     getRecommendUserList,
     getRecommendRule,
+    verifyRecommendCode,
 }

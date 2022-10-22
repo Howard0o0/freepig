@@ -1,7 +1,7 @@
 <template>
 	<view class="left-rigth-margin top-margin centerAlign">
 		<text>内推记录</text>
-		<scroll-view scroll-y="true" class="scroll-Y">
+		<scroll-view scroll-y="true" class="scroll-Y" scroll-top=0>
 			<view class="row" v-for="(user,index) in recommendUserList" :key="index">
 				<uni-list-chat :avatar-circle="false" :title="user.nickname" :avatar="user.avatar_url"
 					:note="joinCampusAndMajorInfo(user.campus, user.major)" :time="parseUserRole(user.role)">
@@ -10,8 +10,8 @@
 		</scroll-view>
 
 		<button open-type="share" type="primary" size="normal">生成内推链接</button>
-		<u--image v-if="isAbleToDraw" src="/page_subject/static/recommend-draw-btn.png" shape="circle" width="200rpx"
-			height="200rpx" @click="drawBtnOnclick"></u--image>
+		<u--image src="/page_subject/static/recommend-draw-btn.png" shape="circle" width="200rpx" height="200rpx"
+			@click="drawBtnOnclick"></u--image>
 
 		<uni-notice-bar text="点击查看幸运儿名单" @click="showPrizeResultBtnOnClick" />
 		<uni-notice-bar v-if="recommendRule" class="bottom-notice-bar" :text="recommendRule" />
@@ -29,6 +29,7 @@ export default {
 			recommendUserList: [],
 			recommendRule: "内推活动规则",
 			isAbleToDraw: false,
+			minRecommendNum: 100,
 		}
 	},
 
@@ -55,6 +56,14 @@ export default {
 	methods: {
 		drawBtnOnclick() {
 			console.log("[DEBUG] clicked draw btn")
+			if (!this.isAbleToDraw) {
+				uni.showToast({
+					title: '有效内推数需大于' + this.minRecommendNum + '才行哇',
+					icon: 'none',
+					duration: 1500,
+				})
+				return
+			}
 		},
 
 		showPrizeResultBtnOnClick() {
@@ -84,6 +93,7 @@ export default {
 			console.log('[DEBUG] got recommend rule: ', resp)
 			if (resp.code != api.SUCCESS_CODE) { return }
 			this.recommendRule = resp.data.rule
+			this.minRecommendNum = resp.data.min_recommend_num
 			this.isAbleToDraw = this.recommendUserList.length >= resp.data.min_recommend_num
 			uni.hideLoading();
 		},

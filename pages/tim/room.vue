@@ -89,23 +89,15 @@
 		<!-- 底部输入栏 -->
 		<view class="input-box" :class="popupLayerClass" @touchmove.stop.prevent="discard">
 			<!-- H5下不能录音，输入栏布局改动一下 -->
-			<!-- #ifndef H5 -->
-			<view class="voice">
-				<view class="icon" :class="isVoice?'jianpan':'yuyin'" @tap="switchVoice"></view>
-			</view>
-			<!-- #endif -->
 			<!-- #ifdef H5 -->
 			<view class="more" @tap="showMore">
 				<view class="icon add"></view>
 			</view>
 			<!-- #endif -->
 			<view class="textbox">
-				<view class="voice-mode" :class="[isVoice?'':'hidden',recording?'recording':'']"
-					@touchstart="voiceBegin" @touchmove.stop.prevent="voiceIng" @touchend="voiceEnd"
-					@touchcancel="voiceCancel">{{voiceTis}}</view>
 				<view class="text-mode" :class="isVoice?'hidden':''">
 					<view class="box">
-						<textarea auto-height="true" v-model="textMsg" @focus="textareaFocus" />
+						<textarea show-confirm-bar="false" auto-height="true" v-model="textMsg" @focus="textareaFocus" />
 					</view>
 					<view class="em" @tap="chooseEmoji">
 						<view class="icon biaoqing"></view>

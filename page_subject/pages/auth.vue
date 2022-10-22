@@ -87,7 +87,10 @@ export default {
 
     onLoad(option) {
         this.refreshKickoffYealList()
-        this.formData.recommendCode = option["recommend-code"]
+        if (option["recommend-code"] && option["recommend-code"] != "") {
+            getApp().globalData.recommendCode = option["recommend-code"]
+        }
+        this.formData.recommendCode = getApp().globalData.recommendCode
     },
 
     methods: {
@@ -120,9 +123,10 @@ export default {
             console.log('[DEBUG] selected major: ', this.formData.selectedMajor)
         },
 
-        authByCertificationBtnOnClick() {
+        async authByCertificationBtnOnClick() {
             console.log('[DEBUG] formData: ', this.formData)
-            if (!this.checkFormData()) {
+            const formDataCheckPass = await this.checkFormData()
+            if (!formDataCheckPass) {
                 return
             }
             uni.navigateTo({
@@ -131,12 +135,14 @@ export default {
                     + '&major_id=' + this.formData.selectedMajor.id
                     + '&degree=' + this.formData.selectedDegree
                     + '&kickoff_year=' + this.formData.selectedKickoffYear
+                    + '&recommend_code=' + this.formData.recommendCode
             })
         },
 
-        authByEmailBtnOnClick() {
+        async authByEmailBtnOnClick() {
             console.log('[DEBUG] formData: ', this.formData)
-            if (!this.checkFormData()) {
+            const formDataCheckPass = await this.checkFormData()
+            if (!formDataCheckPass) {
                 return
             }
             uni.navigateTo({
@@ -145,10 +151,32 @@ export default {
                     + '&major_id=' + this.formData.selectedMajor.id
                     + '&degree=' + this.formData.selectedDegree
                     + '&kickoff_year=' + this.formData.selectedKickoffYear
+                    + '&recommend_code=' + this.formData.recommendCode
             })
         },
 
-        checkFormData() {
+        async checkFormData() {
+            if (this.$store.state.vuex_user.role == "STUDENT") {
+                uni.showToast({
+                    title: '一年内只能认证一次呀, 因信息填错需要重新认证的话邮箱联系我们吧',
+                    icon: 'none',
+                    duration: 1000
+                });
+                return false;
+            }
+
+            if (this.formData.recommendCode && this.formData.recommendCode.length > 0) {
+                const resp = await api.verifyRecommendCode(this.formData.recommendCode)
+                if (resp.code != api.SUCCESS_CODE) {
+                    uni.showToast({
+                        title: '无效内推码',
+                        icon: 'error',
+                        duration: 1000
+                    });
+                    return false
+                }
+            }
+
             if (this.formData.realname == "") {
                 uni.showToast({
                     title: '真实姓名要填呀',
