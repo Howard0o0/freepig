@@ -122,6 +122,13 @@
                     }
                 },
                 {
+                    "path": "pages/show_prize_list",
+                    "style": {
+                        "navigationBarTitleText": "内推拿大奖",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
                     "path": "pages/modify_goods",
                     "style": {
                         "navigationBarTitleText": "",
@@ -205,6 +212,12 @@
                     ]
                 },
                 "page_subject/pages/modify_goods": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/show_prize_list": {
                     "network": "all",
                     "packages": [
                         "__APP__"

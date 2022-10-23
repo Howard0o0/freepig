@@ -152,6 +152,15 @@ export const setUserInfo = (avatar_url, nickname, gender) => uni.$u.http.post('/
     }
 })
 
+export const drawPrize = (email, bankAccount) => uni.$u.http.post('/activity/recommend/draw-prize', {
+    email: email,
+    bank_account: bankAccount,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const getGoodsList = (longitude = 0, latitude = 0, tagID = 0, keyword = "", pageIndex = 0, pageSize = 30) => uni.$u.http.get('/goods/', {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -167,6 +176,12 @@ export const getGoodsList = (longitude = 0, latitude = 0, tagID = 0, keyword = "
 })
 
 export const getMyGoodsList = () => uni.$u.http.get('/goods/by-user', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
+export const getPrizeUserList = () => uni.$u.http.get('/activity/recommend/prize-list', {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
@@ -206,4 +221,6 @@ export const api = {
     getRecommendUserList,
     getRecommendRule,
     verifyRecommendCode,
+    drawPrize,
+    getPrizeUserList,
 }

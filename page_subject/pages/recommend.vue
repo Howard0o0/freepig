@@ -15,6 +15,12 @@
 
 		<uni-notice-bar text="点击查看幸运儿名单" @click="showPrizeResultBtnOnClick" />
 		<uni-notice-bar v-if="recommendRule" class="bottom-notice-bar" :text="recommendRule" />
+
+		<modal v-if="showPop" title="参与抽奖后本轮内推会清空噢, 内推数越多中奖几率越大哈^ ^" confirm-text="冲鸭" cancel-text="再等等"
+			@cancel="showPop=false" @confirm="confirmDrawPrize">
+			<input type='text' placeholder="输入邮箱接收抽奖结果" v-model="email" />
+			<input type='text' placeholder="收款支付宝账号" v-model="bankAccount" />
+		</modal>
 	</view>
 </template>
 
@@ -26,10 +32,14 @@ import { utils } from '../../common/common.js';
 export default {
 	data() {
 		return {
+			showPop: false,
 			recommendUserList: [],
 			recommendRule: "内推活动规则",
 			isAbleToDraw: false,
 			minRecommendNum: 100,
+
+			email: "",
+			bankAccount: "",
 		}
 	},
 
@@ -39,7 +49,15 @@ export default {
 
 	async onShow() {
 		await this.refreshRecommendUserList()
-		this.getRecommendRule()
+		await this.getRecommendRule()
+
+		let validRecommendCnt = 0
+		for (let i = 0; i < this.recommendUserList.length; i++) {
+			if (this.recommendUserList[i].role != "STUDENT") { continue }
+			validRecommendCnt++
+		}
+		this.isAbleToDraw = validRecommendCnt >= this.minRecommendNum
+		console.log("[DEBUG] valid recommend cnt: ", validRecommendCnt, ", min recommend cnt: ", this.minRecommendNum)
 	},
 
 	onShareAppMessage(res) {
@@ -47,13 +65,48 @@ export default {
 			console.log('share from button', res.target)
 		}
 		return {
-			title: '欢迎加入多啦白小集市',
+			title: '欢迎加入哆啦白小集市',
 			path: '/page_subject/pages/auth?recommend-code=' + this.$store.state.vuex_user.wx_open_id,
 			imageUrl: '/page_subject/static/logo.png',
 		}
 	},
 
 	methods: {
+		async confirmDrawPrize() {
+			if (this.email == "") {
+				uni.showToast({
+					title: '邮箱没填呀',
+					icon: 'none',
+					duration: 1500,
+				})
+				return
+			}
+
+			if (this.bankAccount == "") {
+				uni.showToast({
+					title: '支付宝账号咧',
+					icon: 'none',
+					duration: 1500,
+				})
+				return
+			}
+
+			console.log('[DEBUG] 开始提交抽奖');
+			uni.showLoading({
+				title: '提交中',
+			});
+			const resp = await api.drawPrize(this.email, this.bankAccount)
+			if (resp.code != api.SUCCESS_CODE) { this.showPop = false; return; }
+			uni.showToast({
+				title: 'OK',
+				icon: 'success',
+				duration: 1000
+			});
+			this.showPop = false
+			this.refreshRecommendUserList()
+			this.isAbleToDraw = false
+		},
+
 		drawBtnOnclick() {
 			console.log("[DEBUG] clicked draw btn")
 			if (!this.isAbleToDraw) {
@@ -64,10 +117,13 @@ export default {
 				})
 				return
 			}
+
+			this.showPop = true
 		},
 
 		showPrizeResultBtnOnClick() {
 			console.log("[DEBUG] clicked showPrizeResult btn")
+			uni.navigateTo({ url: '/page_subject/pages/show_prize_list' })
 		},
 
 		joinCampusAndMajorInfo(campusName, majorName) {
@@ -94,7 +150,6 @@ export default {
 			if (resp.code != api.SUCCESS_CODE) { return }
 			this.recommendRule = resp.data.rule
 			this.minRecommendNum = resp.data.min_recommend_num
-			this.isAbleToDraw = this.recommendUserList.length >= resp.data.min_recommend_num
 			uni.hideLoading();
 		},
 
@@ -116,6 +171,9 @@ export default {
 </script>
 
 <style lang="scss">
+
+
+
 .scroll-Y {
 	height: 700rpx;
 	background: #eaeaea;
