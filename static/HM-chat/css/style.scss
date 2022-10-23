@@ -117,7 +117,7 @@ page{
 	display: flex;
 	position: fixed;
 	z-index: 20;
-	bottom:8rpx;
+	bottom:16rpx;
 	&.showLayer{transform: translate3d(0,-42vw,0);}
 	transition: all .15s linear;
 	border-bottom: solid 1upx #ddd;

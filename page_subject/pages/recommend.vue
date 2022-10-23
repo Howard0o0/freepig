@@ -126,4 +126,29 @@ export default {
 	top: 0rpx;
 	right: 0rpx;
 }
+
+// 滚动条样式
+/deep/ ::-webkit-scrollbar {
+	/*滚动条整体样式*/
+	width: 4px !important;
+	height: 1px !important;
+	overflow: auto !important;
+	background: #ccc !important;
+	-webkit-appearance: auto !important;
+	display: block;
+}
+
+/deep/ ::-webkit-scrollbar-thumb {
+	/*滚动条里面小方块*/
+	border-radius: 10px !important;
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important;
+	background: #7b7979 !important;
+}
+
+/deep/ ::-webkit-scrollbar-track {
+	/*滚动条里面轨道*/
+	// box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important;
+	// border-radius: 10px !important;
+	background: #989797 !important;
+}
 </style>
