@@ -158,7 +158,7 @@ export default {
         async checkFormData() {
             if (this.$store.state.vuex_user.role == "STUDENT") {
                 uni.showToast({
-                    title: '一年内只能认证一次呀, 因信息填错需要重新认证的话邮箱联系我们吧',
+                    title: '已经认证过啦, 有需求可邮箱联系',
                     icon: 'none',
                     duration: 1000
                 });
