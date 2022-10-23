@@ -97,7 +97,7 @@
 			<view class="textbox">
 				<view class="text-mode" :class="isVoice?'hidden':''">
 					<view class="box">
-						<textarea show-confirm-bar="{{false}}" auto-height="true" v-model="textMsg" @focus="textareaFocus" />
+						<textarea :show-confirm-bar="inputTextShowConfirmBar" auto-height="true" v-model="textMsg" @focus="textareaFocus" />
 					</view>
 					<view class="em" @tap="chooseEmoji">
 						<view class="icon biaoqing"></view>
@@ -161,6 +161,7 @@ const TIM_MESSAGE_TYPE = {
 export default {
 	data() {
 		return {
+			inputTextShowConfirmBar: false,
 
 			//TIM变量
 			conversationActive_: null,
