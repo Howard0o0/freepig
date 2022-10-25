@@ -30,20 +30,22 @@ export default {
 	},
 
 	onLaunch: async function () {
-		await this.getToken()
+		if (!this.$store.state.vuex_token || this.$store.state.vuex_token == ""){
+			await this.getToken()
+		}
 		await utils.refreshUserInfo()
 		const resp = await api.getTIMSig()
 		if (resp.code != api.SUCCESS_CODE) { return }
 		if (this.$store.state.vuex_user.role != "STUDENT") {
 			var that = this
-			this.timLoginTimer = setInterval(()=>{
+			this.timLoginTimer = setInterval(() => {
 				if (that.$store.state.vuex_user.role != "STUDENT") return;
 				this.TIMLogin(this.$store.state.vuex_user.id.toString(), resp.data.tim_sig)
-                uni.showToast({
-                    title: '认证完成 enjoy!',
-                    icon: 'none',
-                    duration: 1500
-                });
+				uni.showToast({
+					title: '认证完成 enjoy!',
+					icon: 'none',
+					duration: 1500
+				});
 				clearInterval(this.timLoginTimer);
 			}, 1000);
 			return;
@@ -67,6 +69,7 @@ export default {
 			});
 
 			var response = await uni.login({ provider: 'weixin' })
+			console.log('[DBUEG] wx login response: ', response)
 			var wx_login_code = response[1].code
 			console.log("[DEBUG] wx_login_code: ", wx_login_code)
 			var resp = await getTokenFromServer({ wx_login_code: wx_login_code })
