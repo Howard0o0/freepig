@@ -99,6 +99,8 @@ export default {
 				goods_price: goods.price,
 				goods_description: goods.description,
 				goods_images: goods.images,
+				campus: this.$store.state.vuex_user.campus,
+				major: this.$store.state.vuex_user.major,
 			}
 			uni.navigateTo({
 				url: '/page_subject/pages/goods_detail'
