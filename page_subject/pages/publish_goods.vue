@@ -1,10 +1,13 @@
 <template>
 	<view class="centerAlign left-rigth-margin">
-		<uni-easyinput type="textarea" autoHeight="true" v-model="goodsDesc" :placeholder="goodsDescPlaceHolder"
-			inputBorder="false" />
-		<u-album :urls="choosedImageURLs"></u-album>
+		<textarea class="textarea" v-model="goodsDesc" :placeholder="goodsDescPlaceHolder" inputBorder="false" />
+		<!-- <u-album :urls="choosedImageURLs"></u-album>
 		<u--image showLoading="false" src="/page_subject/static/add_pic_btn.png" width="200rpx" height="200rpx"
-			@click="addPictureBtnOnClick"></u--image>
+			@click="addPictureBtnOnClick"></u--image> -->
+
+		<tui-upload :value="choosedImageURLs" limit="6" @complete="pickImageComplete" @remove="removeImage"
+			sizeType="['compressed']" imageFormat="['jpg','png']" size="9">
+		</tui-upload>
 
 		<view class="uni-px-5">
 			<uni-data-checkbox mode="tag" v-model="selectedTag" :localdata="tagList"></uni-data-checkbox>
@@ -16,7 +19,7 @@
 			</u-form-item>
 		</u--form>
 
-		<u-button type="primary" text="发布" size="normal" @click="confirmBtnOnClick" />
+		<u-button class="bottom-btn" shape="circle" type="primary" text="发布" size="normal" @click="confirmBtnOnClick" />
 	</view>
 </template>
 
@@ -24,13 +27,17 @@
 
 import { api } from '../../config/api.js';
 import { utils } from '../../common/common.js';
+import tuiUpload from "@/components/thorui/tui-upload/tui-upload.vue"
 
 export default {
+	components: {
+		tuiUpload
+	},
 	data() {
 		return {
 			goodsDesc: "",
 			goodsDescPlaceHolder: "在这里描述下宝贝的转手原因、入手渠道、规格以及新旧程度和使用感受吧, 会有助于更快的转手喔~ ^o^",
-			choosedImageURLs: [""],
+			choosedImageURLs: [],
 			tagList: [
 				{
 					text: '服鞋',
@@ -65,6 +72,21 @@ export default {
 			var resp = await api.getUUID()
 			this.goodsID = resp.data
 			console.log("[DEBUG] goodsID: ", this.goodsID)
+		},
+
+		removeImage(e) {
+			this.choosedImageURLs.splice(e.index, 1)
+			console.log('[DEBUG] choosed image urls after remove: ', this.choosedImageURLs)
+		},
+
+		pickImageComplete(e) {
+			if (e.status != 1) { return }
+			console.log('[DEBUG] pick image event: ', e)
+			console.log('[DEBUG] choosed image urls: ', this.choosedImageURLs)
+			for (let i = 0; i < e.imgArr.length; i++) {
+				if (this.choosedImageURLs.indexOf(e.imgArr[i]) != -1) { continue; }
+				this.choosedImageURLs.push(e.imgArr[i])
+			}
 		},
 
 		async confirmBtnOnClick() {
@@ -190,6 +212,15 @@ export default {
 .uni-px-5 {
 	padding-left: 10px;
 	padding-right: 10px;
+}
+
+.bottom-btn {
+	position: fixed;
+	bottom: calc(var(--window-bottom) + 3px);
+}
+
+.textarea {
+	height: 300rpx;
 }
 
 /* .margin-left-right-side {
