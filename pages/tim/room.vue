@@ -3,7 +3,7 @@
 		<view class="content" @touchstart="hideDrawer">
 			<scroll-view class="msg-list" scroll-y="true" :scroll-with-animation="scrollAnimation"
 				:scroll-top="scrollTop" :scroll-into-view="scrollToView" @scrolltoupper="loadHistory"
-				upper-threshold="50">
+				upper-threshold="50" :style="{bottom: scrollViewBottom+'px'}">
 				<!-- 加载历史数据waitingUI -->
 				<view class="loading">
 					<view class="spinner">
@@ -162,6 +162,7 @@ const TIM_MESSAGE_TYPE = {
 export default {
 	data() {
 		return {
+			scrollViewBottom: 0,
 			inputBottom: 2,
 			inputTextShowConfirmBar: false,
 
@@ -239,6 +240,7 @@ export default {
 	},
 	async onLoad(option) {
 		this.inputBottom = getApp().globalData.safeAreaHeight;
+		this.scrollViewBottom = uni.upx2px(100) + this.inputBottom;
 
 		this.userInfo = this.$store.state.vuex_user
 		console.log('[DEBUG] self userinfo: ', this.userInfo)
