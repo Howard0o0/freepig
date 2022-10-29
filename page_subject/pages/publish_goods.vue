@@ -1,30 +1,32 @@
 <template>
-	<view class="centerAlign left-rigth-margin">
-		<textarea class="textarea" v-model="goodsDesc" :placeholder="goodsDescPlaceHolder" inputBorder="false" />
+	<view>
+		<view class="centerAlign left-rigth-margin">
+			<textarea class="textarea" v-model="goodsDesc" :placeholder="goodsDescPlaceHolder" inputBorder="false" />
+		</view>
 
-		<view style="display: flex; align-items: left; justify-content: left">
+		<view class="left-rigth-margin">
 			<tui-upload :value="choosedImageURLs" limit="6" @complete="pickImageComplete" @remove="removeImage"
 				sizeType="['compressed']" imageFormat="['jpg','png']" size="9">
 			</tui-upload>
 		</view>
 
-		<!-- <view class="uni-px-5">
-			<uni-data-checkbox mode="tag" v-model="selectedTagID" :localdata="tagList"></uni-data-checkbox>
-		</view> -->
-		<v-tabs fontSize="35rpx" v-model="currTagIndex" :tabs="tabNameList" @change="tabOnChange">
-		</v-tabs>
+		<view class="centerAlign left-rigth-margin">
+			<v-tabs fontSize="35rpx" v-model="currTagIndex" :tabs="tabNameList" @change="tabOnChange">
+			</v-tabs>
 
-		<u--form labelPosition="left" class="price">
-			<u-form-item leftIcon="rmb-circle-fill" label="价格" labelWidth="140">
-				<u--input type="digit" v-model="price" placeholder="0.00" inputAlign="right" border="none"
-					@change="priceInputChange" />
-			</u-form-item>
-		</u--form>
+			<u--form labelPosition="left" class="price">
+				<u-form-item leftIcon="rmb-circle-fill" label="价格" labelWidth="140">
+					<u--input type="digit" v-model="price" placeholder="0.00" inputAlign="right" border="none"
+						@change="priceInputChange" />
+				</u-form-item>
+			</u--form>
 
-		<!-- <input type="number" v-model="price" @input="priceInputChange" placeholder="请询问服务员后输入"
+			<!-- <input type="number" v-model="price" @input="priceInputChange" placeholder="请询问服务员后输入"
 			placeholder-style="font-size: 34rpx;color: #CCCCCC;" /> -->
 
-		<u-button class="bottom-btn" shape="circle" type="primary" text="发布" size="normal" @click="confirmBtnOnClick" />
+			<u-button class="bottom-btn" shape="circle" type="primary" text="发布" size="normal"
+				@click="confirmBtnOnClick" />
+		</view>
 	</view>
 </template>
 
