@@ -9,7 +9,7 @@
 		</view>
 
 		<!-- <view class="uni-px-5">
-			<uni-data-checkbox mode="tag" v-model="selectedTag" :localdata="tagList"></uni-data-checkbox>
+			<uni-data-checkbox mode="tag" v-model="selectedTagID" :localdata="tagList"></uni-data-checkbox>
 		</view> -->
 		<v-tabs fontSize="35rpx" v-model="currTagIndex" :tabs="tabNameList" @change="tabOnChange">
 		</v-tabs>
@@ -40,14 +40,14 @@ export default {
 	},
 	data() {
 		return {
-			currTagIndex: 0,
+			currTagIndex: -1,
 			tabNameList: [],
 
 			goodsDesc: "",
 			goodsDescPlaceHolder: "在这里描述下宝贝的转手原因、入手渠道、规格以及新旧程度和使用感受吧, 会有助于更快的转手喔~ ^o^",
 			choosedImageURLs: [],
 			tagList: [],
-			selectedTag: "",
+			selectedTagID: -1,
 			price: 0.00,
 			goodsID: "",
 			MAX_IMAGE_SIZE_BYTE: (20 << 20),
@@ -64,8 +64,8 @@ export default {
 			console.log("[DEBUG] goodsID: ", this.goodsID)
 		},
 		tabOnChange(index) {
-			this.selectedTag = this.getTagIDByTabIndex(index)
-			console.log('[DEBUG] select tag_id: ', this.selectedTag)
+			this.selectedTagID = this.getTagIDByTabIndex(index)
+			console.log('[DEBUG] select tag_id: ', this.selectedTagID)
 		},
 
 		getTagIDByTabIndex(tabIndex) {
@@ -127,17 +127,15 @@ export default {
 		async confirmBtnOnClick() {
 			if (!this.checkFormData()) { return }
 
-			uni.showToast({
+			uni.showLoading({
 				title: '发布中',
-				icon: 'success',
-				duration: 2000
 			});
 
 			var imageURLs = await this.uploadImages()
 			console.log('uploaded image urls: ', imageURLs)
 			if (imageURLs == "") { return }
 
-			var resp = await api.publishGoods(this.goodsID, this.goodsDesc, this.selectedTag, this.price, imageURLs)
+			var resp = await api.publishGoods(this.goodsID, this.goodsDesc, this.selectedTagID, this.price, imageURLs)
 			if (resp.code != api.SUCCESS_CODE) { return }
 
 			uni.showToast({
@@ -171,7 +169,7 @@ export default {
 				});
 				return false
 			}
-			if (this.currTagIndex <= 0) {
+			if (this.selectedTagID < 0) {
 				uni.showToast({
 					title: '要选下标签呀',
 					icon: 'none',
