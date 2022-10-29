@@ -1,23 +1,28 @@
 <template>
 	<view class="centerAlign left-rigth-margin">
 		<textarea class="textarea" v-model="goodsDesc" :placeholder="goodsDescPlaceHolder" inputBorder="false" />
-		<!-- <u-album :urls="choosedImageURLs"></u-album>
-		<u--image showLoading="false" src="/page_subject/static/add_pic_btn.png" width="200rpx" height="200rpx"
-			@click="addPictureBtnOnClick"></u--image> -->
 
-		<tui-upload :value="choosedImageURLs" limit="6" @complete="pickImageComplete" @remove="removeImage"
-			sizeType="['compressed']" imageFormat="['jpg','png']" size="9">
-		</tui-upload>
-
-		<view class="uni-px-5">
-			<uni-data-checkbox mode="tag" v-model="selectedTag" :localdata="tagList"></uni-data-checkbox>
+		<view style="display: flex; align-items: left; justify-content: left">
+			<tui-upload :value="choosedImageURLs" limit="6" @complete="pickImageComplete" @remove="removeImage"
+				sizeType="['compressed']" imageFormat="['jpg','png']" size="9">
+			</tui-upload>
 		</view>
 
-		<u--form labelPosition="left">
-			<u-form-item leftIcon="rmb-circle-fill" label="价格" labelWidth="80">
-				<u--input type="digit" v-model="price" placeholder="0.00" inputAlign="right" border="none" />
+		<!-- <view class="uni-px-5">
+			<uni-data-checkbox mode="tag" v-model="selectedTag" :localdata="tagList"></uni-data-checkbox>
+		</view> -->
+		<v-tabs fontSize="35rpx" v-model="currTagIndex" :tabs="tabNameList" @change="tabOnChange">
+		</v-tabs>
+
+		<u--form labelPosition="left" class="price">
+			<u-form-item leftIcon="rmb-circle-fill" label="价格" labelWidth="140">
+				<u--input type="digit" v-model="price" placeholder="0.00" inputAlign="right" border="none"
+					@change="priceInputChange" />
 			</u-form-item>
 		</u--form>
+
+		<!-- <input type="number" v-model="price" @input="priceInputChange" placeholder="请询问服务员后输入"
+			placeholder-style="font-size: 34rpx;color: #CCCCCC;" /> -->
 
 		<u-button class="bottom-btn" shape="circle" type="primary" text="发布" size="normal" @click="confirmBtnOnClick" />
 	</view>
@@ -35,18 +40,13 @@ export default {
 	},
 	data() {
 		return {
+			currTagIndex: 0,
+			tabNameList: [],
+
 			goodsDesc: "",
 			goodsDescPlaceHolder: "在这里描述下宝贝的转手原因、入手渠道、规格以及新旧程度和使用感受吧, 会有助于更快的转手喔~ ^o^",
 			choosedImageURLs: [],
-			tagList: [
-				{
-					text: '服鞋',
-					value: 1,
-				}, {
-					text: '电子产品',
-					value: 2,
-				}
-			],
+			tagList: [],
 			selectedTag: "",
 			price: 0.00,
 			goodsID: "",
@@ -56,22 +56,57 @@ export default {
 	methods: {
 		async onLoad() {
 			// get tag list from server
-			var tagList = []
-			var resp = await api.getTagList()
-			for (var i = 0; i < resp.data.length; i++) {
-				var tag = resp.data[i]
-				if (tag.name == '全部') { continue }
-				tagList.push({
-					text: tag.name,
-					value: tag.id,
-				})
-			}
-			this.tagList = tagList
+			this.renderTabNameList()
 
 			// get uuid from server and set it as goods_id
 			var resp = await api.getUUID()
 			this.goodsID = resp.data
 			console.log("[DEBUG] goodsID: ", this.goodsID)
+		},
+		tabOnChange(index) {
+			this.selectedTag = this.getTagIDByTabIndex(index)
+			console.log('[DEBUG] select tag_id: ', this.selectedTag)
+		},
+
+		getTagIDByTabIndex(tabIndex) {
+			return this.tagList[tabIndex].id
+		},
+
+		priceInputChange(e) {
+			this.$nextTick(() => {
+				let val = e.toString();
+				val = val.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
+				val = val.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+				val = val.replace(/^0+\./g, '0.');
+				val = val.match(/^0+[1-9]+/) ? val = val.replace(/^0+/g, '') : val
+				val = (val.match(/^\d*(\.?\d{0,2})/g)[0]) || ''
+
+				if (val.includes(".")) {
+					let numDian = val.toString().split(".")[1].length;
+					if (numDian === 2) {
+						this.price = val.length;
+					}
+				} else {
+					// this.moneyMaxLeng = 8;
+				}
+				this.price = val;
+			});
+		},
+
+		async renderTabNameList() {
+			var resp = await api.getTagList()
+			if (resp.code != api.SUCCESS_CODE) { return false }
+
+			var tabNameList = []
+			for (var i = 0; i < resp.data.length; i++) {
+				var tag = resp.data[i]
+				if (tag.id == 0) { continue }
+				tabNameList.push(tag.name)
+				this.tagList.push(tag)
+			}
+			this.tabNameList = tabNameList
+
+			return true
 		},
 
 		removeImage(e) {
@@ -136,7 +171,7 @@ export default {
 				});
 				return false
 			}
-			if (this.selectedTag == "") {
+			if (this.currTagIndex <= 0) {
 				uni.showToast({
 					title: '要选下标签呀',
 					icon: 'none',
@@ -221,6 +256,10 @@ export default {
 
 .textarea {
 	height: 300rpx;
+}
+
+.price {
+	font-size: 80rpx
 }
 
 /* .margin-left-right-side {
