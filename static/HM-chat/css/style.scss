@@ -111,15 +111,15 @@ page{
 }
 .input-box{
 	width: 98%;
-	min-height: 100upx;
+	min-height: 100rpx;
 	padding: 0 1%;
 	background-color: #f2f2f2;
 	display: flex;
 	position: fixed;
 	z-index: 20;
-	bottom:24rpx;
+	bottom:0rpx;
 	&.showLayer{transform: translate3d(0,-42vw,0);}
-	transition: all .15s linear;
+	transition: all .001s linear;
 	border-bottom: solid 1upx #ddd;
 	.voice,.more{
 		flex-shrink: 0;

@@ -14,19 +14,19 @@
 						<view class="rect5"></view>
 					</view>
 				</view>
-				<view class="row" v-for="(item,index) in msgList" :key="index" :id="generateMessageViewID(item.ID)">
+				<view class="row" v-for="(item, index) in msgList" :key="index" :id="generateMessageViewID(item.ID)">
 					<!-- 用户消息 -->
 					<block>
 						<!-- 自己发出的消息 -->
-						<view class="my" v-if="item.flow=='out'">
+						<view class="my" v-if="item.flow == 'out'">
 							<!-- 左-消息 -->
 							<view class="left">
 								<!-- 文字消息 -->
-								<view v-if="item.type==TIM.TYPES.MSG_TEXT" class="bubble">
+								<view v-if="item.type == TIM.TYPES.MSG_TEXT" class="bubble">
 									<rich-text :nodes="nodesFliter(item.payload.text)"></rich-text>
 								</view>
 								<!-- 图片消息 -->
-								<view v-else-if="item.type==TIM.TYPES.MSG_IMAGE" class="bubble">
+								<view v-else-if="item.type == TIM.TYPES.MSG_IMAGE" class="bubble">
 									<image class="img" :src="item.payload.imageInfoArray[0].url" mode="aspectFit"
 										@click="imagePreview(item.payload.imageInfoArray[0].url)"></image>
 								</view>
@@ -45,16 +45,16 @@
 							<!-- 右-用户名称-时间-消息 -->
 							<view class="right">
 								<view class="username">
-									<view class="name">{{toUserInfo.nickname}}</view>
-									<view class="time">{{timeFliter(item.time)}}</view>
+									<view class="name">{{ toUserInfo.nickname }}</view>
+									<view class="time">{{ timeFliter(item.time) }}</view>
 								</view>
 
 								<!-- 文字消息 -->
-								<view v-if="item.type==TIM.TYPES.MSG_TEXT" class="bubble">
+								<view v-if="item.type == TIM.TYPES.MSG_TEXT" class="bubble">
 									<rich-text :nodes="nodesFliter(item.payload.text)"></rich-text>
 								</view>
 								<!-- 图片消息 -->
-								<view v-else-if="item.type==TIM.TYPES.MSG_IMAGE" class="bubble">
+								<view v-else-if="item.type == TIM.TYPES.MSG_IMAGE" class="bubble">
 									<image :src="item.payload.imageInfoArray[0].url" mode="aspectFit"
 										@click="imagePreview(item.payload.imageInfoArray[0].url)"></image>
 								</view>
@@ -67,15 +67,15 @@
 		<!-- 抽屉栏 -->
 		<view class="popup-layer" :class="popupLayerClass" @touchmove.stop.prevent="discard">
 			<!-- 表情 -->
-			<swiper class="emoji-swiper" :class="{hidden:hideEmoji}" indicator-dots="true" duration="150">
-				<swiper-item v-for="(page,pid) in emojiList" :key="pid">
-					<view v-for="(em,eid) in page" :key="eid" @tap="addEmoji(em)">
-						<image :src="'/static/img/emoji/'+em.url" mode="aspectFit"></image>
+			<swiper class="emoji-swiper" :class="{ hidden: hideEmoji }" indicator-dots="true" duration="150">
+				<swiper-item v-for="(page, pid) in emojiList" :key="pid">
+					<view v-for="(em, eid) in page" :key="eid" @tap="addEmoji(em)">
+						<image :src="'/static/img/emoji/' + em.url" mode="aspectFit"></image>
 					</view>
 				</swiper-item>
 			</swiper>
 			<!-- 更多功能 相册-拍照-红包 -->
-			<view class="more-layer" :class="{hidden:hideMore}">
+			<view class="more-layer" :class="{ hidden: hideMore }">
 				<view class="list">
 					<view class="box" @tap="chooseImage">
 						<view class="icon tupian2"></view>
@@ -87,7 +87,7 @@
 			</view>
 		</view>
 		<!-- 底部输入栏 -->
-		<view class="input-box" :class="popupLayerClass" @touchmove.stop.prevent="discard">
+		<view class="input-box" :class="popupLayerClass" @touchmove.stop.prevent="discard" :style="{bottom: inputBottom+'px'}">
 			<!-- H5下不能录音，输入栏布局改动一下 -->
 			<!-- #ifdef H5 -->
 			<view class="more" @tap="showMore">
@@ -95,9 +95,10 @@
 			</view>
 			<!-- #endif -->
 			<view class="textbox">
-				<view class="text-mode" :class="isVoice?'hidden':''">
+				<view class="text-mode" :class="isVoice ? 'hidden' : ''">
 					<view class="box">
-						<textarea :show-confirm-bar="inputTextShowConfirmBar" auto-height="true" v-model="textMsg" @focus="textareaFocus" />
+						<textarea :show-confirm-bar="inputTextShowConfirmBar" auto-height="true" v-model="textMsg"
+							@focus="textareaFocus" @blur="blurTextarea" />
 					</view>
 					<view class="em" @tap="chooseEmoji">
 						<view class="icon biaoqing"></view>
@@ -109,19 +110,19 @@
 				<view class="icon add"></view>
 			</view>
 			<!-- #endif -->
-			<view class="send" :class="isVoice?'hidden':''" @tap="sendText">
+			<view class="send" :class="isVoice ? 'hidden' : ''" @tap="sendText">
 				<view class="btn">发送</view>
 			</view>
 		</view>
 		<!-- 录音UI效果 -->
-		<view class="record" :class="recording?'':'hidden'">
-			<view class="ing" :class="willStop?'hidden':''">
+		<view class="record" :class="recording ? '' : 'hidden'">
+			<view class="ing" :class="willStop ? 'hidden' : ''">
 				<view class="icon luyin2"></view>
 			</view>
-			<view class="cancel" :class="willStop?'':'hidden'">
+			<view class="cancel" :class="willStop ? '' : 'hidden'">
 				<view class="icon chehui"></view>
 			</view>
-			<view class="tis" :class="willStop?'change':''">{{recordTis}}</view>
+			<view class="tis" :class="willStop ? 'change' : ''">{{ recordTis }}</view>
 		</view>
 		<!-- 红包弹窗 -->
 		<view class="windows" :class="windowsState">
@@ -135,9 +136,9 @@
 						</view>
 						<image src="/static/img/im/face/face_1.jpg"></image>
 					</view>
-					<view class="from">来自{{redenvelopeData.from}}</view>
-					<view class="blessing">{{redenvelopeData.blessing}}</view>
-					<view class="money">{{redenvelopeData.money}}</view>
+					<view class="from">来自{{ redenvelopeData.from }}</view>
+					<view class="blessing">{{ redenvelopeData.blessing }}</view>
+					<view class="money">{{ redenvelopeData.money }}</view>
 					<view class="showDetails" @tap="toDetails(redenvelopeData.rid)">
 						查看领取详情 <view class="icon to"></view>
 					</view>
@@ -161,6 +162,7 @@ const TIM_MESSAGE_TYPE = {
 export default {
 	data() {
 		return {
+			inputBottom: 2,
 			inputTextShowConfirmBar: false,
 
 			//TIM变量
@@ -438,10 +440,14 @@ export default {
 		},
 
 		//获取焦点，如果不是选表情ing,则关闭抽屉
-		textareaFocus() {
+		textareaFocus(e) {
 			if (this.popupLayerClass == 'showLayer' && this.hideMore == false) {
 				this.hideDrawer();
 			}
+			this.inputBottom = e.detail.height;
+		},
+		blurTextarea(e) {
+			this.inputBottom = 0;
 		},
 		// 发送文字消息
 		sendText() {
