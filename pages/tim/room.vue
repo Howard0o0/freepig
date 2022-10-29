@@ -238,6 +238,7 @@ export default {
 		},
 	},
 	async onLoad(option) {
+		this.inputBottom = getApp().globalData.safeAreaHeight;
 
 		this.userInfo = this.$store.state.vuex_user
 		console.log('[DEBUG] self userinfo: ', this.userInfo)
@@ -447,7 +448,7 @@ export default {
 			this.inputBottom = e.detail.height;
 		},
 		blurTextarea(e) {
-			this.inputBottom = 0;
+			this.inputBottom = getApp().globalData.safeAreaHeight;
 		},
 		// 发送文字消息
 		sendText() {

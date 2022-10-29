@@ -21,6 +21,7 @@ export default {
 	globalData: {
 		selectedGoodsToShowInDetail: null,
 		selectedGoodsToModify: null,
+		safeAreaHeight: 0,
 	},
 
 	data() {
@@ -30,7 +31,7 @@ export default {
 	},
 
 	onLaunch: async function () {
-		if (!this.$store.state.vuex_token || this.$store.state.vuex_token == ""){
+		if (!this.$store.state.vuex_token || this.$store.state.vuex_token == "") {
 			await this.getToken()
 		}
 		await utils.refreshUserInfo()
@@ -51,6 +52,7 @@ export default {
 			return;
 		}
 		this.TIMLogin(this.$store.state.vuex_user.id.toString(), resp.data.tim_sig)
+		this.globalData.safeAreaHeight = this.getSafeAreaHeight()
 		console.log('App Launch')
 	},
 	onShow: function () {
@@ -60,6 +62,19 @@ export default {
 		console.log('App Hide')
 	},
 	methods: {
+		hasBottomSafeArea() {
+			let screenHeight = wx.getSystemInfoSync().screenHeight
+			let bottom = wx.getSystemInfoSync().safeArea.bottom
+			return screenHeight !== bottom
+		},
+
+		getSafeAreaHeight() {
+			if (!this.hasBottomSafeArea) {
+				return 0;
+			}
+			return wx.getSystemInfoSync().screenHeight - wx.getSystemInfoSync().safeArea.bottom;
+		},
+
 		async getToken() {
 
 			uni.showToast({
