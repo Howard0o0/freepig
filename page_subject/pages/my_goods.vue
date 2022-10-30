@@ -2,8 +2,7 @@
 	<view>
 		<view class="order-list">
 			<view class="list">
-				<view class="row" v-for="(row, index) in myGoodsList" :key="index"
-					@tap="toGoods(row)">
+				<view class="row" v-for="(row, index) in myGoodsList" :key="index" @tap="toGoods(row)">
 
 					<view class="order-info">
 						<view class="left">
@@ -22,11 +21,11 @@
 					<view class="btns">
 						<block>
 							<view class="onsale" @tap.stop="modifyGoodsBtnOnClick(row)">编辑</view>
-							<view v-if="row.status == 'OPEN'"
-								class="outsale" @tap.stop="updateGoodsStatusBtnOnClick(row, 'CLOSE')">下架
+							<view v-if="row.status == 'OPEN'" class="outsale"
+								@tap.stop="updateGoodsStatusBtnOnClick(row, 'CLOSE')">下架
 							</view>
-							<view v-if="row.status == 'CLOSE'"
-								class="onsale" @tap.stop="updateGoodsStatusBtnOnClick(row, 'OPEN')">上架</view>
+							<view v-if="row.status == 'CLOSE'" class="onsale"
+								@tap.stop="updateGoodsStatusBtnOnClick(row, 'OPEN')">上架</view>
 
 						</block>
 					</view>
@@ -60,6 +59,10 @@ export default {
 	},
 
 	onBackPress(e) {
+		this.refreshMyGoodsList()
+	},
+
+	onShow() {
 		this.refreshMyGoodsList()
 	},
 
