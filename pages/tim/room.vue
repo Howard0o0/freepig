@@ -74,7 +74,7 @@
 					</view>
 				</swiper-item>
 			</swiper>
-			<!-- 更多功能 相册-拍照-红包 -->
+			<!-- 更多功能 相册-拍照 -->
 			<view class="more-layer" :class="{ hidden: hideMore }">
 				<view class="list">
 					<view class="box" @tap="chooseImage">

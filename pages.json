@@ -143,6 +143,13 @@
                     }
                 },
                 {
+                    "path": "pages/chat",
+                    "style": {
+                        "navigationBarTitleText": "",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
                     "path": "pages/publish_goods",
                     "style": {
                         "navigationBarTitleText": "",
@@ -218,6 +225,12 @@
                     ]
                 },
                 "page_subject/pages/show_prize_list": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/chat": {
                     "network": "all",
                     "packages": [
                         "__APP__"

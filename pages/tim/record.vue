@@ -2,15 +2,15 @@
 	<view>
 		<!-- 聊天记录 会话列表 -->
 		<view class="conversition-box">
-			<view class="list-box" v-if="userAddConversationList.length>0">
-				<view class="item-box" v-for="(item,index) in userAddConversationList" :key="index"
+			<view class="list-box" v-if="userAddConversationList.length > 0">
+				<view class="item-box" v-for="(item, index) in userAddConversationList" :key="index"
 					@click="toRoom(item)">
 					<view class="item-img">
 						<img :src="item.toUser.avatar_url" alt="">
 					</view>
 					<view class="item-text">
 						<view class="item-user">
-							{{item.toUser.nickname}}
+							{{ item.toUser.nickname }}
 						</view>
 						<view class="item-text-info">
 							<rich-text :nodes="nodesFliter(item.conversation.lastMessage.messageForShow)"></rich-text>
@@ -19,7 +19,7 @@
 					</view>
 					<view class="item-msg">
 						<view class="item-msg-icon" v-if="item.conversation.unreadCount">
-							{{item.conversation.unreadCount}}</view>
+							{{ item.conversation.unreadCount }}</view>
 					</view>
 				</view>
 			</view>
@@ -127,9 +127,10 @@ export default {
 		},
 		toRoom(item) {
 			this.$store.commit('updateConversationActive', item)
-			uni.navigateTo({
-				url: '/pages/tim/room'
-			})
+			// uni.navigateTo({
+			// 	url: '/pages/tim/room'
+			// })
+			uni.navigateTo({ url: '/page_subject/pages/chat' })
 		},
 		//选择用户聊天
 		checkUserToRoom(toUserInfo) {
