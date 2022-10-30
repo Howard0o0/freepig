@@ -6,7 +6,7 @@
 
 		<view class="left-rigth-margin">
 			<tui-upload :value="choosedImageURLs" limit="6" @complete="pickImageComplete" @remove="removeImage"
-				sizeType="['compressed']" imageFormat="['jpg','png']" size="9">
+				sizeType="['compressed']" imageFormat="['jpg','png']" size="9" width="180" height="180">
 			</tui-upload>
 		</view>
 
@@ -42,6 +42,8 @@ export default {
 	},
 	data() {
 		return {
+			isModifyGoodsMode: false,
+
 			currTagIndex: -1,
 			tabNameList: [],
 
@@ -56,14 +58,32 @@ export default {
 		}
 	},
 	methods: {
-		async onLoad() {
+		async onLoad(options) {
 			// get tag list from server
-			this.renderTabNameList()
+			await this.renderTabNameList()
 
-			// get uuid from server and set it as goods_id
-			var resp = await api.getUUID()
-			this.goodsID = resp.data
-			console.log("[DEBUG] goodsID: ", this.goodsID)
+			// TODO: 如果传进来一个goods对象，就是updateGoodsMode
+			if (options.goods) {
+				this.isModifyGoodsMode = true;
+				let goodsToModify = JSON.parse(options.goods);
+				console.log('[DEBUG] modify goods: ', goodsToModify)
+
+				this.goodsDesc = goodsToModify.description
+				this.goodsID = goodsToModify.id
+				this.choosedImageURLs = goodsToModify.images.split(',');
+				this.price = goodsToModify.price
+				this.selectedTagID = goodsToModify.tag_id
+				this.currTagIndex = this.getTagIndexByTagID(this.selectedTagID)
+			} else {
+				this.isModifyGoodsMode = false;
+				console.log('[DEBUG] publish goods')
+
+				// get uuid from server and set it as goods_id
+				var resp = await api.getUUID()
+				this.goodsID = resp.data
+				console.log("[DEBUG] goodsID: ", this.goodsID)
+			}
+
 		},
 		tabOnChange(index) {
 			this.selectedTagID = this.getTagIDByTabIndex(index)
@@ -72,6 +92,13 @@ export default {
 
 		getTagIDByTabIndex(tabIndex) {
 			return this.tagList[tabIndex].id
+		},
+
+		getTagIndexByTagID(tagID) {
+			for (let i = 0; i < this.tagList.length; i++) {
+				if (this.tagList[i].id == tagID) { return i; }
+			}
+			return -1;
 		},
 
 		priceInputChange(e) {
@@ -137,7 +164,9 @@ export default {
 			console.log('uploaded image urls: ', imageURLs)
 			if (imageURLs == "") { return }
 
-			var resp = await api.publishGoods(this.goodsID, this.goodsDesc, this.selectedTagID, this.price, imageURLs)
+			let goodsApi = api.publishGoods
+			if (this.isModifyGoodsMode) { goodsApi = api.updateGoods; }
+			var resp = await goodsApi(this.goodsID, this.goodsDesc, this.selectedTagID, this.price, imageURLs)
 			if (resp.code != api.SUCCESS_CODE) { return }
 
 			uni.showToast({
@@ -198,11 +227,19 @@ export default {
 			return true
 		},
 
+		isLocalImage(imageURL) {
+			return (imageURL.indexOf("http://tmp") != -1)
+		},
+
 		async uploadImages() {
 			var imageURLs = ""
 			var choosedImageURLs = this.choosedImageURLs
 			for (var i = 0; i < choosedImageURLs.length; i++) {
-				if (choosedImageURLs[i] == "") { continue }
+				let imageURL = choosedImageURLs[i]
+				if (!this.isLocalImage(imageURL)) {
+					imageURLs += "," + imageURL
+					continue
+				}
 				var resp = await api.uploadImage(this.goodsID, choosedImageURLs[i])
 				if (resp.code != api.SUCCESS_CODE) { return "" }
 				imageURLs += "," + resp.data.image_urls
