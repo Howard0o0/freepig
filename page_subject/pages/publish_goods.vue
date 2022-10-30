@@ -228,7 +228,7 @@ export default {
 		},
 
 		isLocalImage(imageURL) {
-			return (imageURL.indexOf("http://tmp") != -1)
+			return (imageURL.indexOf("https://") == -1)
 		},
 
 		async uploadImages() {
@@ -240,7 +240,7 @@ export default {
 					imageURLs += "," + imageURL
 					continue
 				}
-				var resp = await api.uploadImage(this.goodsID, choosedImageURLs[i])
+				var resp = await api.uploadImage(this.goodsID, imageURL)
 				if (resp.code != api.SUCCESS_CODE) { return "" }
 				imageURLs += "," + resp.data.image_urls
 			}
