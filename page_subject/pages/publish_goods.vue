@@ -52,7 +52,7 @@ export default {
 			choosedImageURLs: [],
 			tagList: [],
 			selectedTagID: -1,
-			price: 0.00,
+			price: "",
 			goodsID: "",
 			MAX_IMAGE_SIZE_BYTE: (20 << 20),
 		}
@@ -104,6 +104,7 @@ export default {
 		priceInputChange(e) {
 			this.$nextTick(() => {
 				let val = e.toString();
+				if (val == "0") { this.price = ""; return; }
 				val = val.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
 				val = val.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
 				val = val.replace(/^0+\./g, '0.');
