@@ -44,10 +44,10 @@
 							</view>
 							<!-- 右-用户名称-时间-消息 -->
 							<view class="right">
-								<view class="username">
+								<!-- <view class="username">
 									<view class="name">{{ toUserInfo.nickname }}</view>
 									<view class="time">{{ timeFliter(item.time) }}</view>
-								</view>
+								</view> -->
 
 								<!-- 文字消息 -->
 								<view v-if="item.type == TIM.TYPES.MSG_TEXT" class="bubble">
@@ -329,16 +329,16 @@ export default {
 			this.isCompleted = resp.data.is_complete
 			console.log("[DEBUG] hit top trigger load more history")
 
-			if (lastLatestMessageID > 0) {
-				//这段代码很重要，不然每次加载历史数据都会跳到顶部
-				this.$nextTick(function () {
-					this.scrollToView = this.generateMessageViewID(this.nextReqMessageID);//跳转上次的第一行信息位置
-					this.$nextTick(function () {
-						this.scrollAnimation = true;//恢复滚动动画
-					});
+			// if (lastLatestMessageID > 0) {
+			// 	//这段代码很重要，不然每次加载历史数据都会跳到顶部
+			// 	this.$nextTick(function () {
+			// 		this.scrollToView = this.generateMessageViewID(this.nextReqMessageID);//跳转上次的第一行信息位置
+			// 		this.$nextTick(function () {
+			// 			this.scrollAnimation = true;//恢复滚动动画
+			// 		});
 
-				});
-			}
+			// 	});
+			// }
 			this.isHistoryLoading = false;
 		},
 		// 加载初始页面消息
