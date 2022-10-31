@@ -24,6 +24,21 @@ function joinCampusAndMajorInfo(campusName, majorName) {
     return campusName + " | " + majorName
 }
 
+function myMessageListToTIMMessageList(myMesageList, selfUserID, TIM) {
+    let timMessageList = []
+    for (let i in myMesageList) {
+        const message = myMesageList[i]
+        timMessageList.push({
+            conversationID: message.conversation_id,
+            ID: message.id,
+            flow: (message.from_user_id == selfUserID) ? "out" : "in",
+            payload: (message.type == "TEXT") ? { text: message.payload } : { imageInfoArray: [{ url: message.payload }] },
+            type: (message.type == "TEXT") ? TIM.TYPES.MSG_TEXT : TIM.TYPES.MSG_IMAGE,
+        })
+    }
+    return timMessageList
+}
+
 export default {
     refreshUserInfo,
 }
@@ -32,4 +47,5 @@ export const utils = {
     refreshUserInfo,
     interceptUnauthorizedPageCallback,
     joinCampusAndMajorInfo,
+    myMessageListToTIMMessageList,
 }

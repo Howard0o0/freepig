@@ -106,7 +106,7 @@ const store = new Vuex.Store({
             // 还没当前会话，则跳过
             if (Array.isArray(data)) {
                 // 筛选出当前会话的消息
-                const result = data.filter(item => item.conversationID === state.conversationActive.conversationID)
+                const result = data.filter(item => item.conversationID == state.conversationActive.conversationID)
                 state.currentMessageList = [...state.currentMessageList, ...result]
             } else if (data.conversationID === state.conversationActive.conversationID) {
                 state.currentMessageList = [...state.currentMessageList, data]

@@ -196,6 +196,34 @@ export const verifyRecommendCode = (recommendCode) => uni.$u.http.get('/auth/ver
     }
 })
 
+export const getConversationList = () => uni.$u.http.get('/chat/conversation', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: {}
+})
+
+export const getHistoryMessageListFromBeginning = (conversation_id, count) => uni.$u.http.get('/chat/conversation/history-message', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: {
+        'conversation_id': conversation_id,
+        'count': count,
+    }
+})
+
+export const getHistoryMessageList = (conversation_id, count, next_request_message_id) => uni.$u.http.get('/chat/conversation/history-message', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: {
+        'conversation_id': conversation_id,
+        'next_request_message_id': next_request_message_id,
+        'count': count,
+    }
+})
+
 export const SUCCESS_CODE = 200
 
 export const api = {
@@ -223,4 +251,7 @@ export const api = {
     verifyRecommendCode,
     drawPrize,
     getPrizeUserList,
+    getConversationList,
+    getHistoryMessageListFromBeginning,
+    getHistoryMessageList,
 }

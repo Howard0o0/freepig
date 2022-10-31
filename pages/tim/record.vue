@@ -97,15 +97,40 @@ export default {
 		},
 		//获取消息列表
 		getConversationList() {
+			// let promise = this.tim.getConversationList();
+			// promise.then((res) => {
+			// 	let conversationList = res.data.conversationList; // 会话列表，用该列表覆盖原有的会话列表
+			// 	console.log('[DEBUG] conversationList: ', conversationList)
+			// 	if (conversationList.length) {
+			// 		//将返回的会话列表拼接上 用户的基本资料  
+			// 		//说明：如果已经将用户信息 提交到tim服务端了 就不需要再次拼接
+			// 		this.$store.commit("updateConversationList", conversationList);
+			// 	}
+
+			// }).catch((err) => {
+			// 	console.warn('getConversationList error:', err); // 获取会话列表失败的相关信息
+			// });
+
 			// 拉取会话列表
-			let promise = this.tim.getConversationList();
+			let promise = api.getConversationList()
 			promise.then((res) => {
-				let conversationList = res.data.conversationList; // 会话列表，用该列表覆盖原有的会话列表
+				let conversationList = res.data; // 会话列表，用该列表覆盖原有的会话列表
 				console.log('[DEBUG] conversationList: ', conversationList)
-				if (conversationList.length) {
+				let timConversationList = [];
+				for (let i in conversationList) {
+					let conversation = conversationList[i]
+					let theOtherUserID = (conversation.from_user_id == this.$store.state.vuex_user.id) ? conversation.to_user_id : conversation.from_user_id;
+					timConversationList.push({
+						conversationID: conversation.id,
+						userProfile: { userID: theOtherUserID },
+						unreadCount: 0,
+						lastMessage: { messageForShow: "" }
+					});
+				}
+				if (timConversationList.length) {
 					//将返回的会话列表拼接上 用户的基本资料  
 					//说明：如果已经将用户信息 提交到tim服务端了 就不需要再次拼接
-					this.$store.commit("updateConversationList", conversationList);
+					this.$store.commit("updateConversationList", timConversationList);
 				}
 
 			}).catch((err) => {
@@ -127,10 +152,9 @@ export default {
 		},
 		toRoom(item) {
 			this.$store.commit('updateConversationActive', item)
-			// uni.navigateTo({
-			// 	url: '/pages/tim/room'
-			// })
-			uni.navigateTo({ url: '/page_subject/pages/chat' })
+			uni.navigateTo({
+				url: '/pages/tim/room'
+			})
 		},
 		//选择用户聊天
 		checkUserToRoom(toUserInfo) {

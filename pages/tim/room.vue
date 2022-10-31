@@ -3,9 +3,9 @@
 		<view class="content" @touchstart="hideDrawer">
 			<scroll-view class="msg-list" scroll-y="true" :scroll-with-animation="scrollAnimation"
 				:scroll-top="scrollTop" :scroll-into-view="scrollToView" @scrolltoupper="loadHistory"
-				upper-threshold="50" :style="{bottom: scrollViewBottom+'px'}">
+				upper-threshold="50" :style="{ bottom: scrollViewBottom + 'px' }">
 				<!-- 加载历史数据waitingUI -->
-				<view class="loading">
+				<view class="loading" v-if="isHistoryLoading">
 					<view class="spinner">
 						<view class="rect1"></view>
 						<view class="rect2"></view>
@@ -87,7 +87,8 @@
 			</view>
 		</view>
 		<!-- 底部输入栏 -->
-		<view class="input-box" :class="popupLayerClass" @touchmove.stop.prevent="discard" :style="{bottom: inputBottom+'px'}">
+		<view class="input-box" :class="popupLayerClass" @touchmove.stop.prevent="discard"
+			:style="{ bottom: inputBottom + 'px' }">
 			<!-- H5下不能录音，输入栏布局改动一下 -->
 			<!-- #ifdef H5 -->
 			<view class="more" @tap="showMore">
@@ -152,6 +153,7 @@
 <script>
 import { mapState } from "vuex";
 import { api } from '@/config/api.js';
+import { utils } from '@/common/common.js';
 
 const TIM_MESSAGE_TYPE = {
 	"TEXT": 1,
@@ -312,39 +314,50 @@ export default {
 			}
 		},
 		//触发滑动到顶部(加载历史信息记录)
-		loadHistory(e) {
+		async loadHistory(e) {
 			// 更多消息列表
+			this.isHistoryLoading = true
+			let lastLatestMessageID = this.nextReqMessageID
+
 			let conversationID = this.conversationActive_.conversationID
-			let promise = this.tim.getMessageList({ conversationID: conversationID, nextReqMessageID: this.nextReqMessageID, count: this.count });
-			promise.then((res) => {
-				this.$store.commit('unshiftCurrentMessageList', res.data.messageList)
-				this.nextReqMessageID = res.data.nextReqMessageID // 用于续拉，分页续拉时需传入该字段。
-				this.isCompleted = res.data.isCompleted
+			const resp = await api.getHistoryMessageList(conversationID, this.count, this.nextReqMessageID);
+			if (resp.code != api.SUCCESS_CODE) { this.isHistoryLoading = false; return; }
+			const timMessageList = utils.myMessageListToTIMMessageList(resp.data.message_list, this.$store.state.vuex_user.id, this.$TIM)
+			console.log("[DEBUG] timMessageList: ", timMessageList)
+			this.$store.commit('unshiftCurrentMessageList', timMessageList)
+			this.nextReqMessageID = resp.data.next_request_message_id // 用于续拉，分页续拉时需传入该字段。
+			this.isCompleted = resp.data.is_complete
+			console.log("[DEBUG] hit top trigger load more history")
 
-			});
-			//这段代码很重要，不然每次加载历史数据都会跳到顶部
-			this.$nextTick(function () {
-				this.scrollToView = this.generateMessageViewID(this.nextReqMessageID);//跳转上次的第一行信息位置
+			if (lastLatestMessageID > 0) {
+				//这段代码很重要，不然每次加载历史数据都会跳到顶部
 				this.$nextTick(function () {
-					this.scrollAnimation = true;//恢复滚动动画
-				});
+					this.scrollToView = this.generateMessageViewID(this.nextReqMessageID);//跳转上次的第一行信息位置
+					this.$nextTick(function () {
+						this.scrollAnimation = true;//恢复滚动动画
+					});
 
-			});
+				});
+			}
 			this.isHistoryLoading = false;
 		},
 		// 加载初始页面消息
-		getMsgList() {
+		async getMsgList() {
 			// 历史消息列表
+			this.isHistoryLoading = true
 			let conversationID = this.conversationActive_.conversationID
-			let promise = this.tim.getMessageList({ conversationID: conversationID, count: this.count });
-			promise.then((res) => {
-				this.$store.commit('pushCurrentMessageList', res.data.messageList)
-				this.nextReqMessageID = res.data.nextReqMessageID // 用于续拉，分页续拉时需传入该字段。
-				this.isCompleted = res.data.isCompleted
-				if (res.data.messageList.length <= 0) { return }
-				this.scrollToView = this.generateMessageViewID(res.data.messageList[res.data.messageList.length - 1].ID)
-				console.log(this.nextReqMessageID)
-			});
+			const resp = await api.getHistoryMessageListFromBeginning(conversationID, this.count);
+			if (resp.code != api.SUCCESS_CODE) { this.isHistoryLoading = false; return; }
+			const timMessageList = utils.myMessageListToTIMMessageList(resp.data.message_list, this.$store.state.vuex_user.id, this.$TIM)
+			console.log("[DEBUG] timMessageList: ", timMessageList)
+			this.$store.commit('pushCurrentMessageList', timMessageList)
+			this.nextReqMessageID = resp.data.next_request_message_id // 用于续拉，分页续拉时需传入该字段。
+			this.isCompleted = resp.data.is_complete
+			if (timMessageList.length <= 0) { return }
+			this.scrollToView = this.generateMessageViewID(timMessageList[timMessageList.length - 1].ID)
+			console.log(this.nextReqMessageID)
+			console.log("[DEBUG] load latest history")
+
 			// 滚动到底部
 			this.$nextTick(function () {
 				//进入页面滚动到底部
@@ -353,6 +366,7 @@ export default {
 					this.scrollAnimation = true;
 				});
 			});
+			this.isHistoryLoading = false;
 		},
 		//处理图片尺寸，如果不处理宽高，新进入页面加载图片时候会闪
 		setPicSize(content) {
