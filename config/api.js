@@ -224,6 +224,18 @@ export const getHistoryMessageList = (conversation_id, count, next_request_messa
     }
 })
 
+// message : {
+//     "to_user_id": to_user_id,
+//     "type": type,
+//     "payload": payload,
+//     "conversation_id": conversationID,
+// }
+export const sendMessage = (message) => uni.$u.http.post('/chat/message', message, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const SUCCESS_CODE = 200
 
 export const api = {
@@ -254,4 +266,5 @@ export const api = {
     getConversationList,
     getHistoryMessageListFromBeginning,
     getHistoryMessageList,
+    sendMessage,
 }

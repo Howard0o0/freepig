@@ -24,17 +24,25 @@ function joinCampusAndMajorInfo(campusName, majorName) {
     return campusName + " | " + majorName
 }
 
+function myMessageToTIMMessage(myMessage, selfUserID, TIM) {
+    let timMessage = {
+        conversationID: myMessage.conversation_id,
+        ID: myMessage.id,
+        flow: (myMessage.from_user_id == selfUserID) ? "out" : "in",
+        payload: (myMessage.type == "TEXT") ? { text: message.payload } : { imageInfoArray: [{ url: message.payload }] },
+        type: (myMessage.type == "TEXT") ? TIM.TYPES.MSG_TEXT : TIM.TYPES.MSG_IMAGE,
+    }
+    return timMessage
+}
+
 function myMessageListToTIMMessageList(myMesageList, selfUserID, TIM) {
     let timMessageList = []
     for (let i in myMesageList) {
-        const message = myMesageList[i]
-        timMessageList.push({
-            conversationID: message.conversation_id,
-            ID: message.id,
-            flow: (message.from_user_id == selfUserID) ? "out" : "in",
-            payload: (message.type == "TEXT") ? { text: message.payload } : { imageInfoArray: [{ url: message.payload }] },
-            type: (message.type == "TEXT") ? TIM.TYPES.MSG_TEXT : TIM.TYPES.MSG_IMAGE,
-        })
+        let message = myMesageList[i]
+        // call myMessageToTIMMessage fail????
+        let timMessage = utils.myMessageToTIMMessage(message, selfUserID, TIM)
+        console.log("[DEBUG] message", timMessage)
+        timMessageList.push(timMessage)
     }
     return timMessageList
 }
@@ -48,4 +56,5 @@ export const utils = {
     interceptUnauthorizedPageCallback,
     joinCampusAndMajorInfo,
     myMessageListToTIMMessageList,
+    myMessageToTIMMessage,
 }

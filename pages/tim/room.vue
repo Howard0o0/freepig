@@ -501,38 +501,31 @@ export default {
 		},
 
 		// 发送消息
-		sendMsg(content, type) {
-			let message = null
+		async sendMsg(content, type) {
+			let message = {
+				"to_user_id": this.toUserId_,
+				"payload": "",
+				"type": "",
+				"conversation_id": this.conversationActive_.conversationID
+			}
+
 			if (type == TIM_MESSAGE_TYPE.TEXT) {
-				message = this.tim.createTextMessage({
-					to: this.toUserId_,
-					conversationType: 'C2C',
-					payload: {
-						text: content.text
-					}
-				});
+				message.type = "TEXT"
+				message.payload = content
 			} else if (type == TIM_MESSAGE_TYPE.IMAGE) {
-				message = this.tim.createImageMessage({
-					to: this.toUserId_,
-					conversationType: 'C2C',
-					payload: {
-						file: content
-					}
-				});
+				message.type = "IMAGE"
+				const resp = await api.uploadImage(0, content)
+				if (resp.code != api.SUCCESS_CODE) { return; }
+				message.paylaod = resp.data.image_urls
 			} else {
 				throw "unsupported TIM message type: " + type
 			}
 
 			console.log('[DEBUG] sending message: ', message)
-			this.$store.commit('pushCurrentMessageList', message)
-			let pomise = this.tim.sendMessage(message)
-			pomise.then(res => {
-				this.$nextTick(() => {
-					// 滚动到底
-					this.scrollToView = this.generateMessageViewID(res.data.message.ID)
-					console.log('[DEBUG] message sent')
-				});
-			})
+			this.$store.commit('pushCurrentMessageList', myMessageToTIMMessage(message, this.$store.state.vuex_user.id, this.$TIM))
+			const resp = await api.sendMessage(message)
+			if (resp.code != api.SUCCESS_CODE) { return; } //TODO: do something?
+			this.scrollToView = this.generateMessageViewID(resp.data.message_id)
 		},
 
 		generateMessageViewID(messageID) {
