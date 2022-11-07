@@ -28,8 +28,8 @@ function myMessageToTIMMessage(myMessage, selfUserID, TIM) {
     let timMessage = {
         conversationID: myMessage.conversation_id,
         ID: myMessage.id,
-        flow: (myMessage.from_user_id == selfUserID) ? "out" : "in",
-        payload: (myMessage.type == "TEXT") ? { text: message.payload } : { imageInfoArray: [{ url: message.payload }] },
+        flow: ((myMessage.from_user_id + "") == (selfUserID + "")) ? "out" : "in",
+        payload: (myMessage.type == "TEXT") ? { text: myMessage.payload } : { imageInfoArray: [{ url: myMessage.payload }] },
         type: (myMessage.type == "TEXT") ? TIM.TYPES.MSG_TEXT : TIM.TYPES.MSG_IMAGE,
     }
     return timMessage

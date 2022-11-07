@@ -473,9 +473,7 @@ export default {
 				return;
 			}
 			let content = this.replaceEmoji(this.textMsg);
-			let msg = { text: content }
-			console.log('[DEBUG] sending text message: ', this.textMsg, " to user ", this.toUserId_)
-			this.sendMsg(msg, TIM_MESSAGE_TYPE.TEXT);
+			this.sendMsg(content, TIM_MESSAGE_TYPE.TEXT);
 			this.textMsg = '';//清空输入框
 		},
 		//替换表情符号为图片
@@ -503,6 +501,7 @@ export default {
 		// 发送消息
 		async sendMsg(content, type) {
 			let message = {
+				"from_user_id": this.$store.state.vuex_user.id,
 				"to_user_id": this.toUserId_,
 				"payload": "",
 				"type": "",
@@ -522,10 +521,12 @@ export default {
 			}
 
 			console.log('[DEBUG] sending message: ', message)
-			this.$store.commit('pushCurrentMessageList', myMessageToTIMMessage(message, this.$store.state.vuex_user.id, this.$TIM))
 			const resp = await api.sendMessage(message)
 			if (resp.code != api.SUCCESS_CODE) { return; } //TODO: do something?
 			this.scrollToView = this.generateMessageViewID(resp.data.message_id)
+			let timMessage = utils.myMessageToTIMMessage(message, this.$store.state.vuex_user.id, this.$TIM)
+			console.log('[DEBUG] sent tim message: ', timMessage)
+			this.$store.commit('pushCurrentMessageList', timMessage)
 		},
 
 		generateMessageViewID(messageID) {
