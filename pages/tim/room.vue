@@ -426,16 +426,9 @@ export default {
 				sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 				success: (res) => {
 					for (let i = 0; i < res.tempFilePaths.length; i++) {
-						uni.getImageInfo({
-							src: res.tempFilePaths[i],
-							success: (image) => {
-								console.log(image.width);
-								console.log(image.height);
-								let msg = { url: res.tempFilePaths[i], w: image.width, h: image.height };
-								this.sendMsg(res, TIM_MESSAGE_TYPE.IMAGE);
-								console.log('[DEBUG] sending message: ', res)
-							}
-						});
+						const imageFilePath = res.tempFilePaths[i]
+						this.sendMsg(imageFilePath, TIM_MESSAGE_TYPE.IMAGE);
+						console.log('[DEBUG] sending image message: ', imageFilePath)
 					}
 				}
 			});
@@ -514,7 +507,7 @@ export default {
 				message.type = "IMAGE"
 				const resp = await api.uploadImage(0, content)
 				if (resp.code != api.SUCCESS_CODE) { return; }
-				message.paylaod = resp.data.image_urls
+				message.payload = resp.data.image_urls
 			} else {
 				throw "unsupported TIM message type: " + type
 			}
