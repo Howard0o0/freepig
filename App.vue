@@ -27,6 +27,7 @@ export default {
 	data() {
 		return {
 			timLoginTimer: null,
+			refreshMessageTimer: null,
 		}
 	},
 
@@ -35,6 +36,7 @@ export default {
 			await this.getToken()
 		}
 		await utils.refreshUserInfo()
+		console.log('[DEBUG] token: ', this.$store.state.vuex_token)
 		const resp = await api.getTIMSig()
 		if (resp.code != api.SUCCESS_CODE) { return }
 		if (this.$store.state.vuex_user.role != "STUDENT") {
@@ -53,6 +55,8 @@ export default {
 		}
 		this.TIMLogin(this.$store.state.vuex_user.id.toString(), resp.data.tim_sig)
 		this.globalData.safeAreaHeight = this.getSafeAreaHeight()
+
+		this.launchTimerRefreshMessage()
 		console.log('App Launch')
 	},
 	onShow: function () {
@@ -62,6 +66,20 @@ export default {
 		console.log('App Hide')
 	},
 	methods: {
+		launchTimerRefreshMessage() {
+			this.refreshMessageTimer = setInterval(async () => {
+				if (!this.$store.state.conversationActive || !this.$store.state.conversationActive.historyMessageLoaded) { return; }
+				const resp = await api.getLatestMessageList(this.$store.state.conversationActive.conversationID, 100)
+				if (resp.code != api.SUCCESS_CODE) {
+					console.log('[ERROR] getLatestMessageList fail: ', resp.msg)
+				}
+				let messageList = resp.data
+				const timMessageList = utils.myMessageListToTIMMessageList(messageList, this.$store.state.vuex_user.id, this.$TIM)
+				this.$store.commit("pushCurrentMessageList", timMessageList);
+				await utils.ackLastRecvMessage(messageList, this.$store.state.vuex_user.id)
+			}, 2000);
+		},
+
 		hasBottomSafeArea() {
 			let screenHeight = wx.getSystemInfoSync().screenHeight
 			let bottom = wx.getSystemInfoSync().safeArea.bottom

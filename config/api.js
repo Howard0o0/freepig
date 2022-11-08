@@ -224,6 +224,16 @@ export const getHistoryMessageList = (conversation_id, count, next_request_messa
     }
 })
 
+export const getLatestMessageList = (conversation_id, count) => uni.$u.http.get('chat/conversation/latest-message', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: {
+        'conversation_id': conversation_id,
+        'size': count,
+    }
+})
+
 // message : {
 //     "to_user_id": to_user_id,
 //     "type": type,
@@ -231,6 +241,14 @@ export const getHistoryMessageList = (conversation_id, count, next_request_messa
 //     "conversation_id": conversationID,
 // }
 export const sendMessage = (message) => uni.$u.http.post('/chat/message', message, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
+export const ackMessage = (messageID) => uni.$u.http.post('/chat/message/ack', {
+    message_id: messageID,
+}, {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
@@ -267,4 +285,6 @@ export const api = {
     getHistoryMessageListFromBeginning,
     getHistoryMessageList,
     sendMessage,
+    ackMessage,
+    getLatestMessageList,
 }

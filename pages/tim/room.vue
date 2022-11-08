@@ -280,14 +280,8 @@ export default {
 	},
 	onUnload() {
 		//退出页面 将所有的会话内的消息设置为已读
-		let promise = this.tim.setMessageRead({ conversationID: this.conversationActive_.conversationID });
-		promise.then(function (imResponse) {
-			console.log('全部已读')
-			// 已读上报成功
-		}).catch(function (imError) {
-			// 已读上报失败
-			console.warn('setMessageRead error:', imError);
-		});
+
+		this.$store.state.conversationActive.historyMessageLoaded = false;
 	},
 	methods: {
 		//聊天的节点加上外层的div
@@ -341,6 +335,7 @@ export default {
 			// }
 			this.isHistoryLoading = false;
 		},
+
 		// 加载初始页面消息
 		async getMsgList() {
 			// 历史消息列表
@@ -367,6 +362,10 @@ export default {
 				});
 			});
 			this.isHistoryLoading = false;
+
+			let ret = await utils.ackLastRecvMessage(resp.data.message_list, this.$store.state.vuex_user.id)
+			if (!ret) { return; }
+			this.$store.state.conversationActive.historyMessageLoaded = true;
 		},
 		//处理图片尺寸，如果不处理宽高，新进入页面加载图片时候会闪
 		setPicSize(content) {

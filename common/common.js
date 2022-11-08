@@ -41,14 +41,33 @@ function myMessageListToTIMMessageList(myMesageList, selfUserID, TIM) {
         let message = myMesageList[i]
         // call myMessageToTIMMessage fail????
         let timMessage = utils.myMessageToTIMMessage(message, selfUserID, TIM)
-        console.log("[DEBUG] message", timMessage)
+        // console.log("[DEBUG] message", timMessage)
         timMessageList.push(timMessage)
     }
     return timMessageList
 }
 
+async function ackLastRecvMessage(messageList, selfUserID) {
+    for (let i=messageList.length-1;i>=0;i--) {
+        let message = messageList[i]
+        if (message.to_user_id != selfUserID) { continue }
+        const resp = await api.ackMessage(message.id)
+        if (resp.code != api.SUCCESS_CODE) {
+            console.log('[ERROR] ack message ' + message.id + " failed. reason: ", resp.msg)
+            return false
+        }
+        return true
+    }
+    return true
+}
+
 export default {
     refreshUserInfo,
+    interceptUnauthorizedPageCallback,
+    joinCampusAndMajorInfo,
+    myMessageListToTIMMessageList,
+    myMessageToTIMMessage,
+    ackLastRecvMessage,
 }
 
 export const utils = {
@@ -57,4 +76,5 @@ export const utils = {
     joinCampusAndMajorInfo,
     myMessageListToTIMMessageList,
     myMessageToTIMMessage,
+    ackLastRecvMessage,
 }

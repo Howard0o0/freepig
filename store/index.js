@@ -88,6 +88,7 @@ const store = new Vuex.Store({
         //选择已有会话聊天--更新选中会话详情
         updateConversationActive(state, conversationItem) {
             state.conversationActive = Object.assign({}, conversationItem.conversation);
+            state.conversationActive.historyMessageLoaded = false;
             state.toUserId = conversationItem.toUser.id
             state.currentMessageList = []
         },
@@ -111,7 +112,7 @@ const store = new Vuex.Store({
             } else if (data.conversationID === state.conversationActive.conversationID) {
                 state.currentMessageList = [...state.currentMessageList, data]
             }
-            console.log(state.currentMessageList)
+            // console.log(state.currentMessageList)
         },
         /**
          * 滑到顶部请求更多的历史消息
