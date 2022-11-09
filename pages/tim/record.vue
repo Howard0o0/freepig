@@ -85,6 +85,7 @@ export default {
 				//说明：如果已经将用户信息 提交到tim服务端了 就不需要再次拼接
 				this.$store.commit("updateConversationList", timConversationList);
 			}
+			uni.hideLoading()
 		},
 
 		//获取消息列表
@@ -130,6 +131,9 @@ export default {
 	onShow() {
 	},
 	onLoad() {
+		uni.showLoading({
+			title: '正在获取列表'
+		})
 		getApp().watch(this.refreshConversationList, 'conversationList')
 	}
 }

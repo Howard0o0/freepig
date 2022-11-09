@@ -42,7 +42,6 @@ export default {
 	methods: {
 		watch: function (method, istr) {
 			var obj = this.globalData
-			console.log(obj)
 			Object.defineProperty(obj, istr, {
 				configurable: true,
 				enumerable: true,
@@ -56,8 +55,8 @@ export default {
 			})
 		},
 
-		launchTimerRefreshMessage() {
-			this.refreshMessageTimer = setInterval(async () => {
+		async launchTimerRefreshMessage() {
+			const func = async () => {
 				if (!this.$store.state.conversationActive || !this.$store.state.conversationActive.historyMessageLoaded) { return; }
 				const resp = await api.getLatestMessageList(this.$store.state.conversationActive.conversationID, 100)
 				if (resp.code != api.SUCCESS_CODE) {
@@ -67,11 +66,14 @@ export default {
 				const timMessageList = utils.myMessageListToTIMMessageList(messageList, this.$store.state.vuex_user.id, this.$TIM)
 				this.$store.commit("pushCurrentMessageList", timMessageList);
 				await utils.ackLastRecvMessage(messageList, this.$store.state.vuex_user.id)
-			}, 2000);
+			}
+			await func()
+			this.refreshMessageTimer && clearInterval(this.refreshMessageTimer)
+			this.refreshMessageTimer = setInterval(func, 2000);
 		},
 
-		launchTimerRefreshConversationList() {
-			this.refreshConversationListTimer = setInterval(async () => {
+		async launchTimerRefreshConversationList() {
+			const func = async () => {
 				let resp = await api.getConversationList()
 				if (resp.code != api.SUCCESS_CODE) {
 					console.log('[ERROR] getConversationList fail. reason: ', resp.msg)
@@ -95,7 +97,12 @@ export default {
 						index: 1,
 					})
 				}
-			}, 2000);
+			}
+			console.log('[DEBUG] refreshing conversation list...')
+			await func()
+			console.log('[DEBUG] conversation list loaded')
+			this.refreshConversationListTimer && clearInterval(this.refreshConversationListTimer)
+			this.refreshConversationListTimer = setInterval(func, 2000);
 		},
 
 		hasBottomSafeArea() {
