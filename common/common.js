@@ -31,6 +31,7 @@ function myMessageToTIMMessage(myMessage, selfUserID, TIM) {
         flow: ((myMessage.from_user_id + "") == (selfUserID + "")) ? "out" : "in",
         payload: (myMessage.type == "TEXT") ? { text: myMessage.payload } : { imageInfoArray: [{ url: myMessage.payload }] },
         type: (myMessage.type == "TEXT") ? TIM.TYPES.MSG_TEXT : TIM.TYPES.MSG_IMAGE,
+        time: Date.parse(myMessage.created_at)/1000,
     }
     return timMessage
 }

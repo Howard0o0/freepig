@@ -16,6 +16,9 @@
 				</view>
 				<view class="row" v-for="(item, index) in msgList" :key="index" :id="generateMessageViewID(item.ID)">
 					<!-- 用户消息 -->
+					<view class="centerAlign time" v-if="item.shouldShowTime">{{
+							timeFliter(item.time)
+					}}</view>
 					<block>
 						<!-- 自己发出的消息 -->
 						<view class="my" v-if="item.flow == 'out'">
@@ -178,6 +181,7 @@ export default {
 			msgList: [],
 			TIM: null,
 
+			lastTimestampShowed: 0,
 
 			//文字消息
 			textMsg: '',
@@ -236,6 +240,9 @@ export default {
 	watch: {
 		currentMessageList(newVal, oldVal) {
 			this.msgList = newVal
+			for (let i = 0; i < this.msgList.length; i++) {
+				this.msgList[i].shouldShowTime = this.shouldShowTime(this.msgList[i].time)
+			}
 			this.screenMsg(newVal, oldVal)
 		},
 	},
@@ -283,6 +290,17 @@ export default {
 		this.$store.state.conversationActive.historyMessageLoaded = false;
 	},
 	methods: {
+		shouldShowTime(seconds) {
+			const GAP = 5 * 60;
+
+			let lastTimestampShowed = this.lastTimestampShowed
+			this.lastTimestampShowed = seconds;
+			if (Math.abs(seconds - lastTimestampShowed) < GAP) {
+				return false;
+			}
+			return true;
+		},
+
 		//聊天的节点加上外层的div
 		nodesFliter(str) {
 			let nodeStr = '<div style="align-items: center;word-wrap:break-word;">' + str + '</div>'
@@ -718,4 +736,9 @@ export default {
 </script>
 <style lang="scss">
 @import "@/static/HM-chat/css/style.scss";
+
+.time {
+	color: #8f8f94;
+	font-size: small;
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <view class=".left-rigth-margin">
+    <view class="left-rigth-margin">
         <view class="multi-columns">
             <image class="avatar" :src="selectedGoodsToShowInDetail.user_avatar_url" mode="aspectFit"></image>
             <view>
