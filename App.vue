@@ -22,12 +22,14 @@ export default {
 		selectedGoodsToShowInDetail: null,
 		selectedGoodsToModify: null,
 		safeAreaHeight: 0,
+		conversationList: [],
 	},
 
 	data() {
 		return {
 			timLoginTimer: null,
 			refreshMessageTimer: null,
+			refreshConversationListTimer: null,
 		}
 	},
 
@@ -57,6 +59,7 @@ export default {
 		this.globalData.safeAreaHeight = this.getSafeAreaHeight()
 
 		this.launchTimerRefreshMessage()
+		this.launchTimerRefreshConversationList()
 		console.log('App Launch')
 	},
 	onShow: function () {
@@ -66,6 +69,22 @@ export default {
 		console.log('App Hide')
 	},
 	methods: {
+		watch: function (method, istr) {
+			var obj = this.globalData
+			console.log(obj)
+			Object.defineProperty(obj, istr, {
+				configurable: true,
+				enumerable: true,
+				set: function (value) {
+					this._consumerGoodsStatus = value
+					method(value)
+				},
+				get: function (value) {
+					return this._consumerGoodsStatus
+				}
+			})
+		},
+
 		launchTimerRefreshMessage() {
 			this.refreshMessageTimer = setInterval(async () => {
 				if (!this.$store.state.conversationActive || !this.$store.state.conversationActive.historyMessageLoaded) { return; }
@@ -77,6 +96,34 @@ export default {
 				const timMessageList = utils.myMessageListToTIMMessageList(messageList, this.$store.state.vuex_user.id, this.$TIM)
 				this.$store.commit("pushCurrentMessageList", timMessageList);
 				await utils.ackLastRecvMessage(messageList, this.$store.state.vuex_user.id)
+			}, 2000);
+		},
+
+		launchTimerRefreshConversationList() {
+			this.refreshConversationListTimer = setInterval(async () => {
+				let resp = await api.getConversationList()
+				if (resp.code != api.SUCCESS_CODE) {
+					console.log('[ERROR] getConversationList fail. reason: ', resp.msg)
+					return
+				}
+				this.globalData.conversationList = resp.data
+
+				let totalUnreadCount = 0
+				for (let i in this.globalData.conversationList) {
+					let conversation = this.globalData.conversationList[i]
+					totalUnreadCount += conversation.unread_count
+				}
+
+				if (totalUnreadCount > 0) {
+					uni.setTabBarBadge({
+						index: 1,
+						text: '' + totalUnreadCount
+					})
+				} else {
+					uni.removeTabBarBadge({
+						index: 1,
+					})
+				}
 			}, 2000);
 		},
 

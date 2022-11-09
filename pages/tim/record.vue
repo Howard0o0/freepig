@@ -2,8 +2,8 @@
 	<view>
 		<!-- 聊天记录 会话列表 -->
 		<view class="conversition-box">
-			<view class="list-box" v-if="userAddConversationList.length > 0">
-				<view class="item-box" v-for="(item, index) in userAddConversationList" :key="index"
+			<view class="list-box" v-if="timConversationWithUserInfoList.length > 0">
+				<view class="item-box" v-for="(item, index) in timConversationWithUserInfoList" :key="index"
 					@click="toRoom(item)">
 					<view class="item-img">
 						<img :src="item.toUser.avatar_url" alt="">
@@ -48,7 +48,7 @@ export default {
 			userList: userList,
 			friendList: [],
 			isActive: 0, //默认聊天记录
-			userAddConversationList: []
+			timConversationWithUserInfoList: [],
 		}
 	},
 	computed: {
@@ -59,16 +59,15 @@ export default {
 		})
 	},
 	watch: {
-		isSDKReady(val) {
-			//isSDKReady == true 请求会话列表
-			if (val) {
-				this.getConversationList()
-			}
-		},
+		// isSDKReady(val) {
+		// 	//isSDKReady == true 请求会话列表
+		// 	if (val) {
+		// 		this.getConversationList()
+		// 	}
+		// },
 		conversationList(val) {
 			this.getUserInfo(val)
 		}
-
 	},
 	methods: {
 		//注销登录
@@ -95,51 +94,44 @@ export default {
 				this.getConversationList()
 			}
 		},
+
+		refreshConversationList(conversationList) {
+			let timConversationList = [];
+			for (let i in conversationList) {
+				let conversation = conversationList[i]
+				let lastMessage = conversation.last_message
+				let theOtherUserID = (conversation.from_user_id == this.$store.state.vuex_user.id) ? conversation.to_user_id : conversation.from_user_id;
+				timConversationList.push({
+					conversationID: conversation.id,
+					userProfile: { userID: theOtherUserID },
+					unreadCount: conversation.unread_count,
+					lastMessage: { messageForShow: lastMessage.type == "IMAGE" ? "[图片]" : lastMessage.payload }
+				});
+			}
+			if (timConversationList.length) {
+				//将返回的会话列表拼接上 用户的基本资料  
+				//说明：如果已经将用户信息 提交到tim服务端了 就不需要再次拼接
+				this.$store.commit("updateConversationList", timConversationList);
+			}
+		},
+
 		//获取消息列表
 		getConversationList() {
-			// let promise = this.tim.getConversationList();
-			// promise.then((res) => {
-			// 	let conversationList = res.data.conversationList; // 会话列表，用该列表覆盖原有的会话列表
-			// 	console.log('[DEBUG] conversationList: ', conversationList)
-			// 	if (conversationList.length) {
-			// 		//将返回的会话列表拼接上 用户的基本资料  
-			// 		//说明：如果已经将用户信息 提交到tim服务端了 就不需要再次拼接
-			// 		this.$store.commit("updateConversationList", conversationList);
-			// 	}
-
-			// }).catch((err) => {
-			// 	console.warn('getConversationList error:', err); // 获取会话列表失败的相关信息
-			// });
-
 			// 拉取会话列表
-			let promise = api.getConversationList()
-			promise.then((res) => {
-				let conversationList = res.data; // 会话列表，用该列表覆盖原有的会话列表
-				console.log('[DEBUG] conversationList: ', conversationList)
-				let timConversationList = [];
-				for (let i in conversationList) {
-					let conversation = conversationList[i]
-					let theOtherUserID = (conversation.from_user_id == this.$store.state.vuex_user.id) ? conversation.to_user_id : conversation.from_user_id;
-					timConversationList.push({
-						conversationID: conversation.id,
-						userProfile: { userID: theOtherUserID },
-						unreadCount: 0,
-						lastMessage: { messageForShow: "" }
-					});
-				}
-				if (timConversationList.length) {
-					//将返回的会话列表拼接上 用户的基本资料  
-					//说明：如果已经将用户信息 提交到tim服务端了 就不需要再次拼接
-					this.$store.commit("updateConversationList", timConversationList);
-				}
-
-			}).catch((err) => {
-				console.warn('getConversationList error:', err); // 获取会话列表失败的相关信息
-			});
+			this.refreshConversationList(getApp().globalData.conversationList)
 		},
+
+		getIndexOfTimConversationWithUserInfoList(conversationID) {
+			for (let i in this.timConversationWithUserInfoList) {
+				if (this.timConversationWithUserInfoList[i].conversation.conversationID == conversationID) {
+					return i
+				}
+			}
+			return -1
+		},
+
 		//根据消息列表请求聊天对象的用户信息 并完成数据拼接
 		async getUserInfo(conversationList) {
-			this.userAddConversationList = []
 			for (let i in conversationList) {
 				const item = conversationList[i]
 				let obj = {}
@@ -147,7 +139,13 @@ export default {
 				const resp = await api.getUserInfoFromServer({ user_id: item.userProfile.userID })
 				if (resp.code != api.SUCCESS_CODE) { continue }
 				obj.toUser = resp.data
-				this.userAddConversationList.push(JSON.parse(JSON.stringify(obj)))
+
+				let oldConversationIndex = this.getIndexOfTimConversationWithUserInfoList(item.conversationID)
+				if (oldConversationIndex == -1) {
+					this.timConversationWithUserInfoList.push(JSON.parse(JSON.stringify(obj)));
+				} else {
+					this.timConversationWithUserInfoList[oldConversationIndex] = obj
+				}
 			}
 		},
 		toRoom(item) {
@@ -166,20 +164,22 @@ export default {
 
 	},
 	onShow() {
-		if (this.$store.state.vuex_user.role != "STUDENT") {
-			utils.interceptUnauthorizedPageCallback()
-			return
-		}
-		if (this.isSDKReady) {
-			console.log('TIM SDK is ready')
-			this.getConversationList()
-		} else {
-			console.log('TIM SDK is not ready')
-		}
+		// this.getConversationList()
+		// if (this.$store.state.vuex_user.role != "STUDENT") {
+		// 	utils.interceptUnauthorizedPageCallback()
+		// 	return
+		// }
+		// if (this.isSDKReady) {
+		// 	console.log('TIM SDK is ready')
+		// 	this.getConversationList()
+		// } else {
+		// 	console.log('TIM SDK is not ready')
+		// }
 	},
 	onLoad() {
 		let userInfo = JSON.parse(uni.getStorageSync('userInfo'))
 		this.friendList = []
+		getApp().watch(this.refreshConversationList, 'conversationList')
 	}
 }
 </script>

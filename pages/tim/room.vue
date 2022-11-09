@@ -135,7 +135,6 @@
 						<view class="close-btn">
 							<view class="icon close" @tap="closeRedEnvelope"></view>
 						</view>
-						<image src="/static/img/im/face/face_1.jpg"></image>
 					</view>
 					<view class="from">来自{{ redenvelopeData.from }}</view>
 					<view class="blessing">{{ redenvelopeData.blessing }}</view>
