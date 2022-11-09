@@ -33,7 +33,6 @@
 
 <script>
 import { utils } from "@/common/common"
-import userList from '../../commen/tim/user.js'
 import { api } from '@/config/api.js'
 import {
 	mapState
@@ -45,8 +44,6 @@ export default {
 		return {
 			// conversationList: [],
 			toUserList: [],
-			userList: userList,
-			friendList: [],
 			isActive: 0, //默认聊天记录
 			timConversationWithUserInfoList: [],
 		}
@@ -59,40 +56,15 @@ export default {
 		})
 	},
 	watch: {
-		// isSDKReady(val) {
-		// 	//isSDKReady == true 请求会话列表
-		// 	if (val) {
-		// 		this.getConversationList()
-		// 	}
-		// },
 		conversationList(val) {
 			this.getUserInfo(val)
 		}
 	},
 	methods: {
-		//注销登录
-		outLoginBtn() {
-			let promise = this.tim.logout();
-			promise.then(res => {
-				this.$store.commit('reset')
-				uni.reLaunch({
-					url: '../index/index'
-				})
-			}).catch(err => {
-				console.log('退出失败')
-			});
-		},
 		//聊天的节点加上外层的div
 		nodesFliter(str) {
 			let nodeStr = '<div style="align-items: center;word-wrap:break-word;">' + str + '</div>'
 			return nodeStr
-		},
-		//切换tab
-		changeTabBtn(_index) {
-			this.isActive = _index
-			if (this.isSDKReady) {
-				this.getConversationList()
-			}
 		},
 
 		refreshConversationList(conversationList) {
@@ -164,21 +136,8 @@ export default {
 
 	},
 	onShow() {
-		// this.getConversationList()
-		// if (this.$store.state.vuex_user.role != "STUDENT") {
-		// 	utils.interceptUnauthorizedPageCallback()
-		// 	return
-		// }
-		// if (this.isSDKReady) {
-		// 	console.log('TIM SDK is ready')
-		// 	this.getConversationList()
-		// } else {
-		// 	console.log('TIM SDK is not ready')
-		// }
 	},
 	onLoad() {
-		let userInfo = JSON.parse(uni.getStorageSync('userInfo'))
-		this.friendList = []
 		getApp().watch(this.refreshConversationList, 'conversationList')
 	}
 }
