@@ -24,7 +24,7 @@
 				</view>
 			</view>
 			<view class="list-box" v-else>
-				<span class="msg-box">暂无聊天记录</span>
+				<span class="msg-box centerAlign">暂无聊天记录</span>
 			</view>
 		</view>
 

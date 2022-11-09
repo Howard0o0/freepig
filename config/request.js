@@ -26,7 +26,7 @@ module.exports = (vm) => {
         // 自定义参数
         const custom = response.config?.custom
         if (responseFromServer.code !== 200) {
-            console.log("http request fail. reason: ", responseFromServer.msg)
+            console.log("请求失败 ", responseFromServer.msg)
             uni.showToast({
                 title: responseFromServer.msg,
                 icon: 'none',

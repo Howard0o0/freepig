@@ -3,7 +3,8 @@
 		<view class="content" @touchstart="hideDrawer">
 			<scroll-view class="msg-list" scroll-y="true" :scroll-with-animation="scrollAnimation"
 				:scroll-top="scrollTop" :scroll-into-view="scrollToView" @scrolltoupper="loadHistory"
-				upper-threshold="50" :style="{ bottom: scrollViewBottom + 'px' }">
+				@scrolltolower="scrolltolowerCallback" @scroll="scrollCallback" upper-threshold="50"
+				:style="{ bottom: scrollViewBottom + 'px' }">
 				<!-- 加载历史数据waitingUI -->
 				<view class="loading" v-if="isHistoryLoading">
 					<view class="spinner">
@@ -169,6 +170,7 @@ export default {
 			scrollViewBottom: 0,
 			inputBottom: 2,
 			inputTextShowConfirmBar: false,
+			browsingHistoryMessage: false,
 
 			//TIM变量
 			conversationActive_: null,
@@ -291,6 +293,18 @@ export default {
 		this.$store.state.conversationActive.historyMessageLoaded = false;
 	},
 	methods: {
+		scrollCallback(e) {
+			// scroll upper
+			if (e.detail.deltaY > 0) {
+				this.browsingHistoryMessage = true
+			}
+		},
+
+		scrolltolowerCallback() {
+			console.log('[DEBUG] scroll to bottom')
+			this.browsingHistoryMessage = false
+		},
+
 		shouldShowTime(seconds) {
 			const GAP = 5 * 60;
 
@@ -315,14 +329,26 @@ export default {
 		},
 		// 接受消息(定位消息)
 		screenMsg(newVal, oldVal) {
-			if (newVal && oldVal && newVal.length > 0 && oldVal.length > 0 && newVal[0].ID && oldVal[0].ID) {
-				if (newVal[0].ID != oldVal[0].ID && newVal.length >= this.count) {
-					this.$nextTick(() => { this.scrollToView = this.generateMessageViewID(oldVal[0].ID) });
-				} else {
-					this.$nextTick(() => { this.scrollToView = this.generateMessageViewID(newVal[newVal.length - 1].ID) });
-				}
-			} else if (newVal && newVal.length > 0) {
+			if (newVal && oldVal && newVal.length == oldVal.length) { return; }
+
+			// load first batch of history message
+			if ((!oldVal || oldVal.length == 0) && newVal) {
 				this.$nextTick(() => { this.scrollToView = this.generateMessageViewID(newVal[newVal.length - 1].ID) });
+				return
+			}
+
+			if (oldVal && newVal && newVal.length > oldVal.length) {
+				if (newVal[newVal.length - 1].ID == oldVal[oldVal.length - 1].ID) {
+					// hit top and load history message
+					return
+				} else {
+					if (newVal[newVal.length - 1].flow == "out" || !this.browsingHistoryMessage) {
+						// sent a new message || not browsing history messages
+						this.$nextTick(() => { this.scrollToView = this.generateMessageViewID(newVal[newVal.length - 1].ID) });
+					} else {
+						// comming a new message but user is browsing history messages
+					}
+				}
 			}
 		},
 		//触发滑动到顶部(加载历史信息记录)
@@ -345,6 +371,8 @@ export default {
 			this.isCompleted = resp.data.is_complete
 			console.log("[DEBUG] hit top trigger load more history")
 
+			console.log('[DEBUG] scroll to message ', lastLatestMessageID)
+			this.scrollToView = this.generateMessageViewID(lastLatestMessageID)
 			// if (lastLatestMessageID > 0) {
 			// 	//这段代码很重要，不然每次加载历史数据都会跳到顶部
 			// 	this.$nextTick(function () {
@@ -540,11 +568,24 @@ export default {
 				throw "unsupported TIM message type: " + type
 			}
 
+			uni.showLoading({
+				title: '发送中',
+			});
 			console.log('[DEBUG] sending message: ', message)
 			const resp = await api.sendMessage(message)
-			if (resp.code != api.SUCCESS_CODE) { return; } //TODO: do something?
+			uni.hideLoading();
+			if (resp.code != api.SUCCESS_CODE) {
+				uni.showToast({
+					title: '发送失败',
+					icon: "fail",
+					duration: 1000,
+				})
+				return;
+			}
 			this.scrollToView = this.generateMessageViewID(resp.data.message_id)
 			let timMessage = utils.myMessageToTIMMessage(message, this.$store.state.vuex_user.id, this.$TIM)
+			timMessage.time = new Date().getTime() / 1000;
+			timMessage.ID = resp.data.message_id
 			console.log('[DEBUG] sent tim message: ', timMessage)
 			this.$store.commit('pushCurrentMessageList', timMessage)
 		},
