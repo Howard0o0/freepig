@@ -392,10 +392,12 @@ export default {
 		// 打开抽屉
 		openDrawer() {
 			this.popupLayerClass = 'showLayer';
+			this.inputBottom = 0;
 		},
 		// 隐藏抽屉
 		hideDrawer() {
 			this.popupLayerClass = '';
+			this.inputBottom = getApp().globalData.safeAreaHeight;
 			setTimeout(() => {
 				this.hideMore = true;
 				this.hideEmoji = true;
