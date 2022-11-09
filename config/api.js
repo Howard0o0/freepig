@@ -254,6 +254,14 @@ export const ackMessage = (messageID) => uni.$u.http.post('/chat/message/ack', {
     }
 })
 
+export const createConversation = (toUserID) => uni.$u.http.post('/chat/conversation', {
+    to_user_id: toUserID,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const SUCCESS_CODE = 200
 
 export const api = {
@@ -287,4 +295,5 @@ export const api = {
     sendMessage,
     ackMessage,
     getLatestMessageList,
+    createConversation,
 }

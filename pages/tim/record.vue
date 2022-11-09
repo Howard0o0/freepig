@@ -125,15 +125,7 @@ export default {
 			uni.navigateTo({
 				url: '/pages/tim/room'
 			})
-		},
-		//选择用户聊天
-		checkUserToRoom(toUserInfo) {
-			this.$store.commit('createConversationActive', toUserInfo.id)
-			uni.navigateTo({
-				url: '/pages/tim/room'
-			})
 		}
-
 	},
 	onShow() {
 	},

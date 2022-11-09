@@ -255,6 +255,7 @@ export default {
 		// this.userInfo = JSON.parse(uni.getStorageSync('userInfo'))
 		this.toUserId_ = this.$store.state.toUserId.toString()
 		this.conversationActive_ = this.$store.state.conversationActive
+		console.log('[DEBUG] conversationActive_: ', this.conversationActive_)
 		this.TIM = this.$TIM
 
 		//获取聊天对象的用户信息
@@ -332,7 +333,11 @@ export default {
 
 			let conversationID = this.conversationActive_.conversationID
 			const resp = await api.getHistoryMessageList(conversationID, this.count, this.nextReqMessageID);
-			if (resp.code != api.SUCCESS_CODE) { this.isHistoryLoading = false; return; }
+			if (resp.code != api.SUCCESS_CODE) {
+				this.isHistoryLoading = false;
+				console.log('[ERROR] getHistoryMessageList fail')
+				return;
+			}
 			const timMessageList = utils.myMessageListToTIMMessageList(resp.data.message_list, this.$store.state.vuex_user.id, this.$TIM)
 			console.log("[DEBUG] timMessageList: ", timMessageList)
 			this.$store.commit('unshiftCurrentMessageList', timMessageList)
@@ -359,7 +364,11 @@ export default {
 			this.isHistoryLoading = true
 			let conversationID = this.conversationActive_.conversationID
 			const resp = await api.getHistoryMessageListFromBeginning(conversationID, this.count);
-			if (resp.code != api.SUCCESS_CODE) { this.isHistoryLoading = false; return; }
+			if (resp.code != api.SUCCESS_CODE) {
+				this.isHistoryLoading = false;
+				console.log('[ERROR] getHistoryMessageListFromBeginning fail')
+				return;
+			}
 			const timMessageList = utils.myMessageListToTIMMessageList(resp.data.message_list, this.$store.state.vuex_user.id, this.$TIM)
 			console.log("[DEBUG] timMessageList: ", timMessageList)
 			this.$store.commit('pushCurrentMessageList', timMessageList)

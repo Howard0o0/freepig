@@ -3,12 +3,15 @@
         <view class="multi-columns">
             <image class="avatar" :src="selectedGoodsToShowInDetail.user_avatar_url" mode="aspectFit"></image>
             <view>
-                <view class="nickname user-info">{{selectedGoodsToShowInDetail.user_nickname}}</view>
-                <view class="campus-info user-info">{{joinCampusAndMajorInfo(selectedGoodsToShowInDetail.campus, selectedGoodsToShowInDetail.major)}}</view>
+                <view class="nickname user-info">{{ selectedGoodsToShowInDetail.user_nickname }}</view>
+                <view class="campus-info user-info">{{ joinCampusAndMajorInfo(selectedGoodsToShowInDetail.campus,
+                        selectedGoodsToShowInDetail.major)
+                }}</view>
             </view>
-            <u-icon v-if="!(selectedGoodsToShowInDetail.user_id == userInfo.id)" name="chat" size="30" color="#2979ff" @click="sendMessageBtnOnClick" />
+            <u-icon v-if="!(selectedGoodsToShowInDetail.user_id == userInfo.id)" name="chat" size="30" color="#2979ff"
+                @click="sendMessageBtnOnClick" />
         </view>
-        <view class="price">￥{{selectedGoodsToShowInDetail.goods_price}}</view>
+        <view class="price">￥{{ selectedGoodsToShowInDetail.goods_price }}</view>
         <textarea :value="selectedGoodsToShowInDetail.goods_description" disabled="true" auto-height="true"></textarea>
         <view class="swiper-box">
             <swiper indicator-dots="true" circular="true" autoplay="true">
@@ -26,6 +29,7 @@ import { utils } from '../../common/common.js';
 import {
     mapState
 } from "vuex";
+import { api } from '../../config/api';
 
 export default {
     data() {
@@ -44,25 +48,39 @@ export default {
     onShow() {
     },
     methods: {
-        sendMessageBtnOnClick() {
+        async sendMessageBtnOnClick() {
             console.log('[DEBUG] create conversation with user ', this.selectedGoodsToShowInDetail.user_id)
-            this.$store.commit('createConversationActive', this.selectedGoodsToShowInDetail.user_id.toString())
+            const resp = await api.createConversation(this.selectedGoodsToShowInDetail.user_id)
+            if (resp.code != api.SUCCESS_CODE) {
+                uni.showToast({
+                    title: '网络好像不太好',
+                    icon: "fail",
+                    duration: 1000,
+                })
+                return
+            }
+            const conversationID = resp.data.conversation_id
+            console.log('[DEBUG] conversation id created: ', conversationID)
+            this.$store.commit('createConversationActive', {
+                conversationID: conversationID,
+                toUserId: this.selectedGoodsToShowInDetail.user_id.toString(),
+            })
             uni.navigateTo({
                 url: '/pages/tim/room'
             })
         },
 
         imagePreview(imageURL) {
-			uni.previewImage({
-				indicator: "number",
-				loop: true,
-				urls: [imageURL],
-			})
-		},
+            uni.previewImage({
+                indicator: "number",
+                loop: true,
+                urls: [imageURL],
+            })
+        },
 
         joinCampusAndMajorInfo(campusName, majorName) {
-			return campusName + " | " + majorName
-		},
+            return campusName + " | " + majorName
+        },
 
     }
 }

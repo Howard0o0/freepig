@@ -80,9 +80,13 @@ const store = new Vuex.Store({
             state.isSDKReady = false
         },
         //选择好友聊天--创建会话/拼接会话id
-        createConversationActive(state, toUserId) {
-            state.conversationActive.conversationID = 'C2C' + toUserId
-            state.toUserId = toUserId
+        createConversationActive(state, userIDAndConversationID) {
+            console.log('[DBUEG] creating conversation : ', userIDAndConversationID)
+            state.conversationActive = {
+                conversationID: userIDAndConversationID.conversationID,
+                historyMessageLoaded: false
+            }
+            state.toUserId = userIDAndConversationID.toUserId
             state.currentMessageList = []
         },
         //选择已有会话聊天--更新选中会话详情
