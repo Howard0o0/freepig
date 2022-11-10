@@ -1,6 +1,7 @@
 <template>
 	<view v-if="userInfo != null">
-		<uni-card :title="userInfo.nickname" :sub-title="joinCampusAndMajorInfo(userInfo.campus, userInfo.major)"
+		<uni-card :title="userInfo.nickname"
+			:sub-title="joinCampusAndMajorInfo(userInfo.id, userInfo.campus, userInfo.major)"
 			:extra="generateUserDescription(userInfo)" :thumbnail="userInfo.avatar_url"></uni-card>
 	</view>
 </template>
@@ -48,7 +49,8 @@ export default {
 			return kickoffYearDesc + degreeDesc + genderDesc;
 		},
 
-		joinCampusAndMajorInfo(campusName, majorName) {
+		joinCampusAndMajorInfo(id, campusName, majorName) {
+			if (id <= 100) { return "-" }
 			return campusName + " | " + majorName
 		},
 	}
