@@ -44,7 +44,8 @@
 						<view class="other" v-else>
 							<!-- 左-头像 -->
 							<view class="left">
-								<image :src="toUserInfo.avatar_url" mode="aspectFit"></image>
+								<image :src="toUserInfo.avatar_url" mode="aspectFit" @click="toUserAvatarOnClick">
+								</image>
 							</view>
 							<!-- 右-用户名称-时间-消息 -->
 							<view class="right">
@@ -293,6 +294,11 @@ export default {
 		this.$store.state.conversationActive.historyMessageLoaded = false;
 	},
 	methods: {
+		toUserAvatarOnClick() {
+			let userInfo = JSON.stringify(this.toUserInfo);
+			uni.navigateTo({ url: '/page_subject/pages/user_info_detail?userInfo=' + userInfo })
+		},
+
 		scrollCallback(e) {
 			// scroll upper
 			if (e.detail.deltaY > 0) {

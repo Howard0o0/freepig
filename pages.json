@@ -101,6 +101,13 @@
                     }
                 },
                 {
+                    "path": "pages/user_info_detail",
+                    "style": {
+                        "navigationBarTitleText": "",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
                     "path": "pages/my_goods",
                     "style": {
                         "navigationBarTitleText": "朕的宝贝",
@@ -231,6 +238,12 @@
                     ]
                 },
                 "page_subject/pages/chat": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/user_info_detail": {
                     "network": "all",
                     "packages": [
                         "__APP__"
