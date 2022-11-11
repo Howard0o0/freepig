@@ -12,6 +12,7 @@ const whiteList = [
     "/page_subject/pages/set_userinfo",
     "/page_subject/pages/contact_us",
     "/page_subject/pages/admin_login",
+    "/pages/tim/room",
 ]
 
 function isPageInWhiteList(url) {
