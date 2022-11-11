@@ -25,7 +25,14 @@ export default {
 		if (!this.$store.state.vuex_token || this.$store.state.vuex_token == "") {
 			await this.getToken()
 		}
-		await utils.refreshUserInfo()
+		const resp = await utils.refreshUserInfo()
+		if (resp.code != api.SUCCESS_CODE) {
+			uni.showToast({
+				title: '连接服务器失败, 退出重进试试',
+				icon: "none",
+				duration: 1500,
+			})
+		}
 		console.log('[DEBUG] token: ', this.$store.state.vuex_token)
 		this.globalData.safeAreaHeight = this.getSafeAreaHeight()
 

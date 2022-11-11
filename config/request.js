@@ -41,9 +41,13 @@ module.exports = (vm) => {
             }
         }
         return responseFromServer
-    }, (response) => {
-        // 对响应错误做点什么 （statusCode !== 200）
-        uni.$u.toast("http request fail. response: "+ response)
+    }, async (response) => {
+        const res = await uni.getNetworkType()
+        if (res.networkType === "none") {
+            uni.$u.toast("无可用网络T T")
+        } else {
+            uni.$u.toast("连接服务器失败 抢修中... T T")
+        }
         return Promise.reject(response)
     })
 }
