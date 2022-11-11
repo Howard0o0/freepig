@@ -1,5 +1,5 @@
 <script>
-import utils from './common/common.js';
+import { utils } from '@/common/common.js';
 import { api } from '@/config/api.js';
 import { getTokenFromServer, getUserInfoFromServer } from './config/api.js';
 export default {
@@ -23,15 +23,16 @@ export default {
 
 	onLaunch: async function () {
 		if (!this.$store.state.vuex_token || this.$store.state.vuex_token == "") {
-			await this.getToken()
+			let resp = await utils.getToken()
+			if (resp.code != api.SUCCESS_CODE) {
+				uni.$u.toast("登录失败")
+				return;
+			}
 		}
-		const resp = await utils.refreshUserInfo()
-		if (resp.code != api.SUCCESS_CODE) {
-			uni.showToast({
-				title: '连接服务器失败, 退出重进试试',
-				icon: "none",
-				duration: 1500,
-			})
+		const success = await utils.refreshUserInfo()
+		if (!success) {
+			uni.$u.toast("刷新用户信息失败")
+			return
 		}
 		console.log('[DEBUG] token: ', this.$store.state.vuex_token)
 		this.globalData.safeAreaHeight = this.getSafeAreaHeight()
@@ -123,23 +124,6 @@ export default {
 				return 0;
 			}
 			return wx.getSystemInfoSync().screenHeight - wx.getSystemInfoSync().safeArea.bottom;
-		},
-
-		async getToken() {
-
-			uni.showToast({
-				title: '登录中',
-				icon: 'loading',
-				duration: 2000
-			});
-
-			var response = await uni.login({ provider: 'weixin' })
-			console.log('[DBUEG] wx login response: ', response)
-			var wx_login_code = response[1].code
-			console.log("[DEBUG] wx_login_code: ", wx_login_code)
-			var resp = await getTokenFromServer({ wx_login_code: wx_login_code })
-			this.$u.vuex('vuex_token', resp.data.token);
-			console.log("[DEBUG] token: ", this.$store.state.vuex_token)
 		},
 
 		async getUserInfo() {

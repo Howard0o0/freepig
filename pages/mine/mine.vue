@@ -11,8 +11,8 @@
 			</uni-grid-item>
 		</uni-grid>
 
-		<button class="left-rigth-margin" v-if="vuex_user.id <= 100"
-			@click="adminLogin">username login</button>
+		<button class="left-rigth-margin" v-if="vuex_user.id <= 100" @click="adminLogin">username login</button>
+		<button class="left-rigth-margin" v-if="vuex_user.id <= 100" @click="wxLogin">wx login</button>
 
 		<uni-notice-bar class="bottom-notice-bar"
 			v-if="userInfo.role == 'VERIFY_BROKEN' && !identifyFailNoticeShowTimeout" :text="identifyFailReason" />
@@ -24,6 +24,7 @@
 
 import store from '@/store/index.js';
 import { utils } from '../../common/common.js';
+import { api } from '../../config/api.js';
 
 export default {
 	data() {
@@ -90,6 +91,18 @@ export default {
 		adminLogin() {
 			console.log('[DEBUG] adminLogin button clicked')
 			uni.navigateTo({ url: '/page_subject/pages/admin_login' })
+		},
+
+		async wxLogin() {
+			console.log('[DEBUG] wx button clicked')
+			let success = await utils.getToken()
+			if (!success) {
+				uni.$u.toast("登录失败")
+				return;
+			}
+
+			uni.$u.toast("登录成功")
+			uni.reLaunch({ url: '../../pages/mine/mine' })
 		},
 
 		joinCampusAndMajorInfo(campusName, majorName) {

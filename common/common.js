@@ -1,8 +1,13 @@
 import { api } from '../config/api.js';
+import store from '../store/index.js';
 
 async function refreshUserInfo() {
     var resp = await api.getUserInfoFromServer()
+    if (resp.code != api.SUCCESS_CODE) {
+        return false;
+    }
     uni.$u.vuex('vuex_user', resp.data);
+    return true;
 }
 
 function interceptUnauthorizedPageCallback() {
@@ -31,7 +36,7 @@ function myMessageToTIMMessage(myMessage, selfUserID, TIM) {
         flow: ((myMessage.from_user_id + "") == (selfUserID + "")) ? "out" : "in",
         payload: (myMessage.type == "TEXT") ? { text: myMessage.payload } : { imageInfoArray: [{ url: myMessage.payload }] },
         type: (myMessage.type == "TEXT") ? TIM.TYPES.MSG_TEXT : TIM.TYPES.MSG_IMAGE,
-        time: Date.parse(myMessage.created_at)/1000,
+        time: Date.parse(myMessage.created_at) / 1000,
     }
     return timMessage
 }
@@ -49,7 +54,7 @@ function myMessageListToTIMMessageList(myMesageList, selfUserID, TIM) {
 }
 
 async function ackLastRecvMessage(messageList, selfUserID) {
-    for (let i=messageList.length-1;i>=0;i--) {
+    for (let i = messageList.length - 1; i >= 0; i--) {
         let message = messageList[i]
         if (message.to_user_id != selfUserID) { continue }
         const resp = await api.ackMessage(message.id)
@@ -62,6 +67,35 @@ async function ackLastRecvMessage(messageList, selfUserID) {
     return true
 }
 
+//TODO: move to common
+async function getToken() {
+
+    uni.showToast({
+        title: '登录中',
+        icon: 'loading',
+        duration: 2000
+    });
+
+    const response = await uni.login({ provider: 'weixin' })
+    console.log('[DBUEG] wx login response: ', response)
+    var wx_login_code = response[1].code
+    console.log("[DEBUG] wx_login_code: ", wx_login_code)
+    if (!wx_login_code || wx_login_code == "") {
+        uni.$u.toast("微信登录失败: ", response[1].errMsg)
+        return false;
+    }
+
+    const resp = await api.getTokenFromServer({ wx_login_code: wx_login_code })
+    if (resp.code != api.SUCCESS_CODE) {
+        uni.$u.toast("获取登录凭证失败")
+        return false;
+    }
+    uni.$u.vuex('vuex_token', resp.data.token);
+    console.log("[DEBUG] token: ", store.state.vuex_token)
+
+    return true
+}
+
 export default {
     refreshUserInfo,
     interceptUnauthorizedPageCallback,
@@ -69,6 +103,7 @@ export default {
     myMessageListToTIMMessageList,
     myMessageToTIMMessage,
     ackLastRecvMessage,
+    getToken,
 }
 
 export const utils = {
@@ -78,4 +113,5 @@ export const utils = {
     myMessageListToTIMMessageList,
     myMessageToTIMMessage,
     ackLastRecvMessage,
+    getToken,
 }
