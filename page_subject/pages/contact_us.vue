@@ -1,11 +1,10 @@
 <template>
 	<view class="left-rigth-margin centerAlign">
 		<image class="logo" src="/page_subject/static/logo.png" mode="aspectFit"></image>
-		<view>v0.1.0 beta</view>
 		<view>{{aboutFreePigParagraph0}}</view>
 		<view>{{aboutFreePigParagraph1}}</view>
 		<u-form-item leftIcon="email" >
-			<view>howardzz@foxmail.com</view>
+			<text user-select="true">support@doraowhite.com</text>
 		</u-form-item>
 	</view>
 </template>
