@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<uni-card :title="vuex_user.nickname" :sub-title="joinCampusAndMajorInfo(vuex_user.campus, vuex_user.major)"
-			:extra="authTag" :thumbnail="vuex_user.avatar_url" @click="userInfoCardOnClick"></uni-card>
+		<uni-card :title="userNickname" :sub-title="campusInfo" :extra="authTag" :thumbnail="userAvatarURL"
+			@click="userInfoCardOnClick"></uni-card>
 		<uni-grid :column="4" :highlight="true" :showBorder="false" :square="false" @change="gridItemOnClick">
 			<uni-grid-item v-for="(item, index) in grids" :index="index" :key="index">
 				<view class="grid-item-box" style="background-color: #fff;">
@@ -29,7 +29,11 @@ import { api } from '../../config/api.js';
 export default {
 	data() {
 		return {
-			authTag: '未认证',
+			userNickname: "加载中",
+			campusInfo: "加载中",
+			authTag: '加载中',
+			userAvatarURL: "",
+
 			grids: [
 				{
 					icon: "/static/mine/grid-auth.png",
@@ -54,6 +58,10 @@ export default {
 		}
 	},
 	onLoad() {
+		this.userNickname = store.state.vuex_user.nickname
+		this.campusInfo = this.joinCampusAndMajorInfo(store.state.vuex_user.campus, store.state.vuex_user.major)
+		this.userAvatarURL = store.state.vuex_user.avatar_url
+
 		uni.share({
 			provider: 'weixin',
 			scene: "WXSceneSession",
