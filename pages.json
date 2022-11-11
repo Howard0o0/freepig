@@ -12,7 +12,10 @@
             "path": "pages/mine/mine",
             "style": {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": false,
+                "app-plus": {
+                    "softinputNavBar": "none"
+                }
             }
         },
         {

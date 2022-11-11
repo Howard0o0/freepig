@@ -103,8 +103,10 @@
 			<view class="textbox">
 				<view class="text-mode" :class="isVoice ? 'hidden' : ''">
 					<view class="box">
-						<textarea :show-confirm-bar="inputTextShowConfirmBar" auto-height="true" v-model="textMsg"
-							@focus="textareaFocus" @blur="blurTextarea" />
+						<!-- <textarea :show-confirm-bar="inputTextShowConfirmBar" auto-height="true" v-model="textMsg"
+							@focus="textareaFocus" @blur="blurTextarea" /> -->
+						<input class="text-input" type="text" adjust-position="false" confirm-type="send"
+							@confirm="sendText" v-model="textMsg" @focus="textareaFocus" @blur="blurTextarea" />
 					</view>
 					<view class="em" @tap="chooseEmoji">
 						<view class="icon biaoqing"></view>
@@ -116,9 +118,9 @@
 				<view class="icon add"></view>
 			</view>
 			<!-- #endif -->
-			<view class="send" :class="isVoice ? 'hidden' : ''" @tap="sendText">
+			<!-- <view class="send" :class="isVoice ? 'hidden' : ''" @tap="sendText">
 				<view class="btn">发送</view>
-			</view>
+			</view> -->
 		</view>
 		<!-- 录音UI效果 -->
 		<view class="record" :class="recording ? '' : 'hidden'">
@@ -796,5 +798,9 @@ export default {
 .time {
 	color: #8f8f94;
 	font-size: small;
+}
+
+.text-input {
+	width: 100%;
 }
 </style>

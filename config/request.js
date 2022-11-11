@@ -3,6 +3,7 @@ module.exports = (vm) => {
     uni.$u.http.setConfig((config) => {
         /* config 为默认全局配置*/
         config.baseURL = 'http://localhost:8080/api/v1'; /* 根域名 */
+        // config.baseURL = 'http://192.168.2.116:8080/api/v1'; /* 根域名 */
         // config.baseURL = 'https://secondmarket.top/api/v1'; /* 根域名 */
         return config
     })
