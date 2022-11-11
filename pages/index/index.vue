@@ -384,13 +384,14 @@ export default {
 
 			.name {
 				width: 92%;
-				padding: 10upx 4%;
+				padding: 5rpx;
 				display: -webkit-box;
 				-webkit-box-orient: vertical;
 				-webkit-line-clamp: 2;
-				text-align: justify;
+				text-align: left;
 				overflow: hidden;
 				font-size: 30upx;
+				text-overflow: ellipsis;
 			}
 
 			.nickname {
