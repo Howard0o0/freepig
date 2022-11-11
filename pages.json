@@ -129,6 +129,13 @@
                     }
                 },
                 {
+                    "path": "pages/admin_login",
+                    "style": {
+                        "navigationBarTitleText": "",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
                     "path": "pages/show_prize_list",
                     "style": {
                         "navigationBarTitleText": "内推拿大奖",
@@ -226,6 +233,12 @@
                     ]
                 },
                 "page_subject/pages/modify_goods": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/admin_login": {
                     "network": "all",
                     "packages": [
                         "__APP__"

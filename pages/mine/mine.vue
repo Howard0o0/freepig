@@ -1,18 +1,21 @@
 <template>
 	<view>
-		<uni-card :title="vuex_user.nickname" :sub-title="joinCampusAndMajorInfo(vuex_user.campus, vuex_user.major)" :extra="authTag"
-			:thumbnail="vuex_user.avatar_url" @click="userInfoCardOnClick"></uni-card>
+		<uni-card :title="vuex_user.nickname" :sub-title="joinCampusAndMajorInfo(vuex_user.campus, vuex_user.major)"
+			:extra="authTag" :thumbnail="vuex_user.avatar_url" @click="userInfoCardOnClick"></uni-card>
 		<uni-grid :column="4" :highlight="true" :showBorder="false" :square="false" @change="gridItemOnClick">
 			<uni-grid-item v-for="(item, index) in grids" :index="index" :key="index">
 				<view class="grid-item-box" style="background-color: #fff;">
 					<u-icon size="30" :name="item.icon"></u-icon>
-					<view>{{item.text}}</view>
+					<view>{{ item.text }}</view>
 				</view>
 			</uni-grid-item>
 		</uni-grid>
 
+		<button class="left-rigth-margin" v-if="vuex_user.id <= 100"
+			@click="adminLogin">username login</button>
+
 		<uni-notice-bar class="bottom-notice-bar"
-			v-if="userInfo.role=='VERIFY_BROKEN' && !identifyFailNoticeShowTimeout" :text="identifyFailReason" />
+			v-if="userInfo.role == 'VERIFY_BROKEN' && !identifyFailNoticeShowTimeout" :text="identifyFailReason" />
 
 	</view>
 </template>
@@ -82,7 +85,13 @@ export default {
 		// this.toastVerifyBrokenIfNeed()
 	},
 
+
 	methods: {
+		adminLogin() {
+			console.log('[DEBUG] adminLogin button clicked')
+			uni.navigateTo({ url: '/page_subject/pages/admin_login' })
+		},
+
 		joinCampusAndMajorInfo(campusName, majorName) {
 			return campusName + " | " + majorName
 		},

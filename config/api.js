@@ -6,6 +6,15 @@ export const getTokenFromServer = (params, config = {
     }
 }) => uni.$u.http.post('/login/by-wx-account', params, config)
 
+export const adminLogin = (username, passwd) => uni.$u.http.post('/login/by-username-passwd', {
+    username: username,
+    password: passwd,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const getUserInfoFromServer = (params = {}) => uni.$u.http.get('/user', {
     params: params,
     header: {
@@ -266,6 +275,7 @@ export const SUCCESS_CODE = 200
 
 export const api = {
     SUCCESS_CODE,
+    adminLogin,
     getTokenFromServer,
     getUserInfoFromServer,
     getCampusList,
