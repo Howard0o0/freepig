@@ -34,7 +34,15 @@ import { api } from '../../config/api';
 export default {
     data() {
         return {
-            selectedGoodsToShowInDetail: null,
+            selectedGoodsToShowInDetail: {
+                user_avatar_url: "" ,
+                user_nickname: "加载中",
+                campus: "加载中",
+                major: "",
+                user_id: 0,
+                goods_price: "加载中",
+                goods_description: "加载中",
+            },
             swipImages: [],
             userInfo: null,
         }
