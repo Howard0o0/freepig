@@ -19,7 +19,7 @@
 import { api } from '../../config/api.js';
 import { utils } from '../../common/common.js';
 
-const NICKNAME_MAX_LENGH = 6
+const NICKNAME_MAX_LENGH = 17
 
 export default {
 	data() {
@@ -47,6 +47,28 @@ export default {
 		this.formData.nickname = this.userInfo.nickname
 		this.formData.gender = this.userInfo.gender
 		this.formData.avatarImageFilePath = this.userInfo.avatar_url
+		let that = this
+
+		uni.showModal({
+			title: '是否使用微信头像和昵称',
+			success(res) {
+				if (res.confirm) {
+					uni.getUserProfile({
+						lang: 'zh_CN',
+						desc: '获取微信头像和昵称',
+						success: resp => {
+							const userInfo = resp.userInfo
+							console.log('[DEBUG] wx user profile: ', userInfo);
+							that.formData.nickname = userInfo.nickName
+							that.formData.avatarImageFilePath = userInfo.avatarUrl
+						},
+						fail: err => {
+							console.log('[ERRO] wx getUserProfile fail: ' ,err)
+						}
+					});
+				}
+			}
+		});
 	},
 
 	methods: {
@@ -60,8 +82,8 @@ export default {
 				icon: 'success',
 				duration: 2000
 			});
-			let avatar_url = this.userInfo.avatar_url
-			if (this.formData.avatarImageFilePath != this.userInfo.avatar_url) {
+			let avatar_url = this.formData.avatarImageFilePath
+			if (this.formData.avatarImageFilePath.indexOf("https://") == -1 && this.formData.avatarImageFilePath != this.userInfo.avatar_url) {
 				// if the user choose a new avatar image, use the new one
 				let resp = await api.uploadImage(0, this.formData.avatarImageFilePath)
 				if (resp.code != api.SUCCESS_CODE) { return }
