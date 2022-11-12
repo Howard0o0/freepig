@@ -172,6 +172,8 @@ export default {
 	height: 100rpx;
 	color: #666;
 	font-size: 28rpx;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .item-user {
@@ -180,6 +182,8 @@ export default {
 	line-height: 60rpx;
 	color: 333;
 	font-size: 32rpx;
+	overflow: hidden;
+	text-overflow: ellipsis;
 
 }
 
