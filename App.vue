@@ -18,27 +18,18 @@ export default {
 			timLoginTimer: null,
 			refreshMessageTimer: null,
 			refreshConversationListTimer: null,
+			initializeRetryTimer: null,
 		}
 	},
 
 	onLaunch: async function () {
-		if (!this.$store.state.vuex_token || this.$store.state.vuex_token == "") {
-			let resp = await utils.getToken()
-			if (resp.code != api.SUCCESS_CODE) {
-				uni.$u.toast("登录失败")
-				return;
-			}
-		}
-		const success = await utils.refreshUserInfo()
-		if (!success) {
-			uni.$u.toast("刷新用户信息失败")
-			return
-		}
-		console.log('[DEBUG] token: ', this.$store.state.vuex_token)
 		this.globalData.safeAreaHeight = this.getSafeAreaHeight()
+		this.refreshFunc()
 
-		this.launchTimerRefreshMessage()
-		this.launchTimerRefreshConversationList()
+		this.initializeRetryTimer && clearInterval(this.initializeRetryTimer)
+		this.initializeRetryTimer = setInterval(async () => {
+			await this.refreshFunc()
+		}, 2000);
 		console.log('App Launch')
 	},
 	onShow: function () {
@@ -63,54 +54,75 @@ export default {
 			})
 		},
 
-		async launchTimerRefreshMessage() {
-			const func = async () => {
-				if (!this.$store.state.conversationActive || !this.$store.state.conversationActive.historyMessageLoaded) { return; }
-				const resp = await api.getLatestMessageList(this.$store.state.conversationActive.conversationID, 100)
+		async refreshFunc() {
+			if (!this.$store.state.vuex_token || this.$store.state.vuex_token == "") {
+				let resp = await utils.getToken()
 				if (resp.code != api.SUCCESS_CODE) {
-					console.log('[ERROR] getLatestMessageList fail: ', resp.msg)
+					uni.$u.toast("登录失败")
+					return false;
 				}
-				let messageList = resp.data
-				const timMessageList = utils.myMessageListToTIMMessageList(messageList, this.$store.state.vuex_user.id, this.$TIM)
-				this.$store.commit("pushCurrentMessageList", timMessageList);
-				await utils.ackLastRecvMessage(messageList, this.$store.state.vuex_user.id)
 			}
-			await func()
+			const success = await utils.refreshUserInfo()
+			if (!success) {
+				uni.$u.toast("刷新用户信息失败")
+				return false;
+			}
+			// console.log('[DEBUG] token: ', this.$store.state.vuex_token)
+
+			this.refreshConversationList()
+			this.refreshMessage()
+			return true;
+		},
+
+		async refreshMessage() {
+			if (!this.$store.state.conversationActive || !this.$store.state.conversationActive.historyMessageLoaded) { return; }
+			const resp = await api.getLatestMessageList(this.$store.state.conversationActive.conversationID, 100)
+			if (resp.code != api.SUCCESS_CODE) {
+				console.log('[ERROR] getLatestMessageList fail: ', resp.msg)
+			}
+			let messageList = resp.data
+			const timMessageList = utils.myMessageListToTIMMessageList(messageList, this.$store.state.vuex_user.id, this.$TIM)
+			this.$store.commit("pushCurrentMessageList", timMessageList);
+			await utils.ackLastRecvMessage(messageList, this.$store.state.vuex_user.id)
+		},
+
+		async launchTimerRefreshMessage() {
+			await this.refreshMessage()
 			this.refreshMessageTimer && clearInterval(this.refreshMessageTimer)
-			this.refreshMessageTimer = setInterval(func, 2000);
+			this.refreshMessageTimer = setInterval(this.refreshMessage, 2000);
+		},
+
+		async refreshConversationList() {
+			// console.log('[DEBUG] refreshing conversation list...')
+			let resp = await api.getConversationList()
+			if (resp.code != api.SUCCESS_CODE) {
+				console.log('[ERROR] getConversationList fail. reason: ', resp.msg)
+				return
+			}
+			this.globalData.conversationList = resp.data
+
+			let totalUnreadCount = 0
+			for (let i in this.globalData.conversationList) {
+				let conversation = this.globalData.conversationList[i]
+				totalUnreadCount += conversation.unread_count
+			}
+
+			if (totalUnreadCount > 0) {
+				uni.setTabBarBadge({
+					index: 1,
+					text: '' + totalUnreadCount
+				})
+			} else {
+				uni.removeTabBarBadge({
+					index: 1,
+				})
+			}
+			// console.log('[DEBUG] conversation list loaded')
 		},
 
 		async launchTimerRefreshConversationList() {
-			const func = async () => {
-				let resp = await api.getConversationList()
-				if (resp.code != api.SUCCESS_CODE) {
-					console.log('[ERROR] getConversationList fail. reason: ', resp.msg)
-					return
-				}
-				this.globalData.conversationList = resp.data
-
-				let totalUnreadCount = 0
-				for (let i in this.globalData.conversationList) {
-					let conversation = this.globalData.conversationList[i]
-					totalUnreadCount += conversation.unread_count
-				}
-
-				if (totalUnreadCount > 0) {
-					uni.setTabBarBadge({
-						index: 1,
-						text: '' + totalUnreadCount
-					})
-				} else {
-					uni.removeTabBarBadge({
-						index: 1,
-					})
-				}
-			}
-			console.log('[DEBUG] refreshing conversation list...')
-			await func()
-			console.log('[DEBUG] conversation list loaded')
 			this.refreshConversationListTimer && clearInterval(this.refreshConversationListTimer)
-			this.refreshConversationListTimer = setInterval(func, 2000);
+			this.refreshConversationListTimer = setInterval(this.refreshConversationList, 2000);
 		},
 
 		hasBottomSafeArea() {
