@@ -195,6 +195,7 @@ export default {
 			scrollAnimation: false,
 			scrollTop: 0,
 			scrollToView: '',
+			scrollHeight: 0,
 
 			msgImgList: [],
 			myuid: 0,
@@ -335,8 +336,29 @@ export default {
 			let str = this.$commen.dateTimeFliter(timeData)
 			return str
 		},
+
+		keepScrollViewPosition() {
+			this.$nextTick(async () => {
+				const query = uni.createSelectorQuery().in(this)
+				query
+					.select('.msg-list')
+					.boundingClientRect(data => {
+						// data.height 为已经渲染的聊天列表内容高度
+						// this.scrollHeight 为上一次聊天列表内容高度, 如果当前为第一次, 那么this.scrollHeight应该为0
+						// 设置滚动条的高度
+						this.scrollTop = data.height - this.scrollHeight
+						// (注意: 如果在模板中, upper-threshold设置的值不为0, 为50, 那么可以加上该值), 如:
+						// this.scrollTop = data.height - this.scrollHeight + 50
+						// 将本次列表渲染后的内容高度记录下来, 方便下次加载时使用
+						this.scrollHeight = data.height
+					})
+					.exec()
+			})
+		},
+
 		// 接受消息(定位消息)
 		screenMsg(newVal, oldVal) {
+
 			if (newVal && oldVal && newVal.length == oldVal.length) { return; }
 
 			// load first batch of history message
@@ -348,7 +370,8 @@ export default {
 			if (oldVal && newVal && newVal.length > oldVal.length) {
 				if (newVal[newVal.length - 1].ID == oldVal[oldVal.length - 1].ID) {
 					// hit top and load history message
-					return
+					this.keepScrollViewPosition();
+					return;
 				} else {
 					if (newVal[newVal.length - 1].flow == "out" || !this.browsingHistoryMessage) {
 						// sent a new message || not browsing history messages
@@ -415,14 +438,14 @@ export default {
 			console.log(this.nextReqMessageID)
 			console.log("[DEBUG] load latest history")
 
-			// 滚动到底部
-			this.$nextTick(function () {
-				//进入页面滚动到底部
-				this.scrollTop = 9999;
-				this.$nextTick(function () {
-					this.scrollAnimation = true;
-				});
-			});
+			// // 滚动到底部
+			// this.$nextTick(function () {
+			// 	//进入页面滚动到底部
+			// 	this.scrollTop = 9999;
+			// 	this.$nextTick(function () {
+			// 		this.scrollAnimation = true;
+			// 	});
+			// });
 			this.isHistoryLoading = false;
 
 			let ret = await utils.ackLastRecvMessage(resp.data.message_list, this.$store.state.vuex_user.id)
