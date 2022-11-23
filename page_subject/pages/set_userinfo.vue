@@ -1,11 +1,12 @@
 <template>
 	<view class="left-rigth-margin">
 		<view class="centerAlign">
-			<image class="avatar" :src="formData.avatarImageFilePath" @click="avatarOnClick" mode="aspectFit"></image>
+			<button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="avatarOnClick">
+				<image class="avatar" :src="formData.avatarImageFilePath" mode="aspectFit" />
+			</button>
 		</view>
 		<u-form-item label="昵称" labelWidth="80" borderBottom>
-			<u--input v-model="formData.nickname" :placeholder="userInfo.nickname" inputAlign="center"
-				border="surround" />
+			<input type="nickname" v-model="formData.nickname" :placeholder="userInfo.nickname" inputAlign="center" />
 		</u-form-item>
 		<u-form-item label="性别" labelWidth="80" borderBottom>
 			<uni-data-checkbox mode="tag" v-model="formData.gender" :localdata="genderList"></uni-data-checkbox>
@@ -47,28 +48,6 @@ export default {
 		this.formData.nickname = this.userInfo.nickname
 		this.formData.gender = this.userInfo.gender
 		this.formData.avatarImageFilePath = this.userInfo.avatar_url
-		let that = this
-
-		uni.showModal({
-			title: '是否使用微信头像和昵称',
-			success(res) {
-				if (res.confirm) {
-					uni.getUserProfile({
-						lang: 'zh_CN',
-						desc: '获取微信头像和昵称',
-						success: resp => {
-							const userInfo = resp.userInfo
-							console.log('[DEBUG] wx user profile: ', userInfo);
-							that.formData.nickname = userInfo.nickName
-							that.formData.avatarImageFilePath = userInfo.avatarUrl
-						},
-						fail: err => {
-							console.log('[ERRO] wx getUserProfile fail: ' ,err)
-						}
-					});
-				}
-			}
-		});
 	},
 
 	methods: {
@@ -140,20 +119,11 @@ export default {
 			return true
 		},
 
-		async avatarOnClick() {
-			console.log('[DEBUG] avatarOnClick')
-			let res = await uni.chooseImage({
-				count: 1,
-				sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
-				crop: {
-					width: 500,
-					height: 500,
-					resize: true,
-				}
-			});
-			let selectedImageFile = res[1].tempFiles[0]
+		async avatarOnClick(e) {
+			console.log('[DEBUG] avatarOnClick, e: ', e)
+			let selectedImageFile = e.detail.avatarUrl
 			console.log('[DEBUG] avatar image choosed: ', selectedImageFile)
-			this.formData.avatarImageFilePath = selectedImageFile.path
+			this.formData.avatarImageFilePath = selectedImageFile
 			console.log('[DEBUG] avatar image choosed filepath: ', this.formData.avatarImageFilePath)
 		}
 	}
@@ -162,11 +132,23 @@ export default {
 
 <style>
 .avatar {
-	text-align: left;
+	/* text-align: left;
 	width: 200rpx;
 	height: 200rpx;
 	flex-shrink: 0;
-	border: solid 1rpx #000;
+	border: solid 1rpx #000; */
+
+	display: block;
+	width: 200rpx;
+	height: 200rpx;
+}
+
+.avatar-wrapper {
+	padding: 0;
+	width: 200rpx !important;
+	border-radius: 8px;
+	margin-top: 40px;
+	margin-bottom: 40px;
 }
 
 .centerAlign {
