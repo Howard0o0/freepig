@@ -77,10 +77,8 @@ export default {
 				return false
 			}
 
-			uni.showToast({
+			uni.showLoading({
 				title: '更新中',
-				icon: 'success',
-				duration: 2000
 			});
 			let avatar_url = this.formData.avatarImageFilePath
 			if (this.formData.avatarImageFilePath.indexOf("https://") == -1 && this.formData.avatarImageFilePath != this.userInfo.avatar_url) {
@@ -91,6 +89,7 @@ export default {
 			}
 
 			let resp = await api.setUserInfo(avatar_url, this.formData.nickname, this.formData.gender)
+			uni.hideLoading()
 			if (resp.code != api.SUCCESS_CODE) { return }
 
 			uni.showToast({
