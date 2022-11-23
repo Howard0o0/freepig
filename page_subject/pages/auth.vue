@@ -158,7 +158,7 @@ export default {
         async checkFormData() {
             if (this.$store.state.vuex_user.role == "STUDENT") {
                 uni.showToast({
-                    title: '已经认证过啦, 有需求可邮箱联系',
+                    title: '已经认证过啦',
                     icon: 'none',
                     duration: 1000
                 });

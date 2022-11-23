@@ -65,7 +65,7 @@ export default {
 			console.log('share from button', res.target)
 		}
 		return {
-			title: '欢迎加入哆啦白小集市',
+			title: '欢迎加入蹲蹲蹲小集市',
 			path: '/page_subject/pages/auth?recommend-code=' + this.$store.state.vuex_user.wx_open_id,
 			imageUrl: '/page_subject/static/logo.png',
 		}
