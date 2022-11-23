@@ -540,7 +540,7 @@ export default {
 			if (this.popupLayerClass == 'showLayer' && this.hideMore == false) {
 				this.hideDrawer();
 			}
-			this.inputBottom = e.detail.height;
+			// this.inputBottom = e.detail.height;
 		},
 		blurTextarea(e) {
 			this.inputBottom = getApp().globalData.safeAreaHeight;
