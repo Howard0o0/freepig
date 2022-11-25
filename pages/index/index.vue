@@ -166,6 +166,7 @@ export default {
 				keyword: "",
 				tagID: 0,
 			}
+			this.currTabIndex = 0
 		},
 
 		createGoodsBtnOnClick() {
