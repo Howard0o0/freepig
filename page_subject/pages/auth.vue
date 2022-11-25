@@ -1,5 +1,11 @@
 <template>
     <view class="left-rigth-margin">
+        <lyg-popup @popupState="popupState" title="服务协议"
+            protocolPath='/page_subject/pages/webview?can_share=false&url=https://www.doraewhite.com/licence/user_protocol.html'
+            policyPath='/page_subject/pages/webview?can_share=false&url=https://www.doraewhite.com/licence/privacy_policy.html'
+            policyStorageKey="has_read_privacy">
+        </lyg-popup>
+
         <u--form labelPosition="left" :model="formData">
             <u-form-item label="真实姓名" labelWidth="80" borderBottom>
                 <u--input v-model="formData.realname" placeholder="仅用于身份认证" inputAlign="center" border="none">
@@ -51,8 +57,16 @@
 <script>
 
 import { api } from '../../config/api.js';
+import lyg_popup from '@/components/lyg-popup/lyg-popup.vue';
+
+import {
+    mapMutations
+} from 'vuex';
 
 export default {
+    components: {
+        lyg_popup
+    },
     data() {
         return {
             formData: {
@@ -82,6 +96,8 @@ export default {
             kickoffYearList: [
                 { value: 2015, text: "2015" },
             ],
+
+            userAgree: false,
         }
     },
 
@@ -91,9 +107,19 @@ export default {
             getApp().globalData.recommendCode = option["recommend-code"]
         }
         this.formData.recommendCode = getApp().globalData.recommendCode
+
+        var userAgree = wx.getStorageSync('userAgree') || false
+        this.userAgree = userAgree
     },
 
     methods: {
+        popupState(state) {
+            console.debug("confirm protocol: ", state);
+            if (!state) {
+                uni.navigateBack();
+            }
+        },
+
         pickCampusOnClick() {
             uni.navigateTo({ url: '/page_subject/pages/pick_campus' })
         },

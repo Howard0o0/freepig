@@ -111,6 +111,13 @@
                     }
                 },
                 {
+                    "path": "pages/webview",
+                    "style": {
+                        "navigationBarTitleText": "",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
                     "path": "pages/my_goods",
                     "style": {
                         "navigationBarTitleText": "朕的宝贝",
@@ -206,6 +213,12 @@
                     ]
                 },
                 "page_subject/pages/set_userinfo": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/webview": {
                     "network": "all",
                     "packages": [
                         "__APP__"
