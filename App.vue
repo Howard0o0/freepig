@@ -33,9 +33,17 @@ export default {
 		console.log('App Launch')
 	},
 	onShow: function () {
+		this.initializeRetryTimer && clearInterval(this.initializeRetryTimer)
+		this.initializeRetryTimer = setInterval(async () => {
+			await this.refreshFunc()
+		}, 2000);
 		console.log('App Show')
 	},
+	onUnload: function () {
+		console.log('App Unload')
+	},
 	onHide: function () {
+		this.initializeRetryTimer && clearInterval(this.initializeRetryTimer)
 		console.log('App Hide')
 	},
 	methods: {
