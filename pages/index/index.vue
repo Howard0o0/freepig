@@ -99,7 +99,7 @@ export default {
 			await this.updateLocation()
 
 			this.renderTabNameList()
-
+			this.currTabIndex = 0
 			this.resetGoodsParam()
 			this.clearGoodsList()
 			await this.refreshGoodsList()
@@ -166,7 +166,6 @@ export default {
 				keyword: "",
 				tagID: 0,
 			}
-			this.currTabIndex = 0
 		},
 
 		createGoodsBtnOnClick() {
@@ -195,6 +194,7 @@ export default {
 			this.clearGoodsList()
 			this.goodsParam.keyword = searchInput.value
 			this.refreshGoodsList()
+			this.currTabIndex = 0
 		},
 
 		__updateLocation() {
