@@ -1,5 +1,9 @@
 <template>
 	<view>
+		<view class="back-top-box">
+			<u-back-top :scroll-top="scrollTop"></u-back-top>
+		</view>
+
 		<!-- 搜索栏 -->
 		<uni-search-bar @confirm="SearchBtnOnClick" v-model="goodsParam.keyword" />
 
@@ -15,23 +19,24 @@
 			<view class="product-list">
 				<view class="product" v-for="(goods) in goodsList" :key="goods.goods_id" @tap="toGoods(goods)">
 					<image :src="getGoodsFirstImage(goods.goods_images)" mode="aspectFit"></image>
-					<view class="name">{{goods.goods_description}}</view>
+					<view class="name">{{ goods.goods_description }}</view>
 					<view class="info">
-						<view class="price">￥{{goods.goods_price}}</view>
-						<image v-if="goods.user_gender=='MALE'" class="avatar" src="/static/index/man.png" mode="aspectFit"></image>
+						<view class="price">￥{{ goods.goods_price }}</view>
+						<image v-if="goods.user_gender == 'MALE'" class="avatar" src="/static/index/man.png"
+							mode="aspectFit"></image>
 						<image v-else class="avatar" src="/static/index/woman.png" mode="aspectFit"></image>
 					</view>
 					<view class="campus-info">
-						<view class="nickname">{{goods.campus}}</view>
-						<view class="nickname">{{goods.major}}</view>
+						<view class="nickname">{{ goods.campus }}</view>
+						<view class="nickname">{{ goods.major }}</view>
 					</view>
 					<view class="info">
 						<image class="avatar" :src="goods.user_avatar_url" mode="aspectFit"></image>
-						<view class="nickname">{{goods.user_nickname}}</view>
+						<view class="nickname">{{ goods.user_nickname }}</view>
 					</view>
 				</view>
 			</view>
-			<view class="loading-text">{{loadingText}}</view>
+			<view class="loading-text">{{ loadingText }}</view>
 		</view>
 
 
@@ -47,6 +52,8 @@ import { utils } from '../../common/common.js';
 export default {
 	data() {
 		return {
+			scrollTop: 0,
+
 			currTabIndex: 0,
 			tabNameList: [],
 			tagList: [],
@@ -66,6 +73,10 @@ export default {
 				latitude: 0,
 			}
 		}
+	},
+
+	onPageScroll(e) {
+		this.scrollTop = e.scrollTop;
 	},
 
 	onLoad() {
