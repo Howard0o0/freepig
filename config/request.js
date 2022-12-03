@@ -1,10 +1,25 @@
+function showErr(errcode) {
+    const errcode2errmsg = {
+        2002: "服务器繁忙 等等再试呀..",
+        6001: "包含敏感文字诶..",
+        6002: "包含敏感图片诶..",
+    }
+
+    if (!errcode2errmsg.hasOwnProperty(errcode)) { return; }
+    uni.showToast({
+        title: errcode2errmsg[errcode],
+        icon: 'none',
+        duration: 2000
+    });
+}
+
 module.exports = (vm) => {
     // 初始化请求配置
     uni.$u.http.setConfig((config) => {
         /* config 为默认全局配置*/
         // config.baseURL = 'http://localhost:8080/api/v1'; /* 根域名 */
-        // config.baseURL = 'http://192.168.2.116:8080/api/v1'; /* 根域名 */
-        config.baseURL = 'https://www.doraewhite.com/api/v1'; /* 根域名 */
+        config.baseURL = 'https://192.168.14.53/api/v1'; /* 根域名 */
+        // config.baseURL = 'https://www.doraewhite.com/api/v1'; /* 根域名 */
         return config
     })
 
@@ -32,6 +47,8 @@ module.exports = (vm) => {
                 icon: 'none',
                 duration: 2000
             });
+
+            // showErr(responseFromServer.code)
 
             // 如果需要catch返回，则进行reject
             if (custom?.catch) {

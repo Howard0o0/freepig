@@ -271,6 +271,17 @@ export const createConversation = (toUserID) => uni.$u.http.post('/chat/conversa
     }
 })
 
+export const adminGetUserList = (pageIndex, pageSize, role = "") => uni.$u.http.get('admin/user-list', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: {
+        'page_index': pageIndex,
+        'page_size': pageSize,
+        'role': role
+    }
+})
+
 export const SUCCESS_CODE = 200
 
 export const api = {
@@ -306,4 +317,5 @@ export const api = {
     ackMessage,
     getLatestMessageList,
     createConversation,
+    adminGetUserList,
 }

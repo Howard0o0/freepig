@@ -13,6 +13,7 @@
 
 		<button class="left-rigth-margin" v-if="vuex_user.id <= 100" @click="adminLogin">username login</button>
 		<button class="left-rigth-margin" v-if="vuex_user.id <= 100" @click="wxLogin">wx login</button>
+		<button class="left-rigth-margin" v-if="vuex_user.id <= 100" @click="admin">admin</button>
 
 		<uni-notice-bar class="bottom-notice-bar"
 			v-if="userInfo.role == 'VERIFY_BROKEN' && !identifyFailNoticeShowTimeout" :text="identifyFailReason" />
@@ -111,6 +112,11 @@ export default {
 
 			uni.$u.toast("登录成功")
 			uni.reLaunch({ url: '../../pages/mine/mine' })
+		},
+
+		admin() {
+			console.log('[DEBUG] admin button clicked')
+			uni.navigateTo({ url: '/page_subject/pages/admin' })
 		},
 
 		joinCampusAndMajorInfo(campusName, majorName) {
