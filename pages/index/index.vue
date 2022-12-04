@@ -391,7 +391,7 @@ export default {
 
 			image {
 				width: 100%;
-				border-radius: 20upx 20upx 0 0;
+				border-radius: 0 0 0 0;
 			}
 
 			.name {
