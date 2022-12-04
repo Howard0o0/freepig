@@ -7,14 +7,15 @@
 
 		<view class="list">
 			<view class="row" v-for="(row, index) in userList" :key="index">
-				<image :src="row.credential_image_url" mode="aspectFit" @click="imagePreview(row.credential_image_url)"></image>
+				<image :src="row.credential_image_url" mode="aspectFit" @click="imagePreview(row.credential_image_url)">
+				</image>
 				<view>{{ "id: " + row.id + " 姓名: " + row.realname }}</view>
 				<view>{{ row.campus + " " + row.kickoff_year + "级" + row.degree }}</view>
 				<view>{{ row.major }}</view>
 				<view class="btns">
 					<block>
-						<view class="onsale" @tap="passAuthRequest(row.id)">通过</view>
-						<view class="outsale" @tap="rejectAuthRequest(row)">拒绝</view>
+						<view :style="hasSubmitted(row.id) ? 'display:none;' : ''" class="onsale" @tap="passAuthRequest(row.id)">通过</view>
+						<view :style="hasSubmitted(row.id) ? 'display:none;' : ''" class="outsale" @tap="rejectAuthRequest(row.id)">拒绝</view>
 					</block>
 				</view>
 			</view>
@@ -33,6 +34,7 @@ export default {
 			scrollTop: 0,
 
 			userList: [],
+			submittedUserIDList: [],
 			userParam: {
 				currPageIndex: 0,
 				currPageSize: 50,
@@ -69,6 +71,8 @@ export default {
 	methods: {
 
 		async reload() {
+			this.userList = []
+			this.userParam.currPageIndex = 0
 			await this.refreshUserList()
 			console.debug('user list: ', this.userList)
 		},
@@ -85,6 +89,10 @@ export default {
 			uni.hideLoading();
 		},
 
+		hasSubmitted(userID) {
+			return this.submittedUserIDList.includes(userID)
+		},
+
 		imagePreview(imageURL) {
 			uni.previewImage({
 				indicator: "number",
@@ -92,6 +100,42 @@ export default {
 				urls: [imageURL],
 			})
 		},
+
+		async updateUserRole(userID, role, rejectReason = "") {
+			uni.showLoading("更新中")
+			const resp = await api.setUserRole(userID, role, rejectReason)
+			if (resp.code == api.SUCCESS_CODE) {
+				uni.showToast({
+					title: 'OK',
+					icon: 'success',
+					duration: 2000
+				});
+			} else {
+				uni.$u.toast("更新失败 " + resp.msg)
+			}
+			this.submittedUserIDList.push(userID)
+			console.debug("submittedUserIDList: ", this.submittedUserIDList)
+		},
+
+		async passAuthRequest(userID) {
+			this.updateUserRole(userID, api.USER_ROLE.STUDENT)
+		},
+
+		rejectAuthRequest(userID) {
+			var that = this
+			uni.showModal({
+				title: '输入拒绝理由',
+				editable: true,
+				success: async function (res) {
+					if (res.confirm) {
+						let rejectReason = res.content
+						that.updateUserRole(userID, api.USER_ROLE.VERIFY_BROKEN, rejectReason)
+					} else if (res.cancel) {
+						console.debug('reject auth cancel');
+					}
+				}
+			});
+		}
 	}
 }
 </script>

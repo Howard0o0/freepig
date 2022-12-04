@@ -282,10 +282,29 @@ export const adminGetUserList = (pageIndex, pageSize, role = "") => uni.$u.http.
     }
 })
 
+export const setUserRole = (userID, role, rejectReason = "") => uni.$u.http.post('admin/update-user-role', {
+    user_id: userID,
+    role: role,
+    identify_fail_reason: rejectReason,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const SUCCESS_CODE = 200
+
+export const USER_ROLE = {
+    STUDENT: "STUDENT",
+    PENDING: "PENDING",
+    VERIFY_BROKEN: "VERIFY_BROKEN",
+    VISITOR: "VISITOR",
+}
 
 export const api = {
     SUCCESS_CODE,
+    USER_ROLE,
+
     adminLogin,
     getTokenFromServer,
     getUserInfoFromServer,
@@ -318,4 +337,5 @@ export const api = {
     getLatestMessageList,
     createConversation,
     adminGetUserList,
+    setUserRole,
 }
