@@ -30,6 +30,7 @@ export default {
 		this.initializeRetryTimer = setInterval(async () => {
 			await this.refreshFunc()
 		}, 2000);
+		console.info('token: ', this.$store.state.vuex_token)
 		console.log('App Launch')
 	},
 	onShow: function () {

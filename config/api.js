@@ -271,10 +271,40 @@ export const createConversation = (toUserID) => uni.$u.http.post('/chat/conversa
     }
 })
 
+export const adminGetUserList = (pageIndex, pageSize, role = "") => uni.$u.http.get('admin/user-list', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: {
+        'page_index': pageIndex,
+        'page_size': pageSize,
+        'role': role
+    }
+})
+
+export const setUserRole = (userID, role, rejectReason = "") => uni.$u.http.post('admin/update-user-role', {
+    user_id: userID,
+    role: role,
+    identify_fail_reason: rejectReason,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
 export const SUCCESS_CODE = 200
+
+export const USER_ROLE = {
+    STUDENT: "STUDENT",
+    PENDING: "PENDING",
+    VERIFY_BROKEN: "VERIFY_BROKEN",
+    VISITOR: "VISITOR",
+}
 
 export const api = {
     SUCCESS_CODE,
+    USER_ROLE,
+
     adminLogin,
     getTokenFromServer,
     getUserInfoFromServer,
@@ -306,4 +336,6 @@ export const api = {
     ackMessage,
     getLatestMessageList,
     createConversation,
+    adminGetUserList,
+    setUserRole,
 }

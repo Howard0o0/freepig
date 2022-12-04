@@ -76,6 +76,20 @@
                     }
                 },
                 {
+                    "path": "pages/admin",
+                    "style": {
+                        "navigationBarTitleText": "admin"
+                    }
+                },
+                {
+                    "path": "pages/auth_manage",
+                    "style": {
+                        "navigationBarTitleText": "身份审核",
+                        "enablePullDownRefresh": true,
+                        "onReachBottomDistance": 120
+                    }
+                },
+                {
                     "path": "pages/auth_by_email",
                     "style": {
                         "navigationBarTitleText": "",
@@ -219,6 +233,12 @@
                     ]
                 },
                 "page_subject/pages/webview": {
+                    "network": "all",
+                    "packages": [
+                        "__APP__"
+                    ]
+                },
+                "page_subject/pages/admin": {
                     "network": "all",
                     "packages": [
                         "__APP__"
