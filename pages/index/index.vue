@@ -105,6 +105,17 @@ export default {
 		}
 	},
 
+	onShareAppMessage(res) {
+		if (res.from === 'button') {// 来自页面内分享按钮
+			console.log('share from button', res.target)
+		}
+		return {
+			title: '欢迎加入蹲蹲蹲小集市',
+			path: '/pages/index/index',
+			imageUrl: '/page_subject/static/logo.png',
+		}
+	},
+
 	methods: {
 		async reload() {
 			await this.updateLocation()
