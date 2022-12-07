@@ -2,7 +2,7 @@
 	<view class="left-rigth-margin top-margin centerAlign">
 		<text>内推记录</text>
 		<scroll-view scroll-y="true" class="scroll-Y" scroll-top=0>
-			<view class="row" v-for="(user,index) in recommendUserList" :key="index">
+			<view class="row" v-for="(user, index) in recommendUserList" :key="index">
 				<uni-list-chat :avatar-circle="false" :title="user.nickname" :avatar="user.avatar_url"
 					:note="joinCampusAndMajorInfo(user.campus, user.major)" :time="parseUserRole(user.role)">
 				</uni-list-chat>
@@ -14,10 +14,11 @@
 			@click="drawBtnOnclick"></u--image>
 
 		<uni-notice-bar text="点击查看幸运儿名单" @click="showPrizeResultBtnOnClick" />
-		<uni-notice-bar v-if="recommendRule" class="bottom-notice-bar" :text="recommendRule" />
+		<uni-notice-bar v-if="recommendRule" @getmore="showRecommendRule" showGetMore moreText="点击查看内推规则"
+			class="bottom-notice-bar" single text=" " />
 
 		<modal v-if="showPop" title="参与抽奖后本轮内推会清空噢, 内推数越多中奖几率越大哈^ ^" confirm-text="冲鸭" cancel-text="再等等"
-			@cancel="showPop=false" @confirm="confirmDrawPrize">
+			@cancel="showPop = false" @confirm="confirmDrawPrize">
 			<input type='text' placeholder="输入邮箱接收抽奖结果" v-model="email" />
 			<input type='text' placeholder="收款支付宝账号" v-model="bankAccount" />
 		</modal>
@@ -72,6 +73,15 @@ export default {
 	},
 
 	methods: {
+		showRecommendRule() {
+			var that = this
+			uni.showModal({
+				title: "内推活动规则",
+				content: that.recommendRule,
+				showCancel: false,
+			})
+		},
+
 		async confirmDrawPrize() {
 			if (this.email == "") {
 				uni.showToast({
@@ -171,9 +181,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-
-
 .scroll-Y {
 	height: 700rpx;
 	background: #eaeaea;
@@ -208,5 +215,15 @@ export default {
 	// box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important;
 	// border-radius: 10px !important;
 	background: #989797 !important;
+}
+
+.demo-uni-row {
+	margin-top: 20rpx;
+	display: block;
+}
+
+.demo-uni-col {
+	height: 36px;
+	border-radius: 4px;
 }
 </style>
