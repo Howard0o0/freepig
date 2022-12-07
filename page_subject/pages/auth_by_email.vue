@@ -49,12 +49,7 @@ export default {
 				return false
 			}
 
-			uni.showToast({
-				title: '验证中',
-				icon: 'loading',
-				duration: 2000
-			});
-
+			uni.showLoading({ title: '验证中' })
 			var resp = await api.identifyByEmail(
 				this.formData.email,
 				this.formData.verifyCode,
@@ -65,8 +60,17 @@ export default {
 				this.formData.authInfo.degree,
 				this.formData.authInfo.recommend_code
 			)
-			if (resp.code != api.SUCCESS_CODE) { return }
+			uni.hideLoading()
+			if (resp.code != api.SUCCESS_CODE) {
+				uni.$u.toast("验证失败: " + resp.msg)
+				return 
+			}
 
+			uni.showToast({
+				title: '验证成功',
+				icon: 'success',
+				duration: 2000
+			});
 			utils.refreshUserInfo()
 
 			setTimeout(function () {

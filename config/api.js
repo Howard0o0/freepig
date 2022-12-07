@@ -61,7 +61,7 @@ export const getEmailVerifyCode = (email) => uni.$u.http.get('/auth/emailcode', 
     }
 })
 
-export const identifyByEmail = (email, emailVerifyCode, realname, campusID, majorID, kickoffYear, degree) => uni.$u.http.post('/auth/campus-identity-by-edu-email', {
+export const identifyByEmail = (email, emailVerifyCode, realname, campusID, majorID, kickoffYear, degree, recommendCode) => uni.$u.http.post('/auth/campus-identity-by-edu-email', {
     email: email,
     email_verify_code: emailVerifyCode,
     realname: realname,
