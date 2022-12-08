@@ -110,7 +110,7 @@ export default {
 			console.log('share from button', res.target)
 		}
 		return {
-			title: '蹲蹲蹲小集市',
+			title: '兜兜小集市',
 			path: '/pages/index/index',
 			imageUrl: '/page_subject/static/logo.png',
 		}
