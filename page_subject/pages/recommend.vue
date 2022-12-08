@@ -1,6 +1,48 @@
 <template>
 	<view class="left-rigth-margin top-margin centerAlign">
-		<text>内推记录</text>
+		<view class="activity-rule">
+			<u-parse :content="recommendRuleNode.rule" />
+			<u-parse :content="recommendRuleNode.prize" />
+		</view>
+
+		<u--image src="/page_subject/static/recommend-draw-btn.png" shape="circle" width="300rpx" height="300rpx"
+			@click="drawBtnOnclick"></u--image>
+
+		<view class="demo-uni-row">
+			<uni-row width=730>
+				<!-- <uni-col :span="2">
+					<view class="demo-uni-col"></view>
+				</uni-col> -->
+				<uni-col :span="11">
+					<u-button color="#D082A2" type="primary" size="normal" text="  生成内推链接  "
+						openType="share"></u-button>
+				</uni-col>
+				<uni-col :span="2">
+					<view class="demo-uni-col"></view>
+				</uni-col>
+				<uni-col :span="11">
+					<u-button color="#D082A2" type="primary" size="normal" text=" 上期幸运儿  "
+						@click="showPrizeResultBtnOnClick" />
+				</uni-col>
+			</uni-row>
+		</view>
+
+		<scroll-view scroll-y="true" class="scroll-Y" scroll-top=0>
+			<text class="centerAlign" style=" color:#D082A2">内推记录</text>
+			<view class="row" v-for="(user, index) in recommendUserList" :key="index">
+				<uni-list-chat :avatar-circle="false" :title="user.nickname" :avatar="user.avatar_url"
+					:note="joinCampusAndMajorInfo(user.campus, user.major)" :time="parseUserRole(user.role)">
+				</uni-list-chat>
+			</view>
+		</scroll-view>
+
+		<modal v-if="showPop" title="参与抽奖后本轮内推会清空噢, 内推数越多中奖几率越大哈^ ^" confirm-text="冲鸭" cancel-text="再等等"
+			@cancel="showPop = false" @confirm="confirmDrawPrize">
+			<input type='text' placeholder="输入邮箱接收抽奖结果" v-model="email" />
+			<input type='text' placeholder="收款支付宝账号" v-model="bankAccount" />
+		</modal>
+
+		<!-- <text>内推记录</text>
 		<scroll-view scroll-y="true" class="scroll-Y" scroll-top=0>
 			<view class="row" v-for="(user, index) in recommendUserList" :key="index">
 				<uni-list-chat :avatar-circle="false" :title="user.nickname" :avatar="user.avatar_url"
@@ -21,16 +63,20 @@
 			@cancel="showPop = false" @confirm="confirmDrawPrize">
 			<input type='text' placeholder="输入邮箱接收抽奖结果" v-model="email" />
 			<input type='text' placeholder="收款支付宝账号" v-model="bankAccount" />
-		</modal>
+		</modal> -->
 	</view>
 </template>
 
 <script>
 
+import uParse from '@/components/gaoyia-parse/parse.vue'
 import { api } from '../../config/api.js';
 import { utils } from '../../common/common.js';
 
 export default {
+	components: {
+		uParse
+	},
 	data() {
 		return {
 			showPop: false,
@@ -38,6 +84,11 @@ export default {
 			recommendRule: "内推活动规则",
 			isAbleToDraw: false,
 			minRecommendNum: 100,
+			recommendRuleNode: {
+				rule: `<text style=" color:#D00A07">活动规则: </text> <text style=" color:#FFFFFF"> 生成内推链接并邀请高校好友完成认证，邀请好友成功认证大于5人即可参与现金抽奖活动!!</text>`,
+				prize: `<text style=" color:#D00A07">奖金范围: </text> <text style=" color:#FFFFFF"> 3~30元不等，成功邀请好友完成认证数越多，获奖几率越大哇</text>`,
+				// date: `<text style=" color:#D00A07">活动时间: </text> 2022年12月8日 ~ 2022年12月30日`,
+			},
 
 			email: "",
 			bankAccount: "",
@@ -66,7 +117,7 @@ export default {
 			console.log('share from button', res.target)
 		}
 		return {
-			title: '蹲蹲蹲小集市',
+			title: '兜兜小集市',
 			path: '/page_subject/pages/auth?recommend-code=' + this.$store.state.vuex_user.wx_open_id,
 			imageUrl: '/page_subject/static/logo.png',
 		}
@@ -182,8 +233,10 @@ export default {
 
 <style lang="scss">
 .scroll-Y {
-	height: 700rpx;
-	background: #eaeaea;
+	height: 500rpx;
+	background: #EEECF5;
+	margin-top: 10rpx;
+	border-radius: 30rpx;
 }
 
 .fixed-top-right {
@@ -225,5 +278,10 @@ export default {
 .demo-uni-col {
 	height: 36px;
 	border-radius: 4px;
+}
+
+.activity-rule {
+	background: #A5ACD2;
+	border-radius: 30rpx;
 }
 </style>
