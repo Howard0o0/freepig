@@ -80,7 +80,7 @@ export default {
 				this.formData.authInfo.recommend_code
 			)
 			uni.showToast({
-				title: '上传成功,审核结果将在10分钟内返回          23:00-08:00休息哈',
+				title: '上传成功,审核结果将在1日内返回',
 				icon: 'none',
 				duration: 2000
 			});
