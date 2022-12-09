@@ -155,6 +155,17 @@ export default {
             if (!formDataCheckPass) {
                 return
             }
+
+            await uni.requestSubscribeMessage({
+                tmplIds: ['FeXIK4bri75nNxiqFUi1eAB-4kGpKzbLAmmtsvMtCUE'],
+                success(res) {
+                    console.info('subscribe auth message success')
+                },
+                fail(res) {
+                    console.error('subscribe auth message fail: ', res)
+                }
+            })
+
             uni.navigateTo({
                 url: '/page_subject/pages/auth_by_certification?realname=' + this.formData.realname
                     + '&campus_id=' + this.formData.selectedCampus.id
