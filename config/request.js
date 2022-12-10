@@ -42,11 +42,11 @@ module.exports = (vm) => {
         const custom = response.config?.custom
         if (responseFromServer.code !== 200) {
             console.log("请求失败 ", responseFromServer.msg)
-            uni.showToast({
-                title: responseFromServer.msg,
-                icon: 'none',
-                duration: 2000
-            });
+
+            // 前面可能还有错误提示, 等1秒再显示错误信息
+            setTimeout(() => {
+                uni.$u.toast(responseFromServer.msg)
+            }, 1000);
 
             // showErr(responseFromServer.code)
 
