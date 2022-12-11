@@ -17,7 +17,7 @@
 		</view>
 
 
-		<image class="draw_prize_btn" src="/page_subject/static/draw_prize_btn.png"></image>
+		<image class="draw_prize_btn" :src="drawPrizeBtnImageURL"></image>
 
 		<view style=" margin-top:30rpx">
 			<text class="centerAlign" style=" font-weight:700">我的邀请</text>
@@ -105,7 +105,8 @@ export default {
 
 	data() {
 		return {
-			activityRuleBackgroundImageURL: "/page_subject/static/activity_bg_for_new_user.png",
+			activityRuleBackgroundImageURL: "/page_subject/static/activity_bg_for_old_user.png",
+			drawPrizeBtnImageURL: "/page_subject/static/draw_prize_btn.png",
 
 			recommendCode: this.$store.state.vuex_user.wx_open_id,
 			showPop: false,
@@ -132,7 +133,10 @@ export default {
 	async onShow() {
 		if (this.$store.state.vuex_user.draw_count <= 0) {
 			this.hasDrawedBefore = false
+			this.activityRuleBackgroundImageURL = "/page_subject/static/activity_bg_for_new_user.png"
+			this.drawPrizeBtnImageURL = "/page_subject/static/cash_prize_btn.png"
 		}
+		console.debug("是否已经参与过抽奖: ", this.hasDrawedBefore)
 		await this.refreshRecommendUserList()
 		await this.getRecommendRule()
 
