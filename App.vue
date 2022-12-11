@@ -65,8 +65,8 @@ export default {
 
 		async refreshFunc() {
 			if (!this.$store.state.vuex_token || this.$store.state.vuex_token == "") {
-				let resp = await utils.getToken()
-				if (resp.code != api.SUCCESS_CODE) {
+				let success = await utils.getToken()
+				if (!success) {
 					uni.$u.toast("登录失败")
 					return false;
 				}
@@ -76,6 +76,7 @@ export default {
 				uni.$u.toast("刷新用户信息失败")
 				return false;
 			}
+			uni.$u.toast("登录成功")
 			// console.log('[DEBUG] token: ', this.$store.state.vuex_token)
 
 			this.refreshConversationList()
