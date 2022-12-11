@@ -11,18 +11,17 @@ async function refreshUserInfo() {
 }
 
 function interceptUnauthorizedPageCallback() {
-    console.log('[DEBUG] jumping to page mine')
-    uni.showToast({
-        title: '为了保证圈子的干净, 需要先认证噢',
-        icon: 'none',
-        duration: 1000
-    });
+    console.debug('jumping to page mine')
 
-    setTimeout(() => {
-        uni.reLaunch({
-            url: '/pages/mine/mine'
-        })
-    }, 1000);
+    uni.showModal({
+        content: "为了保证圈子的干净, 需要先认证呀 别忘了领红包哦! ＞▽＜ ",
+        showCancel: false,
+        success: async function (res) {
+            uni.reLaunch({
+                url: '/pages/mine/mine'
+            })
+        }
+    })
 }
 
 function joinCampusAndMajorInfo(campusName, majorName) {
