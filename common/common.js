@@ -95,6 +95,24 @@ async function getToken() {
     return true
 }
 
+async function promiseRequestSubscribeMessage(templateIDList) {
+    return new Promise(
+        function (resolve, reject) {
+            uni.requestSubscribeMessage({
+                tmplIds: templateIDList,
+                success(res) {
+                    console.info('订阅微信提醒成功')
+                    resolve(true)
+                },
+                fail(res) {
+                    console.error('订阅微信提醒失败: ', res)
+                    resolve(false)
+                }
+            })
+        }
+    )
+}
+
 export default {
     refreshUserInfo,
     interceptUnauthorizedPageCallback,
@@ -103,6 +121,7 @@ export default {
     myMessageToTIMMessage,
     ackLastRecvMessage,
     getToken,
+    promiseRequestSubscribeMessage,
 }
 
 export const utils = {
@@ -113,4 +132,5 @@ export const utils = {
     myMessageToTIMMessage,
     ackLastRecvMessage,
     getToken,
+    promiseRequestSubscribeMessage,
 }

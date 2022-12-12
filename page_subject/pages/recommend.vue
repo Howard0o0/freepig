@@ -17,7 +17,9 @@
 		</view>
 
 
-		<image class="draw_prize_btn" :src="drawPrizeBtnImageURL"></image>
+		<view @click="drawBtnOnclick">
+			<image class="draw_prize_btn" :src="drawPrizeBtnImageURL" />
+		</view>
 
 		<view style=" margin-top:30rpx">
 			<text class="centerAlign" style=" font-weight:700">我的邀请</text>
@@ -59,10 +61,10 @@
 			</view>
 		</scroll-view> -->
 
-		<modal v-if="showPop" title="参与抽奖后本轮内推会清空噢, 内推数越多中奖几率越大哈^ ^" confirm-text="冲鸭" cancel-text="再等等"
+		<modal v-if="showPop" :title="showPopTitle" content="收款人需与账号一致" confirm-text="冲鸭" cancel-text="再等等"
 			@cancel="showPop = false" @confirm="confirmDrawPrize">
-			<input type='text' placeholder="输入邮箱接收抽奖结果" v-model="email" />
 			<input type='text' placeholder="收款支付宝账号" v-model="bankAccount" />
+			<input type='text' placeholder="支付宝收款人" v-model="payee" />
 		</modal>
 
 		<!-- <text>内推记录</text>
@@ -84,7 +86,7 @@
 
 		<modal v-if="showPop" title="参与抽奖后本轮内推会清空噢, 内推数越多中奖几率越大哈^ ^" confirm-text="冲鸭" cancel-text="再等等"
 			@cancel="showPop = false" @confirm="confirmDrawPrize">
-			<input type='text' placeholder="输入邮箱接收抽奖结果" v-model="email" />
+			<input type='text' placeholder="输入邮箱接收抽奖结果" v-model="payee" />
 			<input type='text' placeholder="收款支付宝账号" v-model="bankAccount" />
 		</modal> -->
 	</view>
@@ -107,6 +109,7 @@ export default {
 		return {
 			activityRuleBackgroundImageURL: "/page_subject/static/activity_bg_for_old_user.png",
 			drawPrizeBtnImageURL: "/page_subject/static/draw_prize_btn.png",
+			showPopTitle: "抽红包",
 
 			recommendCode: this.$store.state.vuex_user.wx_open_id,
 			showPop: false,
@@ -121,7 +124,7 @@ export default {
 			},
 			hasDrawedBefore: true,
 
-			email: "",
+			payee: "",
 			bankAccount: "",
 		}
 	},
@@ -135,6 +138,7 @@ export default {
 			this.hasDrawedBefore = false
 			this.activityRuleBackgroundImageURL = "/page_subject/static/activity_bg_for_new_user.png"
 			this.drawPrizeBtnImageURL = "/page_subject/static/cash_prize_btn.png"
+			this.showPopTitle = "领取红包"
 		}
 		console.debug("是否已经参与过抽奖: ", this.hasDrawedBefore)
 		await this.refreshRecommendUserList()
@@ -154,9 +158,9 @@ export default {
 			console.log('share from button', res.target)
 		}
 		return {
-			title: '兜兜小集市',
+			title: '高校出闲置 上兜兜 新人领红包',
 			path: '/page_subject/pages/auth?recommend-code=' + this.$store.state.vuex_user.wx_open_id,
-			imageUrl: '/page_subject/static/logo.png',
+			imageUrl: '/page_subject/static/activity_bg_for_new_user.png',
 		}
 	},
 
@@ -171,48 +175,45 @@ export default {
 		},
 
 		async confirmDrawPrize() {
-			if (this.email == "") {
-				uni.showToast({
-					title: '邮箱没填呀',
-					icon: 'none',
-					duration: 1500,
-				})
+			if (this.payee == "") {
+				uni.$u.toast("收款人为空")
 				return
 			}
 
 			if (this.bankAccount == "") {
-				uni.showToast({
-					title: '支付宝账号咧',
-					icon: 'none',
-					duration: 1500,
-				})
+				uni.$u.toast("支付宝账号为空")
 				return
 			}
 
-			console.log('[DEBUG] 开始提交抽奖');
+			await utils.promiseRequestSubscribeMessage(['2GB_iOtnLNNKOpivNlBNhnZRo4AbZaAYDwetzVsvqcY'])
+
+			console.debug('开始提交抽奖');
 			uni.showLoading({
 				title: '提交中',
 			});
-			const resp = await api.drawPrize(this.email, this.bankAccount)
+			const resp = await api.drawPrize(this.payee, this.bankAccount)
+			uni.hideLoading()
 			if (resp.code != api.SUCCESS_CODE) { this.showPop = false; return; }
-			uni.showToast({
-				title: 'OK',
-				icon: 'success',
-				duration: 1000
-			});
-			this.showPop = false
-			this.refreshRecommendUserList()
-			this.isAbleToDraw = false
+
+			if (this.$store.state.vuex_user.draw_count <= 0) {
+				// new user, return cash
+				uni.$u.toast("领取成功 将会在一日内到账")
+			} else {
+				uni.$u.toast("感谢参与 结果片刻即出")
+			}
+
+			setTimeout(() => {
+				this.showPop = false
+				this.refreshRecommendUserList()
+				this.isAbleToDraw = false
+			}, 2000)
+
 		},
 
 		drawBtnOnclick() {
 			console.log("[DEBUG] clicked draw btn")
 			if (!this.isAbleToDraw) {
-				uni.showToast({
-					title: '有效内推数需大于' + this.minRecommendNum + '才行哇',
-					icon: 'none',
-					duration: 1500,
-				})
+				uni.$u.toast("内推数不足 >_<|||")
 				return
 			}
 
