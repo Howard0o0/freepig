@@ -11,18 +11,17 @@ async function refreshUserInfo() {
 }
 
 function interceptUnauthorizedPageCallback() {
-    console.log('[DEBUG] jumping to page mine')
-    uni.showToast({
-        title: '为了保证圈子的干净, 需要先认证噢',
-        icon: 'none',
-        duration: 1000
-    });
+    console.debug('jumping to page mine')
 
-    setTimeout(() => {
-        uni.reLaunch({
-            url: '/pages/mine/mine'
-        })
-    }, 1000);
+    uni.showModal({
+        content: "为了保证圈子的干净, 需要先认证呀 别忘了领红包哦! ＞▽＜ ",
+        showCancel: false,
+        success: async function (res) {
+            uni.reLaunch({
+                url: '/pages/mine/mine'
+            })
+        }
+    })
 }
 
 function joinCampusAndMajorInfo(campusName, majorName) {
@@ -96,6 +95,24 @@ async function getToken() {
     return true
 }
 
+async function promiseRequestSubscribeMessage(templateIDList) {
+    return new Promise(
+        function (resolve, reject) {
+            uni.requestSubscribeMessage({
+                tmplIds: templateIDList,
+                success(res) {
+                    console.info('订阅微信提醒成功')
+                    resolve(true)
+                },
+                fail(res) {
+                    console.error('订阅微信提醒失败: ', res)
+                    resolve(false)
+                }
+            })
+        }
+    )
+}
+
 export default {
     refreshUserInfo,
     interceptUnauthorizedPageCallback,
@@ -104,6 +121,7 @@ export default {
     myMessageToTIMMessage,
     ackLastRecvMessage,
     getToken,
+    promiseRequestSubscribeMessage,
 }
 
 export const utils = {
@@ -114,4 +132,5 @@ export const utils = {
     myMessageToTIMMessage,
     ackLastRecvMessage,
     getToken,
+    promiseRequestSubscribeMessage,
 }

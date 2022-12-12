@@ -161,8 +161,8 @@ export const setUserInfo = (avatar_url, nickname, gender) => uni.$u.http.post('/
     }
 })
 
-export const drawPrize = (email, bankAccount) => uni.$u.http.post('/activity/recommend/draw-prize', {
-    email: email,
+export const drawPrize = (payeeRealName, bankAccount) => uni.$u.http.post('/activity/recommend/draw-prize', {
+    payee_realname: payeeRealName,
     bank_account: bankAccount,
 }, {
     header: {
@@ -292,6 +292,32 @@ export const setUserRole = (userID, role, rejectReason = "") => uni.$u.http.post
     }
 })
 
+export const adminHandleUserPrize = (prizeItemID, prize, failMsg = "") => uni.$u.http.post('admin/handle-user-prize', {
+    prize_id: prizeItemID,
+    prize: prize,
+    fail_msg: failMsg,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+
+export const adminGetNewUserPrizeList = () => uni.$u.http.get('admin/new-user-prize-list', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: {
+    }
+})
+
+export const adminGetOldUserPrizeList = () => uni.$u.http.get('admin/old-user-prize-list', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: {
+    }
+})
+
 export const SUCCESS_CODE = 200
 
 export const USER_ROLE = {
@@ -338,4 +364,7 @@ export const api = {
     createConversation,
     adminGetUserList,
     setUserRole,
+    adminHandleUserPrize,
+    adminGetNewUserPrizeList,
+    adminGetOldUserPrizeList,
 }

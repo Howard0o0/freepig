@@ -57,6 +57,7 @@
 <script>
 
 import { api } from '../../config/api.js';
+import { utils } from '../../common/common.js';
 import lyg_popup from '@/components/lyg-popup/lyg-popup.vue';
 
 import {
@@ -156,15 +157,7 @@ export default {
                 return
             }
 
-            await uni.requestSubscribeMessage({
-                tmplIds: ['FeXIK4bri75nNxiqFUi1eAB-4kGpKzbLAmmtsvMtCUE'],
-                success(res) {
-                    console.info('subscribe auth message success')
-                },
-                fail(res) {
-                    console.error('subscribe auth message fail: ', res)
-                }
-            })
+            await utils.promiseRequestSubscribeMessage(['FeXIK4bri75nNxiqFUi1eAB-4kGpKzbLAmmtsvMtCUE'])
 
             uni.navigateTo({
                 url: '/page_subject/pages/auth_by_certification?realname=' + this.formData.realname

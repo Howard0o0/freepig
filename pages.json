@@ -188,6 +188,13 @@
                     }
                 },
                 {
+                    "path": "pages/prize_manage",
+                    "style": {
+                        "navigationBarTitleText": "",
+                        "enablePullDownRefresh": true
+                    }
+                },
+                {
                     "path": "pages/publish_goods",
                     "style": {
                         "navigationBarTitleText": "",
