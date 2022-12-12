@@ -9,9 +9,16 @@
 				<text selectable="true" style="color: #fbb462; font-weight:700">{{ recommendCode }}</text>
 				<view style=" margin-top:30rpx"></view>
 				<view class="invite-btn">
-					<u-button shape="circle" color="#ffda45" type="primary" size="normal" text=" 邀请好友"
+					<u-button shape="circle" color="#ffda45" type="primary" size="normal" text="邀请好友"
 						openType="share"></u-button>
 				</view>
+<!-- 
+				<view style=" margin-top:30rpx"></view>
+
+				<view class="invite-btn">
+					<u-button shape="circle" color="#ffda45" type="primary" size="normal" text="生成链接"
+						@click="genShareLinkBtnOnclick"></u-button>
+				</view> -->
 				<view style=" margin-top:50rpx"></view>
 			</view>
 		</view>
@@ -159,12 +166,34 @@ export default {
 		}
 		return {
 			title: '高校出闲置 上兜兜 新人领红包',
-			path: '/page_subject/pages/auth?recommend-code=' + this.$store.state.vuex_user.wx_open_id,
+			path: '/pages/index/index?recommend-code=' + this.$store.state.vuex_user.wx_open_id,
 			imageUrl: '/page_subject/static/activity_bg_for_new_user.png',
 		}
 	},
 
 	methods: {
+		async genShareLinkBtnOnclick() {
+			const resp = await api.getShareLink()
+			if (resp.code != api.SUCCESS_CODE) {
+				uni.$u.toast("生成链接失败 请使用邀请好友")
+				return;
+			}
+			let shareLink = resp.data
+			uni.setClipboardData({
+				data: shareLink,
+				success: () => {
+					uni.showToast({//提示
+						title: '内推链接已复制',
+						icon: 'success',
+						duration: 2000
+					})
+				},
+				fail: () => {
+					console.error("复制分享链接到剪切板失败")
+				}
+			});
+		},
+
 		showRecommendRule() {
 			var that = this
 			uni.showModal({

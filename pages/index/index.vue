@@ -79,7 +79,10 @@ export default {
 		this.scrollTop = e.scrollTop;
 	},
 
-	onLoad() {
+	onLoad(option) {
+		if (option["recommend-code"] && option["recommend-code"] != "") {
+			getApp().globalData.recommendCode = option["recommend-code"]
+		}
 		this.reload()
 	},
 
