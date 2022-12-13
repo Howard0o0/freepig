@@ -6,19 +6,21 @@
 				<view style=" margin-top:30rpx"></view>
 				<view style=" font-weight:700">专属邀请码</view>
 				<view style=" margin-top:30rpx"></view>
-				<text user-select="true" style="color: #fbb462; font-weight:700" @click="recommendCodeOnClick">{{ recommendCode }}</text>
+				<text user-select="true" style="color: #fbb462; font-weight:700" @click="recommendCodeOnClick">{{
+						recommendCode
+				}}</text>
 				<view style=" margin-top:30rpx"></view>
 				<view class="invite-btn">
 					<u-button shape="circle" color="#ffda45" type="primary" size="normal" text="邀请好友"
 						openType="share"></u-button>
 				</view>
-				<!-- 
+
 				<view style=" margin-top:30rpx"></view>
 
 				<view class="invite-btn">
 					<u-button shape="circle" color="#ffda45" type="primary" size="normal" text="生成链接"
 						@click="genShareLinkBtnOnclick"></u-button>
-				</view> -->
+				</view>
 				<view style=" margin-top:50rpx"></view>
 			</view>
 		</view>
@@ -189,13 +191,27 @@ export default {
 			});
 		},
 
-		async genShareLinkBtnOnclick() {
-			const resp = await api.getShareLink()
-			if (resp.code != api.SUCCESS_CODE) {
-				uni.$u.toast("生成链接失败 请使用邀请好友")
-				return;
+		generateShareLink() {
+			if (!this.$store.state.vuex_user.wx_open_id || this.$store.state.vuex_user.wx_open_id == "") {
+				console.error("wx_open_id empty while generating sharelink")
+				return ""
 			}
-			let shareLink = resp.data
+			return "https://www.doraewhite.com/api/v1/activity/recommend/share-link?recommend-code=" + this.$store.state.vuex_user.wx_open_id
+		},
+
+		async genShareLinkBtnOnclick() {
+			// const resp = await api.getShareLink()
+			// if (resp.code != api.SUCCESS_CODE) {
+			// 	uni.$u.toast("生成链接失败 请使用邀请好友")
+			// 	return;
+			// }
+			let shareLink = this.generateShareLink()
+			shareLink = "[兜兜] " + shareLink + " 「邀好友 领红包」高校专属闲置发布平台 点击链接直接打开 邀请两个好友完成认证 最高抽百元红包"
+			if (shareLink == "") {
+				console.error("generateShareLink fail")
+				uni.$u.toast("生成链接失败 请使用邀请好友")
+				return
+			}
 			uni.setClipboardData({
 				data: shareLink,
 				success: () => {
@@ -207,6 +223,7 @@ export default {
 				},
 				fail: () => {
 					console.error("复制分享链接到剪切板失败")
+					uni.$u.toast("生成链接失败 请使用邀请好友")
 				}
 			});
 		},
