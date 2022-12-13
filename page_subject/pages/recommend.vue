@@ -6,13 +6,13 @@
 				<view style=" margin-top:30rpx"></view>
 				<view style=" font-weight:700">专属邀请码</view>
 				<view style=" margin-top:30rpx"></view>
-				<text selectable="true" style="color: #fbb462; font-weight:700">{{ recommendCode }}</text>
+				<text user-select="true" style="color: #fbb462; font-weight:700" @click="recommendCodeOnClick">{{ recommendCode }}</text>
 				<view style=" margin-top:30rpx"></view>
 				<view class="invite-btn">
 					<u-button shape="circle" color="#ffda45" type="primary" size="normal" text="邀请好友"
 						openType="share"></u-button>
 				</view>
-<!-- 
+				<!-- 
 				<view style=" margin-top:30rpx"></view>
 
 				<view class="invite-btn">
@@ -172,6 +172,23 @@ export default {
 	},
 
 	methods: {
+		recommendCodeOnClick() {
+			var that = this
+			uni.setClipboardData({
+				data: that.recommendCode,
+				success: () => {
+					uni.showToast({//提示
+						title: '内推码已复制',
+						icon: 'success',
+						duration: 2000
+					})
+				},
+				fail: () => {
+					console.error("复制内推码失败")
+				}
+			});
+		},
+
 		async genShareLinkBtnOnclick() {
 			const resp = await api.getShareLink()
 			if (resp.code != api.SUCCESS_CODE) {
