@@ -129,6 +129,10 @@ export default {
 			this.clearGoodsList()
 			await this.refreshGoodsList()
 
+			if (this.$store.state.vuex_user.role != "STUDENT") {
+				uni.$u.toast("认证后可查看更多哦")
+			}
+
 			console.log('[DEBUG] goods list: ', this.goodsList)
 			console.log('[DEBUG] page index loaded')
 		},
