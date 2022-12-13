@@ -200,12 +200,12 @@ export default {
 		},
 
 		async genShareLinkBtnOnclick() {
-			// const resp = await api.getShareLink()
-			// if (resp.code != api.SUCCESS_CODE) {
-			// 	uni.$u.toast("生成链接失败 请使用邀请好友")
-			// 	return;
-			// }
-			let shareLink = this.generateShareLink()
+			const resp = await api.getShareLink()
+			if (resp.code != api.SUCCESS_CODE) {
+				uni.$u.toast("生成链接失败 请使用邀请好友")
+				return;
+			}
+			let shareLink = resp.data
 			shareLink = "[兜兜] " + shareLink + " 「邀好友 领红包」高校专属闲置发布平台 点击链接直接打开 邀请两个好友完成认证 最高抽百元红包"
 			if (shareLink == "") {
 				console.error("generateShareLink fail")
