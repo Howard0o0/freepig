@@ -18,7 +18,7 @@ import { utils } from '../../common/common.js';
 export default {
 	data() {
 		return {
-			aboutFreePigParagraph0: "兜兜是由清华-武大的学生团队联合开发的校园便捷宝贝发布平台, 致力于为童鞋们打造一个可靠方便的跳蚤市场",
+			aboutFreePigParagraph0: "兜兜是由清华-武大的创业团队联合开发的校园便捷宝贝发布平台, 致力于为童鞋们打造一个可靠方便的跳蚤市场",
 			aboutFreePigParagraph1: "如果你对产品的使用有疑惑或不满, 以及相关的改进意见都欢迎骚扰呀, 嘿嘿",
 		}
 	},
