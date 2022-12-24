@@ -5,13 +5,32 @@
 				<image class="avatar" :src="formData.avatarImageFilePath" mode="aspectFit" />
 			</button>
 		</view>
-		<u-form-item label="昵称" labelWidth="80" borderBottom>
-			<input type="nickname" v-model="formData.nickname" :placeholder="userInfo.nickname" inputAlign="center" />
-		</u-form-item>
-		<u-form-item label="性别" labelWidth="80" borderBottom>
+
+		<view class='flex-row'>
+			<view>昵称</view>
+			<u--input type="nickname" v-model="formData.nickname" :placeholder="userInfo.nickname" inputAlign="right"
+				border="none" />
+		</view>
+		<u-divider></u-divider>
+
+		<view class='flex-row'>
+			<view>性别</view>
 			<uni-data-checkbox mode="tag" v-model="formData.gender" :localdata="genderList"></uni-data-checkbox>
-		</u-form-item>
-		<u-button type="primary" text="提交" size="normal" @click="confirmBtnOnClick" />
+		</view>
+		<u-divider></u-divider>
+
+		<view class='flex-row'>
+			<view>收款码</view>
+			<view style="display: flex;">
+				<view align="center" style="padding-right: 50rpx;" @click="uploadWalletCodeOnClick">上传微信收款码</view>
+				<u--image v-if="formData.walletCodeURL.length > 0" shape="circle" width="40rpx" height="40rpx"
+					:src="formData.walletCodeURL" mode="aspectFit" @click="imagePreview(formData.walletCodeURL)" />
+			</view>
+		</view>
+
+		<view class="ok-btn">
+			<u-button type="primary" text="提交" size="normal" @click="confirmBtnOnClick" />
+		</view>
 	</view>
 </template>
 
@@ -30,6 +49,7 @@ export default {
 				nickname: "",
 				gender: "",
 				avatarImageFilePath: "",
+				walletCodeURL: "",
 			},
 			genderList: [
 				{
@@ -48,9 +68,42 @@ export default {
 		this.formData.nickname = this.userInfo.nickname
 		this.formData.gender = this.userInfo.gender
 		this.formData.avatarImageFilePath = this.userInfo.avatar_url
+		this.formData.walletCodeURL = this.userInfo.wallet_code
 	},
 
 	methods: {
+		imagePreview(imageURL) {
+			uni.previewImage({
+				indicator: "number",
+				loop: true,
+				urls: [imageURL],
+			})
+		},
+
+		async uploadWalletCodeOnClick() {
+			var res = await uni.chooseImage({
+				count: 1,
+				sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+				crop: {
+					width: 500,
+					height: 500,
+				}
+			});
+			console.debug('res: ', res)
+			var selectedImageFile = res[1].tempFiles[0]
+			console.debug('image choosed: ', selectedImageFile)
+			const localImageFilepath = selectedImageFile.path
+
+			uni.showLoading({
+				title: '',
+			})
+			var resp = await api.uploadImage(0, localImageFilepath)
+			uni.hideLoading()
+			if (resp.code != api.SUCCESS_CODE) { return "" }
+			let imageURL = resp.data.image_urls
+			this.formData.walletCodeURL = imageURL
+		},
+
 		async confirmBtnOnClick() {
 			if (!this.checkFormData()) {
 				return false
@@ -67,7 +120,7 @@ export default {
 				avatar_url = resp.data.image_urls
 			}
 
-			let resp = await api.setUserInfo(avatar_url, this.formData.nickname, this.formData.gender)
+			let resp = await api.setUserInfo(avatar_url, this.formData.nickname, this.formData.gender, this.formData.walletCodeURL)
 			uni.hideLoading()
 			if (resp.code != api.SUCCESS_CODE) { return }
 
@@ -156,5 +209,24 @@ export default {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+}
+
+.flex-row {
+	display: flex;
+	margin-top: 20rpx;
+	margin-bottom: 20rpx;
+	justify-content: space-between;
+}
+
+.wallet-code-thumbnail {
+	width: 40rpx;
+}
+
+.ok-btn {
+	position: fixed;
+	bottom: 100rpx;
+	width: 85%;
+	margin-left: 20rpx;
+	margin-right: 20rpx;
 }
 </style>

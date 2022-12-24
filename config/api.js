@@ -152,10 +152,11 @@ export const setGoodsStatus = (goodsID, status) => uni.$u.http.post('/goods/stat
     }
 })
 
-export const setUserInfo = (avatar_url, nickname, gender) => uni.$u.http.post('/user', {
+export const setUserInfo = (avatar_url, nickname, gender, walletCodeURL) => uni.$u.http.post('/user', {
     avatar_url: avatar_url,
     gender: gender,
     nickname: nickname,
+    wallet_code: walletCodeURL,
 }, {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,

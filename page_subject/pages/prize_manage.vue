@@ -6,11 +6,16 @@
 		</view>
 
 		<view class="list">
-			<view class="row" v-for="(prizeItem, index) in prizeItemList" :key="index">
-				<view>{{ "id: " + prizeItem.id + " user_id: " + prizeItem.user_id }}</view>
-				<view>{{ "realname: " + prizeItem.payee_realname }}</view>
-				<view>{{ "bank_account: " + prizeItem.bank_account }}</view>
-				<view>{{ "prize: " + prizeItem.prize + " handled: " + prizeItem.handled }}</view>
+			<view v-for="(prizeItem, index) in prizeItemList" :key="index">
+				<view class="flex-row">
+					<u--image shape="circle" width="150rpx" height="150rpx" :src="prizeItem.bank_account"
+						mode="aspectFit" @click="imagePreview(prizeItem.bank_account)" />
+					<view>
+						<view>{{ "id: " + prizeItem.id + " user_id: " + prizeItem.user_id }}</view>
+						<view>{{ "realname: " + prizeItem.payee_realname }}</view>
+						<view>{{ "prize: " + prizeItem.prize + " handled: " + prizeItem.handled }}</view>
+					</view>
+				</view>
 				<view class="btns">
 					<block>
 						<view :style="hasSubmitted(prizeItem.id) ? 'display:none;' : ''" class="onsale"
@@ -191,5 +196,11 @@ credential-image {
 		border: solid 1upx #ec652f;
 		color: #ec652f;
 	}
+}
+
+.flex-row {
+	display: flex;
+	margin-top: 20rpx;
+	margin-bottom: 20rpx;
 }
 </style>
