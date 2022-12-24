@@ -62,23 +62,6 @@ export default {
 		this.userNickname = store.state.vuex_user.nickname
 		this.campusInfo = this.joinCampusAndMajorInfo(store.state.vuex_user.campus, store.state.vuex_user.major)
 		this.userAvatarURL = store.state.vuex_user.avatar_url
-
-		uni.share({
-			provider: 'weixin',
-			scene: "WXSceneSession",
-			type: 5,
-			imageUrl: 'https://bjetxgzv.cdn.bspapp.com/VKCEYUGU-uni-app-doc/962fc340-4f2c-11eb-bdc1-8bd33eb6adaa.png',
-			title: '欢迎体验uniapp',
-			miniProgram: {
-				id: 'gh_abcdefg',
-				path: 'pages/index/index',
-				type: 0,
-				webUrl: 'http://uniapp.dcloud.io'
-			},
-			success: ret => {
-				console.log(JSON.stringify(ret));
-			}
-		});
 	},
 	onShow() {
 		this.refreshAuthTag()

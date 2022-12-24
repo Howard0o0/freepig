@@ -70,11 +70,11 @@
 			</view>
 		</scroll-view> -->
 
-		<modal v-if="showPop" :title="showPopTitle" content="收款人需与账号一致" confirm-text="冲鸭" cancel-text="再等等"
+		<!-- <modal v-if="showPop" :title="showPopTitle" content="收款人需与账号一致" confirm-text="冲鸭" cancel-text="再等等"
 			@cancel="showPop = false" @confirm="confirmDrawPrize">
 			<input type='text' placeholder="收款支付宝账号" v-model="bankAccount" />
 			<input type='text' placeholder="支付宝收款人" v-model="payee" />
-		</modal>
+		</modal> -->
 
 		<!-- <text>内推记录</text>
 		<scroll-view scroll-y="true" class="scroll-Y" scroll-top=0>
@@ -238,23 +238,13 @@ export default {
 		},
 
 		async confirmDrawPrize() {
-			if (this.payee == "") {
-				uni.$u.toast("收款人为空")
-				return
-			}
-
-			if (this.bankAccount == "") {
-				uni.$u.toast("支付宝账号为空")
-				return
-			}
-
 			await utils.promiseRequestSubscribeMessage(['2GB_iOtnLNNKOpivNlBNhnZRo4AbZaAYDwetzVsvqcY'])
 
 			console.debug('开始提交抽奖');
 			uni.showLoading({
 				title: '提交中',
 			});
-			const resp = await api.drawPrize(this.payee, this.bankAccount)
+			const resp = await api.drawPrize("", this.$store.state.vuex_user.wallet_code)
 			uni.hideLoading()
 			if (resp.code != api.SUCCESS_CODE) { this.showPop = false; return; }
 
@@ -266,7 +256,6 @@ export default {
 			}
 
 			setTimeout(() => {
-				this.showPop = false
 				this.refreshRecommendUserList()
 				this.isAbleToDraw = false
 			}, 2000)
@@ -280,7 +269,15 @@ export default {
 				return
 			}
 
-			this.showPop = true
+
+			if (this.$store.state.vuex_user.wallet_code.length <= 0) {
+				uni.$u.toast("请先绑定微信收款码")
+				setTimeout(() => {
+					uni.navigateTo({ url: '/page_subject/pages/set_userinfo' })
+				}, 1500)
+			} else {
+				this.confirmDrawPrize()
+			}
 		},
 
 		showPrizeResultBtnOnClick() {
