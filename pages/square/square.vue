@@ -39,9 +39,6 @@ import { api } from '@/config/api.js';
 import { utils } from '@/common/common.js';
 
 export default {
-    components: {
-        HmTalkCard,
-    },
 
     data() {
         return {
