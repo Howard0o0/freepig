@@ -1,17 +1,10 @@
 {
-  "name": "tim-uniapp",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cos-js-sdk-v5": "^0.5.20",
-    "tim-js-sdk": "^2.1.4",
-    "tim-upload-plugin": "^1.0.4"
-  }
+    "id": "images-adaptation",
+    "name": "实现朋友圈动态，qq说说图片自适应排列",
+    "version": "1.0.0",
+    "description": "实现朋友圈动态，qq说说图片自适应排列",
+    "keywords": [
+        "#uniapp",
+        "#vue"
+    ]
 }

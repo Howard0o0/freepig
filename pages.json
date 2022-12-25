@@ -1,9 +1,17 @@
 {
     "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
         {
+            "path": "pages/square/square",
+            "style": {
+                "navigationBarTitleText": "新鲜事",
+                "enablePullDownRefresh": true,
+                "onReachBottomDistance": 120
+            }
+        },
+        {
             "path": "pages/index/index",
             "style": {
-                "navigationBarTitleText": "广场",
+                "navigationBarTitleText": "闲置",
                 "enablePullDownRefresh": true,
                 "onReachBottomDistance": 120
             }
@@ -40,10 +48,16 @@
     "tabBar": {
         "list": [
             {
+                "pagePath": "pages/square/square",
+                "iconPath": "static/tab_news_unselected.png",
+                "selectedIconPath": "static/tab_news_selected.png",
+                "text": "新鲜事"
+            },
+            {
                 "pagePath": "pages/index/index",
-                "iconPath": "static/tab_index_unselected.png",
-                "selectedIconPath": "static/tab_index_selected.png",
-                "text": "首页"
+                "iconPath": "static/tab_goods_unselected.png",
+                "selectedIconPath": "static/tab_goods_selected.png",
+                "text": "闲置"
             },
             {
                 "pagePath": "pages/tim/record",
@@ -320,7 +334,7 @@
         "list": [
             {
                 "name": "", //模式名称
-                "path": "pages/index/index", //启动页面，必选
+                "path": "pages/square/square", //启动页面，必选
                 "query": "" //启动参数，在页面的onLoad函数里面得到
             }
         ]
