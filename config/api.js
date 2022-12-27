@@ -186,6 +186,18 @@ export const getGoodsList = (longitude = 0, latitude = 0, tagID = 0, keyword = "
     }
 })
 
+export const getArticleList = (longitude = 0, latitude = 0, pageIndex = 0, pageSize = 30) => uni.$u.http.get('/article/', {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+    },
+    params: {
+        'longitude': longitude,
+        'latitude': latitude,
+        'page_index': pageIndex,
+        'page_size': pageSize,
+    }
+})
+
 export const getMyGoodsList = () => uni.$u.http.get('/goods/by-user', {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
@@ -378,4 +390,5 @@ export const api = {
     adminGetNewUserPrizeList,
     adminGetOldUserPrizeList,
     getShareLink,
+    getArticleList,
 }

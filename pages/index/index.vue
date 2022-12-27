@@ -203,8 +203,10 @@ export default {
 		},
 
 		async refreshGoodsList() {
-			uni.showToast({ title: '加载中...', duration: 1000, icon: 'loading' })
+			uni.showLoading({title: '加载中'})
 			const resp = await api.getGoodsList(this.currLocation.longitude, this.currLocation.latitude, this.goodsParam.tagID, this.goodsParam.keyword, this.goodsParam.currPageIndex, this.goodsParam.currPageSize)
+			uni.hideLoading()
+			if (resp.code != api.SUCCESS_CODE) { return; }
 			const goodsList = resp.data
 			if (goodsList == null || goodsList.length == 0) {
 				this.noMoreGoods = true

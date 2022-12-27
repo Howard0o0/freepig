@@ -2,8 +2,10 @@ import { utils } from "../common/common"
 
 // 页面白名单
 const whiteList = [
+    "/pages/square/square",
     "/pages/index/index",
     "/pages/mine/mine",
+    "/pages/tim/room",
     "/page_subject/pages/auth",
     "/page_subject/pages/auth_by_certification",
     "/page_subject/pages/auth_by_email",
@@ -12,7 +14,7 @@ const whiteList = [
     "/page_subject/pages/set_userinfo",
     "/page_subject/pages/contact_us",
     "/page_subject/pages/admin_login",
-    "/pages/tim/room",
+    "/page_subject/pages/news_detail",
 ]
 
 function isPageInWhiteList(url) {

@@ -5,23 +5,21 @@
         </view>
 
 
-        <view v-for="(post) in posts" :key="post.id" @tap="toPostDetail(post)">
-            <uni-card :title="post.username" :sub-title="generatePostDesc(post)" extra=" " :thumbnail="post.user_avatar"
-                @click="toPostDetail(post)">
-                <text class="uni-body">这是一个带头像和双标题的基础卡片，此示例展示了一个完整的卡片。</text>
-                <image style="width: 100%;" :src="getFirstImage(post.images)"></image>
+        <view v-for="(article) in articleList" :key="article.id" @tap="toPostDetail(article)">
+            <uni-card :title="article.username" :sub-title="generatePostDesc(article)" extra=" "
+                :thumbnail="article.user_avatar" @click="toPostDetail(article)">
+                <text class="uni-body">{{ article.text }}</text>
+                <view v-if="getFirstImage(article.images).length > 0">
+                    <image style="width: 100%;" :src="getFirstImage(article.images)"></image>
+                </view>
                 <view slot="actions" class="card-actions">
-                    <view class="card-actions-item" @click="actionsClick('分享')">
-                        <uni-icons type="redo" size="18" color="#999"></uni-icons>
-                        <text class="card-actions-item-text">分享</text>
-                    </view>
                     <view class="card-actions-item" @click="actionsClick('点赞')">
                         <uni-icons type="heart" size="18" color="#999"></uni-icons>
-                        <text class="card-actions-item-text">点赞</text>
+                        <text class="card-actions-item-text">{{ article.like_num }}</text>
                     </view>
                     <view class="card-actions-item" @click="actionsClick('评论')">
                         <uni-icons type="chatbubble" size="18" color="#999"></uni-icons>
-                        <text class="card-actions-item-text">评论</text>
+                        <text class="card-actions-item-text">{{ article.comment_num }}</text>
                     </view>
                 </view>
             </uni-card>
@@ -44,44 +42,19 @@ export default {
         return {
             scrollTop: 0,
 
-            posts: [
-                {
-                    id: 123,
-                    username: "ahahah",
-                    user_avatar: "https://ddp-freepig.oss-cn-beijing.aliyuncs.com/images/user-9-goods-1665913708184745118-1665913732809121787.jpeg",
-                    text: "哈哈哈哈哈",
-                    num: '10',
-                    commentNum: '67',
-                    stateimg: "https://ddp-freepig.oss-cn-beijing.aliyuncs.com/images/user-9-goods-1665913708184745118-1665913732809121787.jpeg",
-                },
-                {
-                    id: 123,
-                    username: "ahahah",
-                    user_avatar: "https://ddp-freepig.oss-cn-beijing.aliyuncs.com/images/user-9-goods-1665913708184745118-1665913732809121787.jpeg",
-                    text: "哈哈哈哈哈",
-                    num: '10',
-                    commentNum: '67',
-                    stateimg: "https://ddp-freepig.oss-cn-beijing.aliyuncs.com/images/user-9-goods-1665913708184745118-1665913732809121787.jpeg",
-                },
-                {
-                    id: 123,
-                    username: "ahahah",
-                    user_avatar: "https://ddp-freepig.oss-cn-beijing.aliyuncs.com/images/user-9-goods-1665913708184745118-1665913732809121787.jpeg",
-                    text: "哈哈哈哈哈",
-                    num: '10',
-                    commentNum: '67',
-                    stateimg: "https://ddp-freepig.oss-cn-beijing.aliyuncs.com/images/user-9-goods-1665913708184745118-1665913732809121787.jpeg",
-                },
-            ],
+            articleList: [],
 
-            goodsParam: {
+            formData: {
                 currPageIndex: 0,
                 currPageSize: 50,
-                keyword: "",
-                tagID: 0,
             },
             loadingText: "正在加载...",
-            noMoreGoods: false,
+            noMoreArticle: false,
+
+            currLocation: {
+                longitude: 0,
+                latitude: 0,
+            }
 
         }
     },
@@ -110,8 +83,8 @@ export default {
             title: '刷新中..',
             icon: 'loading'
         });
-        await this.refreshGoodsList()
-        if (this.noMoreGoods) {
+        await this.refreshArticleList()
+        if (this.noMoreArticle) {
             this.loadingText = "hoops 木有更多啦";
             return false;
         } else {
@@ -131,14 +104,15 @@ export default {
     },
 
     methods: {
-        toPostDetail(post) {
+        toPostDetail(article) {
             uni.navigateTo({
                 url: '/page_subject/pages/news_detail'
             });
         },
 
-        generatePostDesc(post) {
-            return "1小时前·北京大学"
+        generatePostDesc(article) {
+            let timeStr = utils.timeFormatToNAgo(article.created_at)
+            return timeStr + "·" + article.user_campus + "·" + article.user_degree
         },
 
         getFirstImage(imageURLs) {
@@ -149,29 +123,123 @@ export default {
         },
 
         async reload() {
-
-            this.resetGoodsParam()
-            this.clearGoodsList()
-            // refresh list
+            await this.updateLocation()
+            this.resetFormData()
+            this.articleList = []
+            await this.refreshArticleList()
 
             if (this.$store.state.vuex_user.role != "STUDENT") {
-                uni.$u.toast("认证后可查看更多哦")
+                uni.$u.toast("认证后可查看更多本校新鲜事～")
             }
-
-            console.log('[DEBUG] goods list: ', this.goodsList)
-            console.log('[DEBUG] page index loaded')
         },
 
 
-        resetGoodsParam() {
-            this.noMoreGoods = false
-            this.goodsParam = {
+        resetFormData() {
+            this.noMoreArticle = false
+            this.formData = {
                 currPageIndex: 0,
-                currPageSize: this.goodsParam.currPageSize,
-                keyword: "",
-                tagID: 0,
+                currPageSize: this.formData.currPageSize,
             }
         },
+
+        async refreshArticleList() {
+            uni.showLoading({ title: '加载中' })
+            const resp = await api.getArticleList(this.currLocation.longitude, this.currLocation.latitude, this.formData.currPageIndex, this.formData.currPageSize)
+            uni.hideLoading()
+            if (resp.code != api.SUCCESS_CODE) { return; }
+            const articleList = resp.data
+            console.debug("articleList: ", articleList)
+            if (!articleList || articleList.length == 0) {
+                this.noMoreArticle = true
+                return
+            }
+            for (var i in articleList) {
+                let article = articleList[i]
+                this.articleList.push(article)
+            }
+            this.formData.currPageIndex++
+        },
+
+
+
+
+        __updateLocation() {
+            var that = this
+            return new Promise((resolve, reject) => {
+                uni.getLocation({
+                    type: 'gcj02',
+                    success: function (res) {
+                        that.currLocation.longitude = res.longitude
+                        that.currLocation.latitude = res.latitude
+                        console.log('[DEBUG] 当前位置: ' + that.currLocation.longitude + "," + that.currLocation.latitude);
+                        resolve(res)
+                    },
+                    fail: function (err) {
+                        console.log('[ERROR] get location fail: ', err)
+                        uni.showToast({
+                            title: '获取位置失败 ', err,
+                            icon: 'none',
+                            duration: 2000,
+                        });
+                        reject(err)
+                    }
+                });
+            });
+        },
+
+        requestLocationAuth() {
+            return new Promise((resolve, reject) => {
+                uni.getSetting({
+                    success: (res) => {
+                        if (res.authSetting["scope.userLocation"] == undefined || !res.authSetting['scope.userLocation']) {
+                            console.log(res)
+                            uni.authorize({
+                                scope: 'scope.userLocation',
+                                success: () => { //1.1 允许授权
+                                    console.log('[DEBUG] auth for userLocation ok')
+                                    resolve()
+                                },
+                                fail: () => { //1.2 拒绝授权
+                                    console.log('[DEBUG] auth for userLocation is denied')
+
+                                    uni.showModal({
+                                        title: '555 没有位置的话没法用哇 求位置权限',
+                                        success(res) {
+                                            if (res.confirm) {
+                                                uni.openSetting({
+                                                    success() {
+                                                        console.log('[DEBUG] auth for userLocation is ok after denied')
+                                                        resolve()
+                                                    },
+                                                    fail() {
+                                                        console.log('二次开启位置权限失败');
+                                                    }
+                                                });
+                                            } else if (res.cancel) {
+                                                console.log('连续拒绝位置权限');
+                                            }
+                                        }
+                                    });
+
+                                    reject()
+                                }
+                            })
+                        } else {
+                            console.log('[DEBUG] already has auth for userLocation')
+                            resolve()
+                        }
+                    },
+                    fail: () => {
+                        console.log('[DEBUG] 获取授权信息失败')
+                    }
+                })
+            });
+        },
+
+        async updateLocation() {
+            await this.requestLocationAuth()
+            await this.__updateLocation()
+        }
 
     }
 }
@@ -179,6 +247,13 @@ export default {
 
 
 <style lang="scss">
-
-
+.loading-text {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60upx;
+    color: #979797;
+    font-size: 24upx;
+}
 </style>
