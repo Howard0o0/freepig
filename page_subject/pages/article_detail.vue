@@ -1,21 +1,23 @@
 <template>
     <view>
-        <uni-card :title="post.username" :sub-title="generatePostDesc(post)" extra=" " :thumbnail="post.user_avatar"
-            @click="toPostDetail(post)">
-            <text class="uni-body">这是一个带头像和双标题的基础卡片，此示例展示了一个完整的卡片。</text>
-            <image style="width: 100%;" :src="getFirstImage(post.images)"></image>
+        <uni-card :title="article.username" :sub-title="generatePostDesc(article)" extra=" "
+            :thumbnail="article.user_avatar">
+            <text class="uni-body">{{ article.text }}</text>
+            <view v-if="getFirstImage(article.images).length > 0">
+                <swiper indicator-dots="true" circular="true" autoplay="true">
+                    <swiper-item v-for="image in swipImages" :key="image">
+                        <image :src="image" mode="aspectFit" @click="imagePreview(image)"></image>
+                    </swiper-item>
+                </swiper>
+            </view>
             <view slot="actions" class="card-actions">
-                <view class="card-actions-item" @click="actionsClick('分享')">
-                    <uni-icons type="redo" size="18" color="#999"></uni-icons>
-                    <text class="card-actions-item-text">分享</text>
+                <view class="card-actions-item" @click="likeBtnOnClick">
+                    <uni-icons type="heart" size="18" :color="likeBtnColor"></uni-icons>
+                    <text class="card-actions-item-text">{{ article.like_num }}</text>
                 </view>
-                <view class="card-actions-item" @click="actionsClick('点赞')">
-                    <uni-icons type="heart" size="18" color="#999"></uni-icons>
-                    <text class="card-actions-item-text">点赞</text>
-                </view>
-                <view class="card-actions-item" @click="actionsClick('评论')">
+                <view class="card-actions-item">
                     <uni-icons type="chatbubble" size="18" color="#999"></uni-icons>
-                    <text class="card-actions-item-text">评论</text>
+                    <text class="card-actions-item-text">{{ article.comment_num }}</text>
                 </view>
             </view>
         </uni-card>
@@ -38,7 +40,11 @@ import {
 export default {
     data() {
         return {
-            post: {
+            likeBtnColor: "#999",
+            hasLiked: false,
+            swipImages: [],
+
+            article: {
                 id: 123,
                 username: "ahahah",
                 user_avatar: "https://ddp-freepig.oss-cn-beijing.aliyuncs.com/images/user-9-goods-1665913708184745118-1665913732809121787.jpeg",
@@ -115,15 +121,37 @@ export default {
         }
     },
 
-    onLoad(option) {
+    onLoad(options) {
+        this.article = JSON.parse(options.article);
+        console.debug('article detail: ', this.article)
+        this.swipImages = this.article.images.split(",")
+
         this.commentData = {
-            "readNumer": this.commentsFromServer.readNumer,
+            "readNumer": this.article.read_num,
             "commentSize": this.commentsFromServer.commentList.length,
             "comment": this.getTree(this.commentsFromServer.commentList)
         }
     },
 
     methods: {
+        imagePreview(imageURL) {
+            uni.previewImage({
+                indicator: "number",
+                loop: true,
+                urls: [imageURL],
+            })
+        },
+
+        async likeBtnOnClick() {
+            console.debug("likeBtnOnClick")
+            if (this.hasLiked) { return; }
+            const resp = await api.likeArticle(this.article.id)
+            if (resp.code != api.SUCCESS_CODE) { return; }
+            this.hasLiked = true
+            this.likeBtnColor = "#ff0000"
+            this.article.like_num += 1
+        },
+
         getFirstImage(imageURLs) {
             if (!imageURLs) { return ""; }
             const tokens = imageURLs.split(',');
@@ -148,8 +176,9 @@ export default {
             return result;
         },
 
-        generatePostDesc(post) {
-            return "1小时前·北京大学"
+        generatePostDesc(article) {
+            let timeStr = utils.timeFormatToNAgo(article.created_at)
+            return timeStr + "·" + article.user_campus + "·" + article.user_degree
         },
     }
 }

@@ -306,6 +306,14 @@ export const setUserRole = (userID, role, rejectReason = "") => uni.$u.http.post
     }
 })
 
+export const likeArticle = (articleID) => uni.$u.http.post('article/like', {
+    article_id: articleID,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+    }
+})
+
 export const adminHandleUserPrize = (prizeItemID, prize, failMsg = "") => uni.$u.http.post('admin/handle-user-prize', {
     prize_id: prizeItemID,
     prize: prize,
@@ -391,4 +399,5 @@ export const api = {
     adminGetOldUserPrizeList,
     getShareLink,
     getArticleList,
+    likeArticle,
 }

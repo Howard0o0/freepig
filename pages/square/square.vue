@@ -13,11 +13,11 @@
                     <image style="width: 100%;" :src="getFirstImage(article.images)"></image>
                 </view>
                 <view slot="actions" class="card-actions">
-                    <view class="card-actions-item" @click="actionsClick('点赞')">
+                    <view class="card-actions-item">
                         <uni-icons type="heart" size="18" color="#999"></uni-icons>
                         <text class="card-actions-item-text">{{ article.like_num }}</text>
                     </view>
-                    <view class="card-actions-item" @click="actionsClick('评论')">
+                    <view class="card-actions-item">
                         <uni-icons type="chatbubble" size="18" color="#999"></uni-icons>
                         <text class="card-actions-item-text">{{ article.comment_num }}</text>
                     </view>
@@ -105,8 +105,9 @@ export default {
 
     methods: {
         toPostDetail(article) {
+            let articleJSON = JSON.stringify(article);
             uni.navigateTo({
-                url: '/page_subject/pages/news_detail'
+                url: '/page_subject/pages/article_detail?article=' + articleJSON
             });
         },
 
