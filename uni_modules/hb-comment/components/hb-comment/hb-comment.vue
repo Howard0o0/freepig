@@ -34,11 +34,12 @@
 						<!-- 父评论体-start -->
 						<view class="comment-main-top">
 							<view class="nick-name-box">
-								<view class="comLogo com1" v-if="index == 0">沙发</view>
+								<view class="comLogo com4">{{item.degree}}</view>
+								<!-- <view class="comLogo com1" v-if="index == 0">沙发</view>
 								<view class="comLogo com2" v-if="index == 1">板凳</view>
 								<view class="comLogo com3" v-if="index == 2">地板</view>
 								<view class="comLogo com4" v-if="index > 2">{{index + 1}}楼</view>
-								<view class="nick-name">{{item.nickName}}</view>
+								<view class="nick-name">{{item.nickName}}</view> -->
 							</view>
 							<view class="zan-box" @click="like(item.id)">
 								<span :class="item.hasLike ? 'isLike' : 'notLike'">{{item.likeNum == 0 ? '抢首赞' : item.likeNum}}</span>

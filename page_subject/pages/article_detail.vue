@@ -22,8 +22,8 @@
             </view>
         </uni-card>
 
-        <hb-comment ref="hbComment" @add="add" @del="del" @like="like" @focusOn="focusOn" :deleteTip="'确认删除？'"
-            :cmData="commentData" v-if="commentData"></hb-comment>
+        <hb-comment ref="hbComment" @add="publishComment" @del="del" @like="like" @focusOn="focusOn"
+            :deleteTip="'确认删除？'" :cmData="commentData" v-if="commentData"></hb-comment>
 
     </view>
 </template>
@@ -60,7 +60,7 @@ export default {
             },
 
             commentsFromServer: {
-                "readNumer": 193,
+                "readNumber": 193,
                 "commentList": [{
                     "id": 1, // 唯一主键
                     "owner": false, // 是否是拥有者，为true则可以删除，管理员全部为true
@@ -121,19 +121,50 @@ export default {
         }
     },
 
-    onLoad(options) {
+    async onLoad(options) {
         this.article = JSON.parse(options.article);
         console.debug('article detail: ', this.article)
         this.swipImages = this.article.images.split(",")
 
-        this.commentData = {
-            "readNumer": this.article.read_num,
-            "commentSize": this.commentsFromServer.commentList.length,
-            "comment": this.getTree(this.commentsFromServer.commentList)
+        this.commentData.readNumer = this.article.read_num
+
+        const resp = await api.getArticleCommentList(parseInt(this.article.id))
+        if (resp.code != api.SUCCESS_CODE) { return; }
+        console.debug("article comment list: ", resp.data)
+        this.commentsFromServer = {
+            commentList: resp.data,
+            readNumber: this.article.read_num,
         }
+        for (let i = 0; i < this.commentsFromServer.commentList.length; i++) {
+            let ctime = this.commentsFromServer.commentList[i].createTime
+            console.debug("ctime: ", ctime)
+            this.commentsFromServer.commentList[i].createTime = utils.timeFormatToNAgo(ctime)
+            console.debug("readable ctime: ", this.commentsFromServer.commentList[i].createTime)
+        }
+        this.commentData.commentSize = this.commentsFromServer.commentList.length
+        this.commentData.comment = this.getTree(this.commentsFromServer.commentList)
+
     },
 
     methods: {
+        focusOn() {
+
+        },
+
+        async publishComment(e) {
+            console.debug("publishComment on click: ", e)
+            let content = e.content
+            let commentID = e.pId
+            if (commentID) { commentID = parseInt(commentID) }
+            console.debug("content: " + content + ", parent comment_id: ", + commentID)
+            uni.showLoading({ title: '发布中' })
+            let resp = await api.postArticleComment(parseInt(this.article.id), content, commentID)
+            uni.hideLoading()
+            if (resp.code != api.SUCCESS_CODE) { return; }
+            uni.$u.toast("发表评论成功")
+            this.$refs.hbComment.addComplete()
+        },
+
         imagePreview(imageURL) {
             uni.previewImage({
                 indicator: "number",

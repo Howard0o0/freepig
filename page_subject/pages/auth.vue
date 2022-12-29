@@ -89,10 +89,10 @@ export default {
                 { value: 2, text: "数学" },
             ],
             degreeList: [
-                { value: "专科", text: "专科" },
-                { value: "本科", text: "本科" },
-                { value: "硕士研究生", text: "硕士研究生" },
-                { value: "博士研究生", text: "博士研究生" },
+                { value: "专科僧", text: "专科僧" },
+                { value: "本科僧", text: "本科僧" },
+                { value: "硕士僧", text: "硕士僧" },
+                { value: "博士僧", text: "博士僧" },
             ],
             kickoffYearList: [
                 { value: 2015, text: "2015" },

@@ -314,6 +314,25 @@ export const likeArticle = (articleID) => uni.$u.http.post('article/like', {
     }
 })
 
+export const postArticleComment = (articleID, content, parentID) => uni.$u.http.post('article/comment', {
+    article_id: articleID,
+    content: content,
+    parent_id: parentID,
+}, {
+    header: {
+        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+    }
+})
+
+export const getArticleCommentList = (articleID) => uni.$u.http.get('article/comment', {
+    header: {
+        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+    },
+    params: {
+        article_id: articleID,
+    }
+})
+
 export const adminHandleUserPrize = (prizeItemID, prize, failMsg = "") => uni.$u.http.post('admin/handle-user-prize', {
     prize_id: prizeItemID,
     prize: prize,
@@ -400,4 +419,6 @@ export const api = {
     getShareLink,
     getArticleList,
     likeArticle,
+    postArticleComment,
+    getArticleCommentList,
 }

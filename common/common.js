@@ -150,7 +150,7 @@ function getDateDiff(milliSecTimestamp) {
 }
 
 function timeFormatToNAgo(gmtTime) {
-    var date = new Date("2022-12-27T20:10:43+08:00");
+    var date = new Date(gmtTime);
     let ts = date.getTime()
     return getDateDiff(ts)
 }
