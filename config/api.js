@@ -314,6 +314,22 @@ export const likeArticle = (articleID) => uni.$u.http.post('article/like', {
     }
 })
 
+export const likeComment = (commentID) => uni.$u.http.post('article/like-comment', {
+    comment_id: commentID,
+}, {
+    header: {
+        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+    }
+})
+
+export const readArticle = (articleID) => uni.$u.http.post('article/read', {
+    article_id: articleID,
+}, {
+    header: {
+        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+    }
+})
+
 export const postArticleComment = (articleID, content, parentID) => uni.$u.http.post('article/comment', {
     article_id: articleID,
     content: content,
@@ -325,6 +341,15 @@ export const postArticleComment = (articleID, content, parentID) => uni.$u.http.
 })
 
 export const getArticleCommentList = (articleID) => uni.$u.http.get('article/comment', {
+    header: {
+        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+    },
+    params: {
+        article_id: articleID,
+    }
+})
+
+export const getArticle = (articleID) => uni.$u.http.get('article/by-id', {
     header: {
         'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
     },
@@ -421,4 +446,7 @@ export const api = {
     likeArticle,
     postArticleComment,
     getArticleCommentList,
+    likeComment,
+    getArticle,
+    readArticle, 
 }

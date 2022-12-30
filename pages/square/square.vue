@@ -14,7 +14,8 @@
                 </view>
                 <view slot="actions" class="card-actions">
                     <view class="card-actions-item">
-                        <uni-icons type="heart" size="18" color="#999"></uni-icons>
+                        <uni-icons v-if="article.has_like" type="heart" size="18" color="#ff0000"></uni-icons>
+                        <uni-icons v-else type="heart" size="18" color="#999"></uni-icons>
                         <text class="card-actions-item-text">{{ article.like_num }}</text>
                     </view>
                     <view class="card-actions-item">
