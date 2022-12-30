@@ -358,6 +358,15 @@ export const getArticle = (articleID) => uni.$u.http.get('article/by-id', {
     }
 })
 
+export const postArticle = (text, imageURLs) => uni.$u.http.post('article/', {
+    text: text,
+    images: imageURLs,
+}, {
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+    }
+})
+
 export const adminHandleUserPrize = (prizeItemID, prize, failMsg = "") => uni.$u.http.post('admin/handle-user-prize', {
     prize_id: prizeItemID,
     prize: prize,
@@ -449,4 +458,5 @@ export const api = {
     likeComment,
     getArticle,
     readArticle, 
+    postArticle,
 }

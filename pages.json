@@ -216,6 +216,13 @@
                     }
                 },
                 {
+                    "path": "pages/publish_article",
+                    "style": {
+                        "navigationBarTitleText": "",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
                     "path": "pages/publish_goods",
                     "style": {
                         "navigationBarTitleText": "",

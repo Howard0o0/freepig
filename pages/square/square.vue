@@ -28,7 +28,7 @@
         <view class="loading-text">{{ loadingText }}</view>
 
 
-        <uni-fab ref="fab" horizontal="right" vertical="bottom" @fabClick="createGoodsBtnOnClick" />
+        <uni-fab ref="fab" horizontal="right" vertical="bottom" @fabClick="createArticleBtnOnClick" />
     </view>
 </template>
 
@@ -105,6 +105,12 @@ export default {
     },
 
     methods: {
+        createArticleBtnOnClick() {
+            uni.navigateTo({
+                url: '/page_subject/pages/publish_article'
+            });
+        },
+
         toPostDetail(article) {
             let articleJSON = JSON.stringify(article);
             uni.navigateTo({

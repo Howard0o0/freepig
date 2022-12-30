@@ -21,11 +21,9 @@
 				</u-form-item>
 			</u--form>
 
-			<!-- <input type="number" v-model="price" @input="priceInputChange" placeholder="请询问服务员后输入"
-			placeholder-style="font-size: 34rpx;color: #CCCCCC;" /> -->
-
-			<u-button class="bottom-btn" shape="circle" type="primary" text="发布" size="normal"
-				@click="confirmBtnOnClick" />
+			<view class="bottom-btn">
+				<u-button shape="circle" type="primary" text="发布" size="normal" @click="confirmBtnOnClick" />
+			</view>
 		</view>
 	</view>
 </template>
@@ -289,7 +287,10 @@ export default {
 
 .bottom-btn {
 	position: fixed;
-	bottom: calc(var(--window-bottom) + 3px);
+	bottom: 100rpx;
+	width: 85%;
+	margin-left: 50rpx;
+	margin-right: 50rpx;
 }
 
 .textarea {
