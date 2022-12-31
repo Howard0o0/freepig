@@ -147,7 +147,6 @@ export default {
 			uni.navigateTo({
 				url: '/page_subject/pages/goods_detail'
 			});
-
 		},
 
 		getGoodsFirstImage(imageURLs) {

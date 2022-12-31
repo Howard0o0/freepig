@@ -12,22 +12,22 @@
 					</view>
 				</view>
 				<view class="fot-xh">
-						<view class="pic">
-							<image :src="userInfo.avatar_url" style="width: 130rpx;" mode="widthFix" />
-						</view>
-						<view class="txt">
-							<view class="name">
-								<view class="h3">
-									{{ userInfo.nickname }}
-								</view>
-								<view class="phone">
-									{{ joinUserEnrollYearAndDegree(userInfo) }}
-								</view>
-								<view class="phone">
-									{{ joinUserCampusAndMajor(userInfo) }}
-								</view>
+					<view class="pic">
+						<image :src="userInfo.avatar_url" style="width: 130rpx;" mode="widthFix" />
+					</view>
+					<view class="txt">
+						<view class="name">
+							<view class="h3">
+								{{ userInfo.nickname }}
+							</view>
+							<view class="phone">
+								{{ joinUserEnrollYearAndDegree(userInfo) }}
+							</view>
+							<view class="phone">
+								{{ joinUserCampusAndMajor(userInfo) }}
 							</view>
 						</view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -60,6 +60,9 @@
 		</view>
 
 		<view v-if="currTabIndex == GOODS_TAB_INDEX">
+			<view v-for="(goods) in goodsList" :key="goods.id" @tap="goodsOnClick(goods)">
+				<hm-goods-card :options="goods"></hm-goods-card>
+			</view>
 		</view>
 
 	</view>
@@ -70,9 +73,11 @@
 import store from '@/store/index.js';
 import { utils } from '../../common/common.js';
 import { api } from '../../config/api.js';
+import HmGoodsCard from '@/components/hm-goods-card/index.vue'
 
 export default {
 	components: {
+		HmGoodsCard
 	},
 	data() {
 		return {
@@ -107,6 +112,23 @@ export default {
 			const tokens = imageURLs.split(',');
 			if (tokens.length == 0) { return "" }
 			return tokens[0]
+		},
+
+		goodsOnClick(goods) {
+			console.debug("goodsOnClick: ", goods)
+			getApp().globalData.selectedGoodsToShowInDetail = {
+				user_avatar_url: this.userInfo.avatar_url,
+				user_nickname: this.userInfo.nickname,
+				user_id: this.userInfo.id,
+				goods_price: goods.price,
+				goods_description: goods.description,
+				goods_images: goods.images,
+				campus: this.userInfo.campus,
+				major: this.userInfo.major,
+			}
+			uni.navigateTo({
+				url: '/page_subject/pages/goods_detail'
+			});
 		},
 
 		articleOnClick(article) {
@@ -149,6 +171,17 @@ export default {
 			if (resp.code != api.SUCCESS_CODE) { return; }
 			this.goodsList = resp.data
 			console.debug("userGoodsList: ", this.goodsList)
+
+			const goodsList = resp.data
+			for (var i = 0; i < goodsList.length; i++) {
+				let goods = goodsList[i]
+				goods.tradeName = "¥" + goods.price
+				goods.describe = goods.description
+				goods.commodity = goods.status == 'OPEN' ? '售卖中' : '已售出'
+				goods.pic = this.getFirstImage(goods.images)
+				goodsList[i] = goods
+			}
+			this.goodsList = goodsList
 		},
 
 		joinUserEnrollYearAndDegree(userInfo) {

@@ -91,7 +91,7 @@ export default {
         },
 
         joinCampusAndMajorInfo(campusName, majorName) {
-            return campusName + " | " + majorName
+            return campusName + "·" + majorName
         },
 
     }
