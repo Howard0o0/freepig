@@ -121,7 +121,7 @@ export default {
 				icon: 'loading',
 				duration: 2000
 			});
-			const resp = await api.getMyGoodsList()
+			const resp = await api.getUserGoodsList(this.$store.state.vuex_user.id)
 			uni.hideToast()
 			if (resp.code != api.SUCCESS_CODE) { return }
 			this.myGoodsList = resp.data

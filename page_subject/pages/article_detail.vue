@@ -1,7 +1,7 @@
 <template>
     <view>
         <uni-card :title="article.username" :sub-title="generatePostDesc(article)" extra=" "
-            :thumbnail="article.user_avatar">
+            :thumbnail="article.user_avatar" @click="toUserHomePage(article.user_id)">
             <text class="uni-body">{{ article.text }}</text>
             <view v-if="getFirstImage(article.images).length > 0">
                 <swiper indicator-dots="true" circular="true" autoplay="true">
@@ -11,11 +11,11 @@
                 </swiper>
             </view>
             <view slot="actions" class="card-actions">
-                <view class="card-actions-item" @click="likeBtnOnClick">
+                <view class="card-actions-item" @tap.stop="likeBtnOnClick">
                     <uni-icons type="heart" size="18" :color="likeBtnColor"></uni-icons>
                     <text class="card-actions-item-text">{{ article.like_num }}</text>
                 </view>
-                <view class="card-actions-item">
+                <view class="card-actions-item" @tap.stop="commentBtnOnClick">
                     <uni-icons type="chatbubble" size="18" color="#999"></uni-icons>
                     <text class="card-actions-item-text">{{ article.comment_num }}</text>
                 </view>
@@ -94,6 +94,12 @@ export default {
 
         },
 
+        toUserHomePage(userID) {
+            uni.navigateTo({
+                url: '/page_subject/pages/user_info_detail?user_id=' + userID
+            });
+        },
+
         async reloadComment() {
             const resp = await api.getArticleCommentList(parseInt(this.article.id))
             if (resp.code != api.SUCCESS_CODE) { return; }
@@ -131,6 +137,10 @@ export default {
                 loop: true,
                 urls: [imageURL],
             })
+        },
+
+        async commentBtnOnClick() {
+
         },
 
         async likeBtnOnClick() {

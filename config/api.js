@@ -186,7 +186,7 @@ export const getGoodsList = (longitude = 0, latitude = 0, tagID = 0, keyword = "
     }
 })
 
-export const getArticleList = (longitude = 0, latitude = 0, pageIndex = 0, pageSize = 30) => uni.$u.http.get('/article/', {
+export const getArticleList = (longitude = 0, latitude = 0, pageIndex = 0, pageSize = 30, authorUserID = 0) => uni.$u.http.get('/article/', {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
     },
@@ -195,12 +195,16 @@ export const getArticleList = (longitude = 0, latitude = 0, pageIndex = 0, pageS
         'latitude': latitude,
         'page_index': pageIndex,
         'page_size': pageSize,
+        'author_user_id': authorUserID,
     }
 })
 
-export const getMyGoodsList = () => uni.$u.http.get('/goods/by-user', {
+export const getUserGoodsList = (userID) => uni.$u.http.get('/goods/by-user', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+    },
+    params: {
+        'user_id': userID,
     }
 })
 
@@ -429,7 +433,7 @@ export const api = {
     updateGoodsInfo,
     setGoodsStatus,
     getGoodsList,
-    getMyGoodsList,
+    getUserGoodsList,
     getTIMSig,
     setUserInfo,
     updateGoods,
@@ -457,6 +461,6 @@ export const api = {
     getArticleCommentList,
     likeComment,
     getArticle,
-    readArticle, 
+    readArticle,
     postArticle,
 }
