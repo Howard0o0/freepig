@@ -8,7 +8,8 @@
 						个人主页
 					</view>
 					<view class="pic">
-						<image src="/page_subject/static/msg.png" style="width: 40rpx;" mode="widthFix"></image>
+						<image src="/page_subject/static/msg.png" style="width: 40rpx;" mode="widthFix"
+							@click="sendMessageBtnOnClick(userInfo.id)"></image>
 					</view>
 				</view>
 				<view class="fot-xh">
@@ -107,6 +108,33 @@ export default {
 	},
 
 	methods: {
+		async sendMessageBtnOnClick(toUserID) {
+			console.debug("sendMessageBtnOnClick: ", toUserID)
+			uni.showLoading({
+				title: '建立会话',
+			});
+			console.log('[DEBUG] create conversation with user ', toUserID)
+			const resp = await api.createConversation(toUserID)
+			if (resp.code != api.SUCCESS_CODE) {
+				uni.showToast({
+					title: '网络好像不太好',
+					icon: "fail",
+					duration: 1000,
+				})
+				return
+			}
+			const conversationID = resp.data.conversation_id
+			console.log('[DEBUG] conversation id created: ', conversationID)
+			this.$store.commit('createConversationActive', {
+				conversationID: conversationID,
+				toUserId: toUserID.toString(),
+			})
+			uni.hideLoading();
+			uni.navigateTo({
+				url: '/pages/tim/room'
+			})
+		},
+
 		getFirstImage(imageURLs) {
 			if (!imageURLs) { return ""; }
 			const tokens = imageURLs.split(',');

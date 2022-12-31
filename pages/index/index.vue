@@ -30,7 +30,7 @@
 						<view class="nickname">{{ goods.campus }}</view>
 						<view class="nickname">{{ goods.major }}</view>
 					</view>
-					<view class="info">
+					<view class="info" @tap.stop="toUserHomePage(goods.user_id)">
 						<image class="avatar" :src="goods.user_avatar_url" mode="aspectFit"></image>
 						<view class="nickname">{{ goods.user_nickname }}</view>
 					</view>
@@ -120,6 +120,12 @@ export default {
 	},
 
 	methods: {
+		toUserHomePage(userID) {
+            uni.navigateTo({
+                url: '/page_subject/pages/user_info_detail?user_id=' + userID
+            });
+        },
+
 		async reload() {
 			await this.updateLocation()
 

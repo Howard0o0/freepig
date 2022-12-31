@@ -1,12 +1,13 @@
 <template>
     <view class="left-rigth-margin">
         <view class="multi-columns">
-            <image class="avatar" :src="selectedGoodsToShowInDetail.user_avatar_url" mode="aspectFit"></image>
-            <view>
+            <image @tap="toUserHomePage(selectedGoodsToShowInDetail.user_id)" class="avatar"
+                :src="selectedGoodsToShowInDetail.user_avatar_url" mode="aspectFit"></image>
+            <view @tap="toUserHomePage(selectedGoodsToShowInDetail.user_id)">
                 <view class="nickname user-info">{{ selectedGoodsToShowInDetail.user_nickname }}</view>
                 <view class="campus-info user-info">{{ joinCampusAndMajorInfo(selectedGoodsToShowInDetail.campus,
-                        selectedGoodsToShowInDetail.major)
-                }}</view>
+        selectedGoodsToShowInDetail.major)
+}}</view>
             </view>
             <u-icon v-if="!(selectedGoodsToShowInDetail.user_id == userInfo.id)" name="chat" size="30" color="#2979ff"
                 @click="sendMessageBtnOnClick" />
@@ -35,7 +36,7 @@ export default {
     data() {
         return {
             selectedGoodsToShowInDetail: {
-                user_avatar_url: "" ,
+                user_avatar_url: "",
                 user_nickname: "加载中",
                 campus: "加载中",
                 major: "",
@@ -58,8 +59,8 @@ export default {
     methods: {
         async sendMessageBtnOnClick() {
             uni.showLoading({
-				title: '建立会话',
-			});
+                title: '建立会话',
+            });
             console.log('[DEBUG] create conversation with user ', this.selectedGoodsToShowInDetail.user_id)
             const resp = await api.createConversation(this.selectedGoodsToShowInDetail.user_id)
             if (resp.code != api.SUCCESS_CODE) {
@@ -92,6 +93,12 @@ export default {
 
         joinCampusAndMajorInfo(campusName, majorName) {
             return campusName + "·" + majorName
+        },
+
+        toUserHomePage(userID) {
+            uni.navigateTo({
+                url: '/page_subject/pages/user_info_detail?user_id=' + userID
+            });
         },
 
     }
