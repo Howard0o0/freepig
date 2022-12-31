@@ -149,6 +149,13 @@ function getDateDiff(milliSecTimestamp) {
     return result;
 }
 
+function getFirstImage(imageURLs) {
+    if (!imageURLs) { return ""; }
+    const tokens = imageURLs.split(',');
+    if (tokens.length == 0) { return "" }
+    return tokens[0]
+}
+
 function timeFormatToNAgo(gmtTime) {
     var date = new Date(gmtTime);
     let ts = date.getTime()
@@ -165,6 +172,7 @@ export default {
     getToken,
     promiseRequestSubscribeMessage,
     timeFormatToNAgo,
+    getFirstImage,
 }
 
 export const utils = {
@@ -177,4 +185,5 @@ export const utils = {
     getToken,
     promiseRequestSubscribeMessage,
     timeFormatToNAgo,
+    getFirstImage,
 }

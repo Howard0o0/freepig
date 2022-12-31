@@ -5,11 +5,31 @@
 			<text class="user-description">{{ joinUserCampusAndMajor(userInfo) }}</text>
 		</uni-card>
 
-		<v-tabs class="left-rigth-margin centerAlign" fontSize="18rpx" v-model="currTabIndex" :tabs="tabNameList"
-			@change="tabOnChange">
-		</v-tabs>
+		<view class="left-rigth-margin centerAlign">
+			<v-tabs fontSize="22rpx" v-model="currTabIndex" :tabs="tabNameList" @change="tabOnChange" />
+		</view>
 
 		<view v-if="currTabIndex == ARTICLE_TAB_INDEX">
+			<view v-for="(article) in articleList" :key="article.id" @tap="articleOnClick(article)">
+				<uni-card :title="article.username" :sub-title="generateArticleDesc(article)" extra=" "
+					:thumbnail="article.user_avatar" @click="articleOnClick(article)">
+					<text class="uni-body">{{ article.text }}</text>
+					<view v-if="getFirstImage(article.images).length > 0">
+						<image style="width: 100%;" :src="getFirstImage(article.images)"></image>
+					</view>
+					<view slot="actions" class="card-actions">
+						<view class="card-actions-item">
+							<uni-icons v-if="article.has_like" type="heart" size="18" color="#ff0000"></uni-icons>
+							<uni-icons v-else type="heart" size="18" color="#999"></uni-icons>
+							<text class="card-actions-item-text">{{ article.like_num }}</text>
+						</view>
+						<view class="card-actions-item">
+							<uni-icons type="chatbubble" size="18" color="#999"></uni-icons>
+							<text class="card-actions-item-text">{{ article.comment_num }}</text>
+						</view>
+					</view>
+				</uni-card>
+			</view>
 		</view>
 
 		<view v-if="currTabIndex == GOODS_TAB_INDEX">
@@ -25,12 +45,14 @@ import { utils } from '../../common/common.js';
 import { api } from '../../config/api.js';
 
 export default {
+	components: {
+	},
 	data() {
 		return {
 			userInfo: null,
 			ARTICLE_TAB_INDEX: 0,
 			GOODS_TAB_INDEX: 1,
-			tabNameList: ['TA的新鲜事', 'TA的宝贝'],
+			tabNameList: ['Ta的新鲜事', 'Ta的宝贝'],
 			currTabIndex: 0,
 
 			MAX_LOAD_ARTICLE_LEN: 100,
@@ -53,6 +75,23 @@ export default {
 	},
 
 	methods: {
+		getFirstImage(imageURLs) {
+			if (!imageURLs) { return ""; }
+			const tokens = imageURLs.split(',');
+			if (tokens.length == 0) { return "" }
+			return tokens[0]
+		},
+
+		articleOnClick(article) {
+			let articleJSON = JSON.stringify(article);
+			uni.navigateTo({
+				url: '/page_subject/pages/article_detail?article=' + articleJSON
+			});
+		},
+
+		generateArticleDesc(article) {
+			return utils.timeFormatToNAgo(article.created_at)
+		},
 
 		tabOnChange(index) {
 			switch (index) {

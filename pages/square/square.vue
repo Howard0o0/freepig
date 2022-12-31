@@ -5,9 +5,9 @@
         </view>
 
 
-        <view v-for="(article) in articleList" :key="article.id" @tap="toPostDetail(article)">
+        <view v-for="(article) in articleList" :key="article.id" @tap="articleOnClick(article)">
             <uni-card :title="article.username" :sub-title="generatePostDesc(article)" extra=" "
-                :thumbnail="article.user_avatar" @click="toPostDetail(article)">
+                :thumbnail="article.user_avatar" @click="articleOnClick(article)">
                 <text class="uni-body">{{ article.text }}</text>
                 <view v-if="getFirstImage(article.images).length > 0">
                     <image style="width: 100%;" :src="getFirstImage(article.images)"></image>
@@ -111,7 +111,7 @@ export default {
             });
         },
 
-        toPostDetail(article) {
+        articleOnClick(article) {
             let articleJSON = JSON.stringify(article);
             uni.navigateTo({
                 url: '/page_subject/pages/article_detail?article=' + articleJSON
