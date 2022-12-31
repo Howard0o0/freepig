@@ -316,7 +316,7 @@ export default {
 
 .fot-xh .txt .name .h3 {
 	font-size: 24rpx;
-	margin-bottom: 13rpx;
+	margin-bottom: 5rpx;
 	font-weight: bold;
 }
 
