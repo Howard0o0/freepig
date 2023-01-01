@@ -18,8 +18,13 @@
 					</view>
 					<view class="txt">
 						<view class="name">
-							<view class="h3">
-								{{ userInfo.nickname }}
+							<view class=".flex-row">
+								<view class="h3">
+									{{ userInfo.nickname }}
+								</view>
+								<image v-if="userInfo.gender == 'MALE'" class="gender-icon" src="/static/index/man.png"
+									mode="aspectFit" />
+								<image v-else class="gender-icon" src="/static/index/woman.png" mode="aspectFit" />
 							</view>
 							<view class="phone">
 								{{ joinUserEnrollYearAndDegree(userInfo) }}
@@ -421,5 +426,15 @@ export default {
 	top: 0;
 	left: 0;
 	z-index: -1;
+}
+
+.flex-row {
+	display: flex;
+	justify-content: left;
+}
+
+.gender-icon {
+	width: 6rpx;
+	height: 6rpx;
 }
 </style>

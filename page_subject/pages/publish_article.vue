@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="centerAlign left-rigth-margin">
-			<textarea class="textarea" v-model="articleContent" :placeholder="articleContentPlaceHolder"
+			<textarea class="input-textarea" v-model="articleContent" :placeholder="articleContentPlaceHolder"
 				inputBorder="false" />
 		</view>
 
@@ -168,8 +168,12 @@ export default {
 	font-size: 80rpx
 }
 
-/* .margin-left-right-side {
-	margin-left: 10px;
-	margin-right: 10px;
-} */
+.input-textarea{
+		height: 200rpx;
+		font-size: 28rpx;
+		padding: 20rpx 30rpx;
+		border-radius: 10rpx;
+		width: calc(100% - 60rpx);
+		background-color: #F9F9F9;
+	}
 </style>

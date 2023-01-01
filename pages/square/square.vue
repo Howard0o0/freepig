@@ -5,14 +5,14 @@
         </view>
 
 
-        <view v-for="(article) in articleList" :key="article.id" @tap="articleOnClick(article)">
+        <view v-for="(article) in articleList" :key="article.id">
             <uni-card :title="article.username" :sub-title="generatePostDesc(article)" extra=" "
-                :thumbnail="article.user_avatar" @click="articleOnClick(article)">
-                <text class="uni-body">{{ article.text }}</text>
-                <view v-if="getFirstImage(article.images).length > 0">
+                :thumbnail="article.user_avatar" @click.stop="toUserHomePage(article.user_id)">
+                <text class="uni-body" @click.stop="articleOnClick(article)">{{ article.text }}</text>
+                <view v-if="getFirstImage(article.images).length > 0" @click.stop="articleOnClick(article)">
                     <image style="width: 100%;" :src="getFirstImage(article.images)"></image>
                 </view>
-                <view slot="actions" class="card-actions">
+                <view slot="actions" class="card-actions" @click.stop="articleOnClick(article)">
                     <view class="card-actions-item">
                         <uni-icons v-if="article.has_like" type="heart" size="18" color="#ff0000"></uni-icons>
                         <uni-icons v-else type="heart" size="18" color="#999"></uni-icons>
@@ -247,7 +247,13 @@ export default {
         async updateLocation() {
             await this.requestLocationAuth()
             await this.__updateLocation()
-        }
+        },
+
+        toUserHomePage(userID) {
+            uni.navigateTo({
+                url: '/page_subject/pages/user_info_detail?user_id=' + userID
+            });
+        },
 
     }
 }
