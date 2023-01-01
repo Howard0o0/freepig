@@ -29,6 +29,8 @@
         <hb-comment ref="hbComment" @add="publishComment" @del="del" @like="likeCommentOnClick" @focusOn="focusOn"
             :deleteTip="'确认删除？'" :cmData="commentData" v-if="commentData"></hb-comment>
 
+        <l-painter ref="painter" custom-style="position: fixed; left: 200%" />
+
     </view>
 </template>
 
@@ -149,6 +151,175 @@ export default {
 
         async shareBtnOnClick() {
             console.debug("shareBtnOnClick")
+
+            let images = []
+            if (this.article.images.length > 0) {
+                let tokens = this.article.images.split(',');
+                console.debug("image arr: ", tokens)
+                for (var i = 0; i < tokens.length; i++) {
+                    let imageURL = tokens[i]
+                    images.push({
+                        src: imageURL,
+                        type: "image",
+                        css: {
+                            objectFit: "cover",
+                            width: "128rpx",
+                            height: "128rpx",
+                            paddingLeft: "10rpx"
+                        },
+                    })
+                }
+            }
+            console.debug("images: ", images)
+
+            let jsonSchema = {
+                css: {
+                    width: "750rpx",
+                    paddingBottom: "40rpx",
+                    background: "linear-gradient(,#000 0%, #ff5000 100%)"
+                },
+                views: [
+                    {
+                        src: this.article.user_avatar,
+                        type: "image",
+                        css: {
+                            background: "#fff",
+                            objectFit: "cover",
+                            marginLeft: "40rpx",
+                            marginTop: "40rpx",
+                            width: "84rpx",
+                            border: "2rpx solid #fff",
+                            boxSizing: "border-box",
+                            height: "84rpx",
+                            borderRadius: "50%"
+                        }
+                    },
+                    {
+                        type: "view",
+                        css: {
+                            marginTop: "40rpx",
+                            paddingLeft: "20rpx",
+                            display: "inline-block"
+                        },
+                        views: [
+                            {
+                                text: this.article.username,
+                                type: "text",
+                                css: {
+                                    display: "block",
+                                    paddingBottom: "10rpx",
+                                    color: "#fff",
+                                    fontSize: "32rpx",
+                                    fontWeight: "bold"
+                                }
+                            },
+                            {
+                                text: this.article.user_campus + "·" + this.article.user_major,
+                                type: "text",
+                                css: {
+                                    color: "rgba(255,255,255,.7)",
+                                    fontSize: "24rpx"
+                                },
+                            }
+                        ],
+                    },
+                    {
+                        css: {
+                            marginLeft: "40rpx",
+                            marginTop: "30rpx",
+                            padding: "32rpx",
+                            boxSizing: "border-box",
+                            background: "#fff",
+                            borderRadius: "16rpx",
+                            width: "670rpx",
+                            boxShadow: "0 20rpx 58rpx rgba(0,0,0,.15)"
+                        },
+                        views: [
+                            {
+                                text: this.article.text,
+                                type: "text",
+                                css: {
+                                    paddingRight: "1rpx",
+                                    boxSizing: "border-box",
+                                    lineClamp: 10,
+                                    color: "#333333",
+                                    lineHeight: "1.8em",
+                                    fontSize: "36rpx",
+                                    width: "100%"
+                                },
+                            }, {
+                                views: images
+                            }, {
+                                css: {
+                                    marginTop: "30rpx"
+                                },
+                                views: [
+                                    {
+                                        src: "/page_subject/static/QR.jpeg",
+                                        type: "image",
+                                        css: {
+                                            width: "128rpx",
+                                            height: "128rpx",
+                                        },
+
+                                    }, {
+                                        text: "微信识别二维码 更多校园有趣新鲜事等你来看",
+                                        type: "text",
+                                        css: {
+                                            paddingTop: "40rpx",
+                                            paddingLeft: "32rpx",
+                                            boxSizing: "border-box",
+                                            lineClamp: 2,
+                                            color: "#333333",
+                                            lineHeight: "1.8em",
+                                            fontSize: "18rpx",
+                                            width: "478rpx"
+                                        },
+                                    }],
+                                type: "view"
+                            }],
+                        type: "view"
+                    }, {
+                        type: "view",
+                        css: {
+                            marginTop: "40rpx",
+                            paddingLeft: "150rpx",
+                            display: "inline-block",
+                        },
+                        views: [{
+                            text: "兜兜 | 看校园新鲜事·扩列新同学",
+                            type: "text",
+                            css: {
+                                display: "block",
+                                paddingBottom: "10rpx",
+                                color: "#fff",
+                                fontSize: "32rpx",
+                                fontWeight: "bold"
+                            }
+                        }]
+                    }
+                ]
+            }
+
+            // 渲染
+            this.$refs.painter.render(jsonSchema);
+            // 生成图片
+            this.$refs.painter.canvasToTempFilePathSync({
+                fileType: "jpg",
+                // 如果返回的是base64是无法使用 saveImageToPhotosAlbum，需要设置 pathType为url
+                pathType: 'url',
+                quality: 1,
+                success: (res) => {
+                    console.log(res.tempFilePath);
+                    // 非H5 保存到相册
+                    uni.saveImageToPhotosAlbum({
+                        filePath: res.tempFilePath,
+                        success: function () {
+                            console.log('save success');
+                        }
+                    });
+                },
+            });
         },
 
         async likeBtnOnClick() {
