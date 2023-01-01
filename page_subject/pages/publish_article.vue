@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="centerAlign left-rigth-margin" style="margin-top: 30rpx;">
-			<textarea class="input-textarea" v-model="articleContent" :placeholder="articleContentPlaceHolder"
+			<textarea maxlength="1024" class="input-textarea" v-model="articleContent" :placeholder="articleContentPlaceHolder"
 				inputBorder="false" />
 		</view>
 

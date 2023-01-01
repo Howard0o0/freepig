@@ -11,6 +11,10 @@
                 </swiper>
             </view>
             <view slot="actions" class="card-actions">
+                <view class="card-actions-item" @tap.stop="shareBtnOnClick">
+                    <uni-icons type="redo" size="18" color="#999"></uni-icons>
+                    <text class="card-actions-item-text">{{ article.like_num }}</text>
+                </view>
                 <view class="card-actions-item" @tap.stop="likeBtnOnClick">
                     <uni-icons type="heart" size="18" :color="likeBtnColor"></uni-icons>
                     <text class="card-actions-item-text">{{ article.like_num }}</text>
@@ -140,7 +144,11 @@ export default {
         },
 
         async commentBtnOnClick() {
+            console.debug("commentBtnOnClick")
+        },
 
+        async shareBtnOnClick() {
+            console.debug("shareBtnOnClick")
         },
 
         async likeBtnOnClick() {

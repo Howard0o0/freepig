@@ -22,9 +22,12 @@
 								<view class="h3">
 									{{ userInfo.nickname }}
 								</view>
-								<image v-if="userInfo.gender == 'MALE'" class="gender-icon" src="/static/index/man.png"
+								<!-- <image v-if="userInfo.gender == 'MALE'" class="gender-icon" src="/static/index/man.png"
 									mode="aspectFit" />
-								<image v-else class="gender-icon" src="/static/index/woman.png" mode="aspectFit" />
+								<image v-else class="gender-icon" src="/static/index/woman.png" mode="aspectFit" /> -->
+
+								<u-icon v-if="userInfo.gender == 'MALE'" name="man" size="18" color="#0099FF" />
+								<u-icon v-else name="woman" size="18" color="#FF66CC" />
 							</view>
 							<view class="phone">
 								{{ joinUserEnrollYearAndDegree(userInfo) }}
@@ -46,7 +49,7 @@
 			<view v-for="(article) in articleList" :key="article.id" @tap="articleOnClick(article)">
 				<uni-card :title="article.username" :sub-title="generateArticleDesc(article)" extra=" "
 					:thumbnail="article.user_avatar" @click="articleOnClick(article)">
-					<text class="uni-body">{{ article.text }}</text>
+					<u--text :lines="4" class="uni-body" :text="article.text" />
 					<view v-if="getFirstImage(article.images).length > 0">
 						<image style="width: 100%;" :src="getFirstImage(article.images)"></image>
 					</view>
