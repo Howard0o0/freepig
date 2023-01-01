@@ -1,10 +1,10 @@
 <template>
 	<view>
-		<view class="centerAlign left-rigth-margin">
+		<view class="centerAlign left-rigth-margin" style="margin-top: 30rpx;">
 			<textarea class="textarea" v-model="goodsDesc" :placeholder="goodsDescPlaceHolder" inputBorder="false" />
 		</view>
 
-		<view class="left-rigth-margin">
+		<view class="left-rigth-margin" style="margin-top: 30rpx;">
 			<tui-upload :value="choosedImageURLs" limit="6" @complete="pickImageComplete" @remove="removeImage"
 				sizeType="['compressed']" imageFormat="['jpg','png']" size="9" width="180" height="180">
 			</tui-upload>
@@ -294,7 +294,12 @@ export default {
 }
 
 .textarea {
-	height: 300rpx;
+	height: 200rpx;
+	font-size: 28rpx;
+	padding: 20rpx 30rpx;
+	border-radius: 10rpx;
+	width: calc(100% - 60rpx);
+	background-color: #F9F9F9;
 }
 
 .price {

@@ -434,7 +434,7 @@ export default {
 }
 
 .gender-icon {
-	width: 6rpx;
-	height: 6rpx;
+	width: 35rpx;
+	height: 35rpx;
 }
 </style>
