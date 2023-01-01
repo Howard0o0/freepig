@@ -14,12 +14,15 @@
         </view>
         <view class="price">￥{{ selectedGoodsToShowInDetail.goods_price }}</view>
         <textarea :value="selectedGoodsToShowInDetail.goods_description" disabled="true" auto-height="true"></textarea>
-        <view class="swiper-box">
+        <!-- <view class="swiper-box">
             <swiper indicator-dots="true" circular="true" autoplay="true">
                 <swiper-item v-for="image in swipImages" :key="image">
                     <image :src="image" mode="aspectFit" @click="imagePreview(image)"></image>
                 </swiper-item>
             </swiper>
+        </view> -->
+        <view style="margin-top: 30rpx;">
+            <telPic :imageArr="swipImages" :lineNum="3" :spacingNumber="5"></telPic>
         </view>
     </view>
 </template>
@@ -31,8 +34,12 @@ import {
     mapState
 } from "vuex";
 import { api } from '../../config/api';
+import { telPic } from "@/components/tel-pic/tel-pic.vue"
 
 export default {
+    components: {
+        telPic,
+    },
     data() {
         return {
             selectedGoodsToShowInDetail: {

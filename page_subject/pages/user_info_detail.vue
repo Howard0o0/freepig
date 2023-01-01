@@ -51,7 +51,7 @@
 					:thumbnail="article.user_avatar" @click="articleOnClick(article)">
 					<u--text :lines="4" class="uni-body" :text="article.text" />
 					<view v-if="getFirstImage(article.images).length > 0">
-						<image style="width: 100%;" :src="getFirstImage(article.images)"></image>
+						<telPic :imageArr="article.images.split(',')" :lineNum="6" :spacingNumber="5"></telPic>
 					</view>
 					<view slot="actions" class="card-actions">
 						<view class="card-actions-item">
@@ -83,10 +83,12 @@ import store from '@/store/index.js';
 import { utils } from '../../common/common.js';
 import { api } from '../../config/api.js';
 import HmGoodsCard from '@/components/hm-goods-card/index.vue'
+import { telPic } from "@/components/tel-pic/tel-pic.vue"
 
 export default {
 	components: {
-		HmGoodsCard
+		HmGoodsCard,
+		telPic,
 	},
 	data() {
 		return {

@@ -10,7 +10,7 @@
                 :thumbnail="article.user_avatar" @click.stop="toUserHomePage(article.user_id)">
                 <u--text :lines="4" class="uni-body" @click.stop="articleOnClick(article)" :text="article.text" />
                 <view v-if="getFirstImage(article.images).length > 0" @click.stop="articleOnClick(article)">
-                    <image style="width: 128rpx; height: 128rpx;" :src="getFirstImage(article.images)"></image>
+                    <telPic :imageArr="article.images.split(',')" :lineNum="6" :spacingNumber="5"></telPic>
                 </view>
                 <view slot="actions" class="card-actions" @click.stop="articleOnClick(article)">
                     <view class="card-actions-item">
@@ -36,9 +36,12 @@
 
 import { api } from '@/config/api.js';
 import { utils } from '@/common/common.js';
+import { telPic } from "@/components/tel-pic/tel-pic.vue"
 
 export default {
-
+    components: {
+        telPic
+    },
     data() {
         return {
             scrollTop: 0,

@@ -2,13 +2,9 @@
     <view>
         <uni-card :title="article.username" :sub-title="generatePostDesc(article)" extra=" "
             :thumbnail="article.user_avatar" @click="toUserHomePage(article.user_id)">
-            <text class="uni-body">{{ article.text }}</text>
+            <text class="uni-body" @click.stop="articleTextOnClick">{{ article.text }}</text>
             <view v-if="getFirstImage(article.images).length > 0">
-                <swiper indicator-dots="true" circular="true" autoplay="true">
-                    <swiper-item v-for="image in swipImages" :key="image">
-                        <image :src="image" mode="aspectFit" @click="imagePreview(image)"></image>
-                    </swiper-item>
-                </swiper>
+                <telPic :imageArr="article.images.split(',')" :lineNum="6" :spacingNumber="5"></telPic>
             </view>
             <view slot="actions" class="card-actions">
                 <view class="card-actions-item" @tap.stop="shareBtnOnClick">
@@ -38,12 +34,16 @@
 
 import { api } from '../../config/api.js';
 import { utils } from '../../common/common.js';
+import { telPic } from "@/components/tel-pic/tel-pic.vue"
 
 import {
     mapMutations
 } from 'vuex';
 
 export default {
+    components: {
+        telPic
+    },
     data() {
         return {
             likeBtnColor: "#999",
@@ -98,6 +98,10 @@ export default {
     methods: {
         focusOn() {
 
+        },
+
+        articleTextOnClick() {
+            console.debug("articleTextOnClick")
         },
 
         toUserHomePage(userID) {
