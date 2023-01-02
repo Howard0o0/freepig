@@ -12,7 +12,13 @@
             <u-icon v-if="!(selectedGoodsToShowInDetail.user_id == userInfo.id)" name="chat" size="30" color="#2979ff"
                 @click="sendMessageBtnOnClick" />
         </view>
-        <view class="price">￥{{ selectedGoodsToShowInDetail.goods_price }}</view>
+        <view class="price-and-edit-btn-row">
+            <view class="price">￥{{ selectedGoodsToShowInDetail.goods_price }}</view>
+            <view style="width:150rpx;">
+                <u-button v-if="selectedGoodsToShowInDetail.user_id == userInfo.id" type="primary" shape="circle"
+                    size="small" :plain="true" text="编辑" @click="editGoodsOnClick" />
+            </view>
+        </view>
         <textarea :value="selectedGoodsToShowInDetail.goods_description" disabled="true" auto-height="true"></textarea>
         <view style="margin-top: 30rpx;">
             <telPic :imageArr="swipImages" :lineNum="3" :spacingNumber="5"></telPic>
@@ -57,6 +63,7 @@ export default {
     onShow() {
     },
     methods: {
+
         async sendMessageBtnOnClick() {
             uni.showLoading({
                 title: '建立会话',
@@ -187,5 +194,12 @@ export default {
         color: #fff;
         background-color: rgba(0, 0, 0, 0.2);
     }
+}
+
+.price-and-edit-btn-row {
+    display: flex;
+    margin-top: 10rpx;
+    margin-bottom: 10rpx;
+    justify-content: space-between;
 }
 </style>

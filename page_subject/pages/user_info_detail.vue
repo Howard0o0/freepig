@@ -37,7 +37,7 @@
 			</view>
 		</view>
 
-		<view class="left-rigth-margin centerAlign">
+		<view class="left-rigth-margin centerAlign" style="margin-bottom: 20rpx;">
 			<v-tabs fontSize="22rpx" v-model="currTabIndex" :tabs="tabNameList" @change="tabOnChange" />
 		</view>
 
@@ -65,8 +65,9 @@
 		</view>
 
 		<view v-if="currTabIndex == GOODS_TAB_INDEX">
-			<view v-for="(goods) in goodsList" :key="goods.id" @tap="goodsOnClick(goods)">
-				<hm-goods-card :options="goods"></hm-goods-card>
+			<view v-for="(goods) in goodsList" :key="goods.id">
+				<hm-goods-card :options="goods" @offSaleOnClick="offSaleOnClick" @onSaleOnClick="onSaleOnClick"
+					@goodsOnClick="goodsOnClick" />
 			</view>
 		</view>
 
@@ -77,11 +78,13 @@
 
 <script>
 
-import store from '@/store/index.js';
 import { utils } from '../../common/common.js';
 import { api } from '../../config/api.js';
 import HmGoodsCard from '@/components/hm-goods-card/index.vue'
 import { telPic } from "@/components/tel-pic/tel-pic.vue"
+import {
+	mapState
+} from "vuex";
 
 export default {
 	components: {
@@ -146,6 +149,10 @@ export default {
 	},
 
 	methods: {
+		dummyOnClick() {
+
+		},
+
 		async reload() {
 			this.loadingText = this.TEXT_LOADING
 			uni.showLoading({})
@@ -253,6 +260,33 @@ export default {
 			this.currPageIndex++
 		},
 
+		setGoodsStatus(goodsID, isOnSale) {
+			for (var i in this.goodsList) {
+				if (this.goodsList[i].id == goodsID) {
+					this.goodsList[i].isOnSale = isOnSale
+					break;
+				}
+			}
+		},
+
+		async offSaleOnClick(goodsId) {
+			console.debug("offSaleOnClick, goodsID: ", goodsId)
+			uni.showLoading({ title: "更新中" })
+			const resp = await api.setGoodsStatus(goodsId, "CLOSE")
+			if (resp.code != api.SUCCESS_CODE) { return }
+			uni.$u.toast("宝贝下架成功")
+			this.setGoodsStatus(goodsId, false)
+		},
+
+		async onSaleOnClick(goodsId) {
+			console.debug("onSaleOnClick, goodsID: ", goodsId)
+			uni.showLoading({ title: "更新中" })
+			const resp = await api.setGoodsStatus(goodsId, "OPEN")
+			if (resp.code != api.SUCCESS_CODE) { return }
+			uni.$u.toast("宝贝上架成功")
+			this.setGoodsStatus(goodsId, true)
+		},
+
 		async reloadUserGoods() {
 			uni.showLoading({})
 			const resp = await api.getUserGoodsList(this.userInfo.id, this.currPageIndex, this.PAGE_SIZE)
@@ -269,6 +303,8 @@ export default {
 				goods.describe = goods.description
 				goods.commodity = goods.status == 'OPEN' ? '售卖中' : '已售出'
 				goods.pic = this.getFirstImage(goods.images)
+				goods.isOnSale = goods.status == 'OPEN' ? true : false
+				goods.isOwner = (goods.user_id == this.$store.state.vuex_user.id) ? true : false;
 				goodsList[i] = goods
 			}
 

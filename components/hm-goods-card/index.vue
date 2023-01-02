@@ -5,14 +5,30 @@
         <text class="title">{{ options.title }}</text>
         <image class="titleimg" :src="options.titleimg" />
       </div> -->
-      <div class="goods">
+      <div class="goods" @click="goodsOnClick(options)">
         <div class="wrap">
           <image class="pic" :src="options.pic" />
         </div>
         <div class="block">
           <text class="tradeName">{{ options.tradeName }}</text>
           <text class="describe">{{ options.describe }}</text>
-          <text class="commodity">{{ options.commodity }}</text>
+          <view class="sale-buttons">
+            <u-tag v-if="options.isOnSale == true" text="售卖中" color="#c85661" borderColor="#c85661" plain />
+            <u-tag v-else text="已下架" color="#b8bcc0" borderColor="#b8bcc0" plain />
+            <!-- <text class="commodity">{{ options.commodity }}</text> -->
+
+            <view v-if="options.isOwner" style="padding-left: 80rpx">
+              <view style="width:150rpx; height = 30rpx;" v-if="options.isOnSale == true">
+                <u-button type="primary" shape="circle" size="small" :plain="true" text="下架"
+                  @click.native.stop="offSaleOnClick(options.id)" />
+              </view>
+              <view style="width:150rpx; height = 30rpx;" v-else>
+                <u-button type="primary" shape="circle" size="small" :plain="true" text="上架"
+                  @click.native.stop="onSaleOnClick(options.id)" />
+              </view>
+            </view>
+
+          </view>
         </div>
       </div>
       <!-- <div class="row" />
@@ -67,7 +83,10 @@ export default {
             './images/img_25335_0_3.png',
           thirdName: '简易木端',
           thirdDescribe: '小号桌',
-          thirdcommodity: '桌子'
+          thirdcommodity: '桌子',
+
+          isOwner: false,
+          isOnSale: true,
         };
       }
     }
@@ -75,9 +94,26 @@ export default {
   data() {
     return {};
   },
-  methods: {}
+  methods: {
+    onSaleOnClick(goodsID) {
+      this.$emit('onSaleOnClick', goodsID);
+    },
+    offSaleOnClick(goodsID) {
+      this.$emit('offSaleOnClick', goodsID);
+    },
+    goodsOnClick(goods) {
+      this.$emit('goodsOnClick', goods);
+    },
+  }
 };
 </script>
 <style>
 @import './index.response.css';
+
+.sale-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-top: 10rpx;
+}
 </style>
