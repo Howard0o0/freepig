@@ -71,7 +71,7 @@
 		</view>
 
 		<view class="loading-text">{{ loadingText }}</view>
-		<view>_</view>
+		<view>.</view>
 	</view>
 </template>
 
@@ -102,7 +102,7 @@ export default {
 			MAX_LOAD_ARTICLE_LEN: 100,
 			MAX_LOAD_GOODS_LEN: 100,
 			currPageIndex: 0,
-			PAGE_SIZE: 3,
+			PAGE_SIZE: 5,
 
 			articleList: [],
 			goodsList: [],
@@ -131,6 +131,7 @@ export default {
 
 	//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
 	async onReachBottom() {
+		console.debug("onReachBottom")
 		uni.showToast({
 			title: '刷新中..',
 			icon: 'loading'
@@ -244,11 +245,10 @@ export default {
 			if (resp.code != api.SUCCESS_CODE) { return; }
 			let fetchedArticleList = resp.data
 			console.debug("fetched userArticleList: ", fetchedArticleList)
-			if (fetchedArticleList.length == 0) {
+			if (fetchedArticleList.length < this.PAGE_SIZE) {
 				this.loadingText = this.TEXT_NO_MORE
-				return
 			}
-			this.articleList.push(...resp.data)
+			this.articleList.push(...fetchedArticleList)
 			console.debug("userArticleList: ", this.articleList)
 			this.currPageIndex++
 		},
@@ -258,11 +258,11 @@ export default {
 			const resp = await api.getUserGoodsList(this.userInfo.id, this.currPageIndex, this.PAGE_SIZE)
 			uni.hideLoading()
 			if (resp.code != api.SUCCESS_CODE) { return; }
-			this.goodsList = resp.data
-			console.debug("userGoodsList: ", this.goodsList)
-			this.currPageIndex++
 
 			const goodsList = resp.data
+			if (goodsList.length < this.PAGE_SIZE) {
+				this.loadingText = this.TEXT_NO_MORE
+			}
 			for (var i = 0; i < goodsList.length; i++) {
 				let goods = goodsList[i]
 				goods.tradeName = "¥" + goods.price
@@ -271,7 +271,11 @@ export default {
 				goods.pic = this.getFirstImage(goods.images)
 				goodsList[i] = goods
 			}
-			this.goodsList = goodsList
+
+			console.debug("fetched fetchedGoodsList: ", goodsList)
+			this.goodsList.push(...goodsList)
+			console.debug("userGoodsList: ", this.goodsList)
+			this.currPageIndex++
 		},
 
 		joinUserEnrollYearAndDegree(userInfo) {
