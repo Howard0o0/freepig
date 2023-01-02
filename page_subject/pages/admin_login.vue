@@ -1,5 +1,5 @@
 <template>
-    <view class="left-rigth-margin">
+    <view class="left-right-margin">
         <u--form labelPosition="left" :model="formData">
             <u-form-item label="username" labelWidth="80" borderBottom>
                 <u--input v-model="formData.username" placeholder="用户名" inputAlign="center" border="none">
@@ -11,7 +11,7 @@
             </u-form-item>
         </u--form>
 
-        <button class="left-rigth-margin" @click="loginButtonOnClick">登录</button>
+        <button class="left-right-margin" @click="loginButtonOnClick">登录</button>
     </view>
 </template>
 

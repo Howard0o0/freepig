@@ -11,9 +11,9 @@
 			</uni-grid-item>
 		</uni-grid>
 
-		<button class="left-rigth-margin" v-if="vuex_user.id <= 100" @click="adminLogin">username login</button>
-		<button class="left-rigth-margin" v-if="vuex_user.id <= 100" @click="wxLogin">wx login</button>
-		<button class="left-rigth-margin" v-if="vuex_user.id <= 100" @click="admin">admin</button>
+		<button class="left-right-margin" v-if="vuex_user.id <= 100" @click="adminLogin">username login</button>
+		<button class="left-right-margin" v-if="vuex_user.id <= 100" @click="wxLogin">wx login</button>
+		<button class="left-right-margin" v-if="vuex_user.id <= 100" @click="admin">admin</button>
 
 		<uni-notice-bar class="bottom-notice-bar"
 			v-if="userInfo.role == 'VERIFY_BROKEN' && !identifyFailNoticeShowTimeout" :text="identifyFailReason" />

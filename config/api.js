@@ -365,6 +365,17 @@ export const getArticleCommentList = (articleID) => uni.$u.http.get('article/com
     }
 })
 
+export const getArticleCommentListByUser = (userID, pageIndex, pageSize) => uni.$u.http.get('article/comment/by-user', {
+    header: {
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
+    },
+    params: {
+        user_id: userID,
+        page_index: pageIndex,
+        page_size: pageSize,
+    }
+})
+
 export const getArticle = (articleID) => uni.$u.http.get('article/by-id', {
     header: {
         'Content-Type': 'application/json', 'Token': store.state.vuex_token,
@@ -476,4 +487,5 @@ export const api = {
     readArticle,
     postArticle,
     getGoodsByID,
+    getArticleCommentListByUser,
 }

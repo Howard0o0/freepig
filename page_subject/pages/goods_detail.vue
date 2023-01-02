@@ -1,5 +1,5 @@
 <template>
-    <view class="left-rigth-margin">
+    <view class="left-right-margin">
         <view class="multi-columns">
             <image @tap="toUserHomePage(selectedGoodsToShowInDetail.user_id)" class="avatar"
                 :src="selectedGoodsToShowInDetail.user_avatar_url" mode="aspectFit"></image>
@@ -169,7 +169,7 @@ export default {
     margin: 10rpx 4% 10rpx 0;
 }
 
-.left-rigth-margin {
+.left-right-margin {
     margin-left: 4%;
     margin-right: 4%;
 }

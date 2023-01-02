@@ -1,8 +1,8 @@
 <template>
-	<view class="left-rigth-margin">
-		<button class="left-rigth-margin" @click="authManageOnClick">身份认证审核</button>
-		<button class="left-rigth-margin" @click="newUserPrizeManageOnClick">新人红包处理</button>
-		<button class="left-rigth-margin" @click="oldUserPrizeManageOnClick">老人抽奖处理</button>
+	<view class="left-right-margin">
+		<button class="left-right-margin" @click="authManageOnClick">身份认证审核</button>
+		<button class="left-right-margin" @click="newUserPrizeManageOnClick">新人红包处理</button>
+		<button class="left-right-margin" @click="oldUserPrizeManageOnClick">老人抽奖处理</button>
 	</view>
 </template>
 

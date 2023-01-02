@@ -1,11 +1,11 @@
 <template>
 	<view>
-		<view class="centerAlign left-rigth-margin" style="margin-top: 30rpx;">
+		<view class="centerAlign left-right-margin" style="margin-top: 30rpx;">
 			<textarea maxlength="1024" class="input-textarea" v-model="articleContent" :placeholder="articleContentPlaceHolder"
 				inputBorder="false" />
 		</view>
 
-		<view class="left-rigth-margin" style="margin-top: 30rpx;">
+		<view class="left-right-margin" style="margin-top: 30rpx;">
 			<tui-upload :value="choosedImageURLs" limit="6" @complete="pickImageComplete" @remove="removeImage"
 				sizeType="['compressed']" imageFormat="['jpg','png']" size="9" width="180" height="180">
 			</tui-upload>

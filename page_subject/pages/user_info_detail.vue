@@ -37,7 +37,7 @@
 			</view>
 		</view>
 
-		<view class="left-rigth-margin centerAlign" style="margin-bottom: 20rpx;">
+		<view class="left-right-margin centerAlign" style="margin-bottom: 20rpx;">
 			<v-tabs fontSize="22rpx" v-model="currTabIndex" :tabs="tabNameList" @change="tabOnChange" />
 		</view>
 
@@ -68,6 +68,25 @@
 			<view v-for="(goods) in goodsList" :key="goods.id">
 				<hm-goods-card :options="goods" @offSaleOnClick="offSaleOnClick" @onSaleOnClick="onSaleOnClick"
 					@goodsOnClick="goodsOnClick" />
+			</view>
+		</view>
+
+		<view v-if="currTabIndex == COMMENT_TAB_INDEX">
+			<view v-for="(comment) in commentList" :key="comment.id">
+				<div class="box" style="margin-right: 3rpx;">
+					<div class="comment" @click="commentOnClick(comment)">
+						<u-avatar :src="userInfo.avatar_url" shape="circle" />
+						<view class="comment-center-block">
+							<view class="flex-row">
+								<text style="font-weight: bold;">{{ userInfo.nickname }}</text>
+								<text>·{{ generateReadableCommentTime(comment) }}</text>
+							</view>
+							<text>{{ comment.content }}</text>
+						</view>
+						<div class="comment-right-block"> <u--text :lines="3" color="#707980"
+								:text="comment.article_content" size="10" /> </div>
+					</div>
+				</div>
 			</view>
 		</view>
 
@@ -109,6 +128,7 @@ export default {
 
 			articleList: [],
 			goodsList: [],
+			commentList: [],
 
 			TEXT_NO_MORE: "hoops 木有更多啦",
 			TEXT_LOADING: "正在加载...",
@@ -149,8 +169,15 @@ export default {
 	},
 
 	methods: {
-		dummyOnClick() {
+		async commentOnClick(comment) {
+			console.debug("commentOnClick: ", comment)
+			uni.showLoading({})
+			const resp = await api.getArticle(comment.article_id)
+			uni.hideLoading()
+			if (resp.code != api.SUCCESS_CODE) { return; }
 
+			let article = resp.data
+			this.articleOnClick(article)
 		},
 
 		async reload() {
@@ -226,6 +253,10 @@ export default {
 			return utils.timeFormatToNAgo(article.created_at)
 		},
 
+		generateReadableCommentTime(comment) {
+			return utils.timeFormatToNAgo(comment.created_at)
+		},
+
 		reloadList(tabIndex) {
 			switch (tabIndex) {
 				case this.ARTICLE_TAB_INDEX:
@@ -233,6 +264,10 @@ export default {
 					break;
 				case this.GOODS_TAB_INDEX:
 					this.reloadUserGoods()
+					break;
+
+				case this.COMMENT_TAB_INDEX:
+					this.reloadUserArticleComment()
 					break;
 				default:
 					break;
@@ -286,6 +321,23 @@ export default {
 			if (resp.code != api.SUCCESS_CODE) { return }
 			uni.$u.toast("宝贝上架成功")
 			this.setGoodsStatus(goodsId, true)
+		},
+
+		async reloadUserArticleComment() {
+			uni.showLoading({})
+			const resp = await api.getArticleCommentListByUser(this.userInfo.id, this.currPageIndex, this.PAGE_SIZE)
+			uni.hideLoading()
+			if (resp.code != api.SUCCESS_CODE) { return; }
+
+			let commentList = resp.data
+			if (commentList.length < this.PAGE_SIZE) {
+				this.loadingText = this.TEXT_NO_MORE
+			}
+
+			console.debug("fetched commentList: ", commentList)
+			this.commentList.push(...commentList)
+			console.debug("commentList: ", this.commentList)
+			this.currPageIndex++
 		},
 
 		async reloadUserGoods() {
@@ -534,5 +586,50 @@ export default {
 .gender-icon {
 	width: 35rpx;
 	height: 35rpx;
+}
+
+.box {
+	width: 98%;
+	height: 200rpx;
+	display: flex;
+	justify-content: space-between;
+
+	align-items: flex-start;
+	margin-left: 15rpx;
+	margin-right: 15rpx;
+	border-radius: 38.96rpx;
+	box-shadow: 0px 10px 30px rgba(209, 213, 223, 0.5);
+	background-color: #ffffff;
+}
+
+.comment-center-block {
+	display: flex;
+	align-items: flex-start;
+	flex-direction: column;
+	width: 60%;
+	height: 180rpx;
+	padding: 0;
+
+	color: #141821;
+	font-family: MicrosoftYaHei, Microsoft YaHei;
+	font-size: 26rpx;
+	font-weight: normal;
+}
+
+.comment-right-block {
+	width: 20%;
+	height: 100%;
+}
+
+.comment {
+	display: flex;
+	position: relative;
+	align-items: flex-start;
+	flex-direction: row;
+	margin-top: 62.34rpx;
+	margin-left: 30rpx;
+	margin-right: 30rpx;
+	height: 194.81rpx;
+	justify-content: space-between;
 }
 </style>

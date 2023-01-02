@@ -1,5 +1,5 @@
 <template>
-	<view class="left-rigth-margin centerAlign">
+	<view class="left-right-margin centerAlign">
 		<image class="logo" src="/page_subject/static/logo.png" mode="aspectFit"></image>
 		<view>{{aboutFreePigParagraph0}}</view>
 		<view>{{aboutFreePigParagraph1}}</view>

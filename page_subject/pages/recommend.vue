@@ -1,5 +1,5 @@
 <template>
-	<view class="left-rigth-margin top-margin centerAlign">
+	<view class="left-right-margin top-margin centerAlign">
 		<view class="container">
 			<image class="bg-img" :src="activityRuleBackgroundImageURL"></image>
 			<view class="recommend-code-block centerAlign">

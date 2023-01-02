@@ -1,5 +1,5 @@
 <template>
-    <view class="left-rigth-margin">
+    <view class="left-right-margin">
         <lyg-popup @popupState="popupState" title="服务协议"
             protocolPath='/page_subject/pages/webview?can_share=false&url=https://www.doraewhite.com/licence/user_protocol.html'
             policyPath='/page_subject/pages/webview?can_share=false&url=https://www.doraewhite.com/licence/privacy_policy.html'

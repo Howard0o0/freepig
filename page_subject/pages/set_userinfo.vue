@@ -1,5 +1,5 @@
 <template>
-	<view class="left-rigth-margin">
+	<view class="left-right-margin">
 		<view class="centerAlign">
 			<button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="avatarOnClick">
 				<image class="avatar" :src="formData.avatarImageFilePath" mode="aspectFit" />

@@ -10,7 +10,7 @@
 		<view class="loading-text">下拉刷新</view>
 
 		<!-- 商品标签 -->
-		<v-tabs class="left-rigth-margin" fontSize="35rpx" v-model="currTabIndex" :tabs="tabNameList"
+		<v-tabs class="left-right-margin" fontSize="35rpx" v-model="currTabIndex" :tabs="tabNameList"
 			@change="tabOnChange">
 		</v-tabs>
 
@@ -476,7 +476,7 @@ export default {
 	}
 }
 
-.left-rigth-margin {
+.left-right-margin {
 	margin-left: 4%;
 	margin-right: 4%;
 }

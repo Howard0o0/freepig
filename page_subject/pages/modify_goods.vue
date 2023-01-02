@@ -1,5 +1,5 @@
 <template>
-	<view class="centerAlign left-rigth-margin">
+	<view class="centerAlign left-right-margin">
 		<uni-easyinput type="textarea" autoHeight="true" v-model="goodsDesc" :placeholder="goodsDescPlaceHolder"
 			inputBorder="false" />
 		<u-album :urls="choosedImageURLs"></u-album>

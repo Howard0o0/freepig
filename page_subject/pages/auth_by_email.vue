@@ -1,5 +1,5 @@
 <template>
-	<view class="left-rigth-margin">
+	<view class="left-right-margin">
 		<u--form labelPosition="top" :model="formData">
 			<u-form-item label="学校邮箱" labelWidth="80" borderBottom>
 				<u--input v-model="formData.email" placeholder="只能用学校的edu邮箱噢" inputAlign="left" border="none">

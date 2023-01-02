@@ -1,5 +1,5 @@
 <template>
-	<view class="left-rigth-margin top-margin centerAlign">
+	<view class="left-right-margin top-margin centerAlign">
 		<text>恭喜以下幸运儿</text>
 		<uni-list>
 			<uni-list-chat v-for="(user,index) in prizeUserList" :key="index" :avatar-circle="false"
