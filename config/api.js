@@ -200,12 +200,14 @@ export const getArticleList = (longitude = 0, latitude = 0, pageIndex = 0, pageS
     }
 })
 
-export const getUserGoodsList = (userID) => uni.$u.http.get('/goods/by-user', {
+export const getUserGoodsList = (userID, pageIndex, pageSize) => uni.$u.http.get('/goods/by-user', {
     header: {
         'Content-Type': 'application/json', 'Token': store.state.vuex_token,
     },
     params: {
         'user_id': userID,
+        'page_index': pageIndex,
+        'page_size': pageSize,
     }
 })
 

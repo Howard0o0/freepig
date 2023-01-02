@@ -122,8 +122,12 @@ $uni-font-size-paragraph: 15px;
 	border-top: 1px #eee solid;
 }
 
-// .row-items {
-//     flex-direction: row;
-//     flex-wrap: wrap;
-//     align-items: center;
-// }
+.loading-text {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 60upx;
+	color: #979797;
+	font-size: 24upx;
+}

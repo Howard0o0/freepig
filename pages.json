@@ -135,7 +135,8 @@
                     "path": "pages/user_info_detail",
                     "style": {
                         "navigationBarTitleText": "",
-                        "enablePullDownRefresh": false
+                        "enablePullDownRefresh": true,
+                        "onReachBottomDistance": 120
                     }
                 },
                 {

@@ -22,10 +22,6 @@
 								<view class="h3">
 									{{ userInfo.nickname }}
 								</view>
-								<!-- <image v-if="userInfo.gender == 'MALE'" class="gender-icon" src="/static/index/man.png"
-									mode="aspectFit" />
-								<image v-else class="gender-icon" src="/static/index/woman.png" mode="aspectFit" /> -->
-
 								<u-icon v-if="userInfo.gender == 'MALE'" name="man" size="18" color="#0099FF" />
 								<u-icon v-else name="woman" size="18" color="#FF66CC" />
 							</view>
@@ -74,6 +70,8 @@
 			</view>
 		</view>
 
+		<view class="loading-text">{{ loadingText }}</view>
+		<view>_</view>
 	</view>
 </template>
 
@@ -92,32 +90,71 @@ export default {
 	},
 	data() {
 		return {
+			userID: 0,
 			userInfo: null,
 			ARTICLE_TAB_INDEX: 0,
 			GOODS_TAB_INDEX: 1,
-			tabNameList: ['Ta的新鲜事', 'Ta的宝贝'],
+			COMMENT_TAB_INDEX: 2,
+			LIKE_TAB_INDEX: 3,
+			tabNameList: ['Ta的新鲜事', 'Ta的宝贝', 'Ta的评论', 'Ta的点赞'],
 			currTabIndex: 0,
 
 			MAX_LOAD_ARTICLE_LEN: 100,
 			MAX_LOAD_GOODS_LEN: 100,
+			currPageIndex: 0,
+			PAGE_SIZE: 3,
 
 			articleList: [],
 			goodsList: [],
+
+			TEXT_NO_MORE: "hoops 木有更多啦",
+			TEXT_LOADING: "正在加载...",
+			loadingText: "",
+			noMoreGoods: false,
 		}
 	},
 	async onLoad(options) {
 		console.debug("user_id: ", options.user_id)
-		uni.showLoading({})
-		const resp = await api.getUserInfoFromServer({ user_id: options.user_id })
-		if (resp.code != api.SUCCESS_CODE) { return; }
-		uni.hideLoading()
-		this.userInfo = resp.data
-		this.tabOnChange(this.currTabIndex)
+		this.userID = options.user_id
+		this.reload()
 	},
 	onShow() {
 	},
 
+	//下拉刷新，需要自己在page.json文件中配置开启页面下拉刷新 "enablePullDownRefresh": true
+	onPullDownRefresh() {
+		setTimeout(() => {
+			this.reload()
+			uni.stopPullDownRefresh();
+		}, 1000);
+	},
+
+	//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
+	async onReachBottom() {
+		uni.showToast({
+			title: '刷新中..',
+			icon: 'loading'
+		});
+		this.reloadList(this.currTabIndex)
+		if (this.noMoreGoods) {
+			this.loadingText = this.TEXT_NO_MORE;
+			return false;
+		} else {
+			this.loadingText = this.TEXT_LOADING;
+		}
+	},
+
 	methods: {
+		async reload() {
+			this.loadingText = this.TEXT_LOADING
+			uni.showLoading({})
+			const resp = await api.getUserInfoFromServer({ user_id: this.userID })
+			if (resp.code != api.SUCCESS_CODE) { return; }
+			uni.hideLoading()
+			this.userInfo = resp.data
+			this.tabOnChange(this.currTabIndex)
+		},
+
 		async sendMessageBtnOnClick(toUserID) {
 			console.debug("sendMessageBtnOnClick: ", toUserID)
 			uni.showLoading({
@@ -180,8 +217,8 @@ export default {
 			return utils.timeFormatToNAgo(article.created_at)
 		},
 
-		tabOnChange(index) {
-			switch (index) {
+		reloadList(tabIndex) {
+			switch (tabIndex) {
 				case this.ARTICLE_TAB_INDEX:
 					this.reloadUserArticle()
 					break;
@@ -193,22 +230,37 @@ export default {
 			}
 		},
 
+		tabOnChange(index) {
+			this.currPageIndex = 0
+			this.articleList = []
+			this.goodsList = []
+			this.reloadList(index)
+		},
+
 		async reloadUserArticle() {
 			uni.showLoading({})
-			const resp = await api.getArticleList(0, 0, 0, this.MAX_LOAD_ARTICLE_LEN, this.userInfo.id)
+			const resp = await api.getArticleList(0, 0, this.currPageIndex, this.PAGE_SIZE, this.userInfo.id)
 			uni.hideLoading()
 			if (resp.code != api.SUCCESS_CODE) { return; }
-			this.articleList = resp.data
+			let fetchedArticleList = resp.data
+			console.debug("fetched userArticleList: ", fetchedArticleList)
+			if (fetchedArticleList.length == 0) {
+				this.loadingText = this.TEXT_NO_MORE
+				return
+			}
+			this.articleList.push(...resp.data)
 			console.debug("userArticleList: ", this.articleList)
+			this.currPageIndex++
 		},
 
 		async reloadUserGoods() {
 			uni.showLoading({})
-			const resp = await api.getUserGoodsList(this.userInfo.id)
+			const resp = await api.getUserGoodsList(this.userInfo.id, this.currPageIndex, this.PAGE_SIZE)
 			uni.hideLoading()
 			if (resp.code != api.SUCCESS_CODE) { return; }
 			this.goodsList = resp.data
 			console.debug("userGoodsList: ", this.goodsList)
+			this.currPageIndex++
 
 			const goodsList = resp.data
 			for (var i = 0; i < goodsList.length; i++) {
