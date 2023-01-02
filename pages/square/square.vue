@@ -7,7 +7,7 @@
 
         <view v-for="(article) in articleList" :key="article.id">
             <uni-card :title="article.username" :sub-title="generatePostDesc(article)" extra=" "
-                :thumbnail="article.user_avatar" @click.stop="toUserHomePage(article.user_id)">
+                :thumbnail="article.user_avatar" @click="toUserHomePage(article.user_id)">
                 <u--text :lines="4" class="uni-body" @click.stop="articleOnClick(article)" :text="article.text" />
                 <view v-if="getFirstImage(article.images).length > 0" @click.stop="articleOnClick(article)">
                     <telPic :imageArr="article.images.split(',')" :lineNum="6" :spacingNumber="5"></telPic>

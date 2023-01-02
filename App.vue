@@ -76,6 +76,7 @@ export default {
 				uni.$u.toast("刷新用户信息失败")
 				return false;
 			}
+
 			// console.log('[DEBUG] token: ', this.$store.state.vuex_token)
 
 			this.refreshConversationList()

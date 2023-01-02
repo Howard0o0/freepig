@@ -64,6 +64,9 @@
             },
             "scope.userLocation" : {
                 "desc" : "需要获取当前位置才能获取附近宝贝呀"
+            },
+            "scope.writePhotosAlbum" : {
+                "desc" : "保存图片至相册"
             }
         },
         "requiredPrivateInfos" : [ "getLocation" ],

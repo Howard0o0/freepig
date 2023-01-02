@@ -9,7 +9,6 @@
             <view slot="actions" class="card-actions">
                 <view class="card-actions-item" @tap.stop="shareBtnOnClick">
                     <uni-icons type="redo" size="18" color="#999"></uni-icons>
-                    <text class="card-actions-item-text">{{ article.like_num }}</text>
                 </view>
                 <view class="card-actions-item" @tap.stop="likeBtnOnClick">
                     <uni-icons type="heart" size="18" :color="likeBtnColor"></uni-icons>
@@ -93,7 +92,26 @@ export default {
         this.commentData.readNumer = this.article.read_num
         api.readArticle(parseInt(this.article.id))
         this.reloadComment()
+
+        uni.onUserCaptureScreen(function () {
+            console.debug("onUserCaptureScreen")
+            this.shareBtnOnClick()
+        });
     },
+
+    // async onShareAppMessage(res) {
+    //     console.debug("onShareAppMessage: ", res)
+    //     let posterImageURL = await this.generateSharePoster()
+    //     if (posterImageURL.length == 0) {
+    //         return
+    //     }
+
+    //     return {
+    //         title: '分享一条校园新鲜事',
+    //         path: '/pages/index/index?recommend-code=' + this.$store.state.vuex_user.wx_open_id,
+    //         imageUrl: posterImageURL,
+    //     }
+    // },
 
     methods: {
         focusOn() {
@@ -153,8 +171,67 @@ export default {
             console.debug("commentBtnOnClick")
         },
 
+        requestWriteAlbumAuth() {
+            return new Promise((resolve, reject) => {
+                uni.getSetting({
+                    success: (res) => {
+                        if (res.authSetting["scope.writePhotosAlbum"] == undefined || !res.authSetting['scope.writePhotosAlbum']) {
+                            console.debug(res)
+                            uni.authorize({
+                                scope: 'scope.writePhotosAlbum',
+                                success: () => { //1.1 允许授权
+                                    console.debug('auth for writePhotosAlbum ok')
+                                    resolve(true)
+                                },
+                                fail: () => { //1.2 拒绝授权
+                                    console.debug('auth for writePhotosAlbum is denied')
+
+                                    uni.showModal({
+                                        title: '缺少相册写入权限将无法分享  请打开相册权限',
+                                        success(res) {
+                                            if (res.confirm) {
+                                                uni.openSetting({
+                                                    success() {
+                                                        console.log('[DEBUG] auth for userLocation is ok after denied')
+                                                        resolve(true)
+                                                    },
+                                                    fail() {
+                                                        console.log('二次开启位置权限失败');
+                                                    }
+                                                });
+                                            } else if (res.cancel) {
+                                                console.log('连续拒绝位置权限');
+                                                uni.$u.toast("保存图片失败 无法分享")
+                                                resolve(false)
+                                            }
+                                        }
+                                    });
+                                    resolve(false)
+                                }
+                            })
+                        } else {
+                            console.debug('already has auth for writePhotosAlbum')
+                            resolve(true)
+                        }
+                    },
+                    fail: () => {
+                        console.debug('获取相册授权信息失败')
+                        resolve(false)
+                    }
+                })
+            });
+        },
+
+        dummyOnClick() {
+
+        },
+
         async shareBtnOnClick() {
-            console.debug("shareBtnOnClick")
+
+            console.debug("generating share poster")
+
+            let requestWriteAlbumAuthRes = await this.requestWriteAlbumAuth()
+            if (!requestWriteAlbumAuthRes) { return; }
 
             let images = []
             if (this.article.images.length > 0) {
@@ -176,7 +253,7 @@ export default {
             }
             console.debug("images: ", images)
 
-            let jsonSchema = {
+            let poster = {
                 css: {
                     width: "750rpx",
                     paddingBottom: "40rpx",
@@ -305,8 +382,10 @@ export default {
                 ]
             }
 
+            let posterImageURL = ""
+
             // 渲染
-            this.$refs.painter.render(jsonSchema);
+            this.$refs.painter.render(poster);
             // 生成图片
             this.$refs.painter.canvasToTempFilePathSync({
                 fileType: "jpg",
@@ -319,10 +398,15 @@ export default {
                     uni.saveImageToPhotosAlbum({
                         filePath: res.tempFilePath,
                         success: function () {
-                            console.log('save success');
+                            console.log('save share poster to album success');
+                            uni.$u.toast("分享图片已保存到相册")
                         }
                     });
+                    posterImageURL = res.tempFilePath
                 },
+                fail: (res) => {
+                    uni.$u.toast("生成分享图片失败")
+                }
             });
         },
 

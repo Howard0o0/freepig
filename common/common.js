@@ -76,21 +76,24 @@ async function getToken() {
     });
 
     const response = await uni.login({ provider: 'weixin' })
-    console.log('[DBUEG] wx login response: ', response)
+    console.debug('wx login response: ', response)
     var wx_login_code = response[1].code
-    console.log("[DEBUG] wx_login_code: ", wx_login_code)
+    console.debug("wx_login_code: ", wx_login_code)
     if (!wx_login_code || wx_login_code == "") {
         uni.$u.toast("微信登录失败: ", response[1].errMsg)
+        console.error("wx login fail. err: ", response[1].errMsg)
         return false;
     }
 
     const resp = await api.getTokenFromServer({ wx_login_code: wx_login_code })
+    console.debug("getTokenFromServer resp: ", resp)
     if (resp.code != api.SUCCESS_CODE) {
         uni.$u.toast("获取登录凭证失败")
+        console.error("getTokenFromServer fail. resp: ", resp)
         return false;
     }
     uni.$u.vuex('vuex_token', resp.data.token);
-    console.log("[DEBUG] token: ", store.state.vuex_token)
+    console.debug("token: ", store.state.vuex_token)
 
     return true
 }

@@ -3,7 +3,7 @@ import store from '../store/index.js';
 // post请求，通过wx_login_code获取token
 export const getTokenFromServer = (params, config = {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 }) => uni.$u.http.post('/login/by-wx-account', params, config)
 
@@ -12,53 +12,54 @@ export const adminLogin = (username, passwd) => uni.$u.http.post('/login/by-user
     password: passwd,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const getUserInfoFromServer = (params = {}) => uni.$u.http.get('/user', {
     params: params,
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Token': store.state.vuex_token,
     }
 })
 
 export const getTIMSig = () => uni.$u.http.get('/user/tim-sig', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const getRecommendUserList = () => uni.$u.http.get('/user/recommend-list', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const getRecommendRule = () => uni.$u.http.get('/activity/recommend/rule', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const getCampusList = (keyword) => uni.$u.http.get('/info/campus', {
     params: { keyword: keyword },
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const getMajorList = (campusID) => uni.$u.http.get('/info/major', {
     params: { campus_id: campusID },
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const getEmailVerifyCode = (email) => uni.$u.http.get('/auth/emailcode', {
     params: { email: email },
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -73,7 +74,7 @@ export const identifyByEmail = (email, emailVerifyCode, realname, campusID, majo
     recommend_code: recommendCode,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -96,13 +97,13 @@ export const identifyByCertification = (certificationImageFilePath, realname, ca
 
 export const getTagList = () => uni.$u.http.get('/goods/tag', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const getUUID = () => uni.$u.http.get('/info/uuid', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -123,7 +124,7 @@ export const publishGoods = (goodsID, goodsDesc, tagID, price, imageURLs) => uni
     tag_id: tagID,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -136,19 +137,19 @@ export const updateGoods = (goodsID, goodsDesc, tagID, price, imageURLs) => uni.
     tag_id: tagID,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const updateGoodsInfo = (params = {}) => uni.$u.http.post('/goods', params, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const setGoodsStatus = (goodsID, status) => uni.$u.http.post('/goods/status', { goods_id: goodsID, status: status }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -159,7 +160,7 @@ export const setUserInfo = (avatar_url, nickname, gender, walletCodeURL) => uni.
     wallet_code: walletCodeURL,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -168,13 +169,13 @@ export const drawPrize = (payeeRealName, bankAccount) => uni.$u.http.post('/acti
     bank_account: bankAccount,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const getGoodsList = (longitude = 0, latitude = 0, tagID = 0, keyword = "", pageIndex = 0, pageSize = 30) => uni.$u.http.get('/goods/', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {
         'longitude': longitude,
@@ -188,7 +189,7 @@ export const getGoodsList = (longitude = 0, latitude = 0, tagID = 0, keyword = "
 
 export const getArticleList = (longitude = 0, latitude = 0, pageIndex = 0, pageSize = 30, authorUserID = 0) => uni.$u.http.get('/article/', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {
         'longitude': longitude,
@@ -201,7 +202,7 @@ export const getArticleList = (longitude = 0, latitude = 0, pageIndex = 0, pageS
 
 export const getUserGoodsList = (userID) => uni.$u.http.get('/goods/by-user', {
     header: {
-        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
     },
     params: {
         'user_id': userID,
@@ -210,13 +211,13 @@ export const getUserGoodsList = (userID) => uni.$u.http.get('/goods/by-user', {
 
 export const getPrizeUserList = () => uni.$u.http.get('/activity/recommend/prize-list', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const verifyRecommendCode = (recommendCode) => uni.$u.http.get('/auth/verify-recommend-code', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {
         'recommend_code': recommendCode,
@@ -225,14 +226,14 @@ export const verifyRecommendCode = (recommendCode) => uni.$u.http.get('/auth/ver
 
 export const getConversationList = () => uni.$u.http.get('/chat/conversation', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {}
 })
 
 export const getHistoryMessageListFromBeginning = (conversation_id, count) => uni.$u.http.get('/chat/conversation/history-message', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {
         'conversation_id': conversation_id,
@@ -242,7 +243,7 @@ export const getHistoryMessageListFromBeginning = (conversation_id, count) => un
 
 export const getHistoryMessageList = (conversation_id, count, next_request_message_id) => uni.$u.http.get('/chat/conversation/history-message', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {
         'conversation_id': conversation_id,
@@ -253,7 +254,7 @@ export const getHistoryMessageList = (conversation_id, count, next_request_messa
 
 export const getLatestMessageList = (conversation_id, count) => uni.$u.http.get('chat/conversation/latest-message', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {
         'conversation_id': conversation_id,
@@ -269,7 +270,7 @@ export const getLatestMessageList = (conversation_id, count) => uni.$u.http.get(
 // }
 export const sendMessage = (message) => uni.$u.http.post('/chat/message', message, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -277,7 +278,7 @@ export const ackMessage = (messageID) => uni.$u.http.post('/chat/message/ack', {
     message_id: messageID,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -285,13 +286,13 @@ export const createConversation = (toUserID) => uni.$u.http.post('/chat/conversa
     to_user_id: toUserID,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const adminGetUserList = (pageIndex, pageSize, role = "") => uni.$u.http.get('admin/user-list', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {
         'page_index': pageIndex,
@@ -306,7 +307,7 @@ export const setUserRole = (userID, role, rejectReason = "") => uni.$u.http.post
     identify_fail_reason: rejectReason,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -314,7 +315,7 @@ export const likeArticle = (articleID) => uni.$u.http.post('article/like', {
     article_id: articleID,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -322,7 +323,7 @@ export const likeComment = (commentID) => uni.$u.http.post('article/like-comment
     comment_id: commentID,
 }, {
     header: {
-        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
     }
 })
 
@@ -330,7 +331,7 @@ export const readArticle = (articleID) => uni.$u.http.post('article/read', {
     article_id: articleID,
 }, {
     header: {
-        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
     }
 })
 
@@ -340,13 +341,13 @@ export const postArticleComment = (articleID, content, parentID) => uni.$u.http.
     parent_id: parentID,
 }, {
     header: {
-        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
     }
 })
 
 export const getArticleCommentList = (articleID) => uni.$u.http.get('article/comment', {
     header: {
-        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
     },
     params: {
         article_id: articleID,
@@ -355,7 +356,7 @@ export const getArticleCommentList = (articleID) => uni.$u.http.get('article/com
 
 export const getArticle = (articleID) => uni.$u.http.get('article/by-id', {
     header: {
-        'Content-Type': 'application/json', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
     },
     params: {
         article_id: articleID,
@@ -367,7 +368,7 @@ export const postArticle = (text, imageURLs) => uni.$u.http.post('article/', {
     images: imageURLs,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
@@ -377,13 +378,13 @@ export const adminHandleUserPrize = (prizeItemID, prize, failMsg = "") => uni.$u
     fail_msg: failMsg,
 }, {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     }
 })
 
 export const adminGetNewUserPrizeList = () => uni.$u.http.get('admin/new-user-prize-list', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {
     }
@@ -391,7 +392,7 @@ export const adminGetNewUserPrizeList = () => uni.$u.http.get('admin/new-user-pr
 
 export const adminGetOldUserPrizeList = () => uni.$u.http.get('admin/old-user-prize-list', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {
     }
@@ -399,7 +400,7 @@ export const adminGetOldUserPrizeList = () => uni.$u.http.get('admin/old-user-pr
 
 export const getShareLink = () => uni.$u.http.get('/activity/recommend/share-link', {
     header: {
-        'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': store.state.vuex_token,
+        'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
     },
     params: {
     }

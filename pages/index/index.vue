@@ -121,10 +121,10 @@ export default {
 
 	methods: {
 		toUserHomePage(userID) {
-            uni.navigateTo({
-                url: '/page_subject/pages/user_info_detail?user_id=' + userID
-            });
-        },
+			uni.navigateTo({
+				url: '/page_subject/pages/user_info_detail?user_id=' + userID
+			});
+		},
 
 		async reload() {
 			await this.updateLocation()
@@ -208,7 +208,7 @@ export default {
 		},
 
 		async refreshGoodsList() {
-			uni.showLoading({title: '加载中'})
+			uni.showLoading({ title: '加载中' })
 			const resp = await api.getGoodsList(this.currLocation.longitude, this.currLocation.latitude, this.goodsParam.tagID, this.goodsParam.keyword, this.goodsParam.currPageIndex, this.goodsParam.currPageSize)
 			uni.hideLoading()
 			if (resp.code != api.SUCCESS_CODE) { return; }
@@ -273,7 +273,7 @@ export default {
 									console.log('[DEBUG] auth for userLocation is denied')
 
 									uni.showModal({
-										title: '555 没有位置的话没法用哇 求位置权限',
+										title: '缺少位置权限将无法获取附近宝贝 请打开位置权限',
 										success(res) {
 											if (res.confirm) {
 												uni.openSetting({
@@ -283,6 +283,7 @@ export default {
 													},
 													fail() {
 														console.log('二次开启位置权限失败');
+														uni.$u.toast("获取附近宝贝失败")
 													}
 												});
 											} else if (res.cancel) {

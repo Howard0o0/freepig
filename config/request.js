@@ -18,7 +18,8 @@ module.exports = (vm) => {
     uni.$u.http.setConfig((config) => {
         /* config 为默认全局配置*/
         // config.baseURL = 'http://localhost:8080/api/v1'; /* 根域名 */
-        config.baseURL = 'https://192.168.14.53/api/v1'; /* 根域名 */
+        // config.baseURL = 'https://192.168.14.53/api/v1'; /* 根域名 */
+        config.baseURL = 'http://192.168.14.53:8080/api/v1'; /* 根域名 */
         // config.baseURL = 'https://www.doraewhite.com/api/v1'; /* 根域名 */
         return config
     })
@@ -27,7 +28,7 @@ module.exports = (vm) => {
     uni.$u.http.interceptors.request.use((config) => { // 可使用async await 做异步操作
         config.data = config.data || {}
         // 可以在此通过vm引用vuex中的变量，具体值在vm.$store.state中
-        config.header['Authorization'] = vm.$store.state.vuex_token
+        config.header['Token'] = vm.$store.state.vuex_token
         return config
     }, config => { // 可使用async await 做异步操作
         return Promise.reject(config)
@@ -35,7 +36,7 @@ module.exports = (vm) => {
 
     // 响应拦截
     uni.$u.http.interceptors.response.use((response) => { /* 对响应成功做点什么 可使用async await 做异步操作*/
-        // console.log('[DEBUG] [response interceptor] response from server: ', response)
+        // console.debug('[response interceptor] response from server: ', response)
         const responseFromServer = response.data
 
         // 自定义参数

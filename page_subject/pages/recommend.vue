@@ -40,64 +40,6 @@
 		</view>
 
 		<view class="loading-text">hoops 没有更多啦 ┑(￣▽ ￣)┍</view>
-
-		<!-- <u--image src="/page_subject/static/recommend-draw-btn.png" shape="circle" width="300rpx" height="300rpx"
-			@click="drawBtnOnclick"></u--image> -->
-
-		<!-- 
-		<view class="demo-uni-row">
-			<uni-row width=730>
-				<uni-col :span="11">
-					<u-button color="#D082A2" type="primary" size="normal" text="  生成内推链接  "
-						openType="share"></u-button>
-				</uni-col>
-				<uni-col :span="2">
-					<view class="demo-uni-col"></view>
-				</uni-col>
-				<uni-col :span="11">
-					<u-button color="#D082A2" type="primary" size="normal" text=" 上期幸运儿  "
-						@click="showPrizeResultBtnOnClick" />
-				</uni-col>
-			</uni-row>
-		</view>
-
-		<scroll-view scroll-y="true" class="scroll-Y" scroll-top=0>
-			<text class="centerAlign" style=" color:#D082A2">内推记录</text>
-			<view class="row" v-for="(user, index) in recommendUserList" :key="index">
-				<uni-list-chat :avatar-circle="false" :title="user.nickname" :avatar="user.avatar_url"
-					:note="joinCampusAndMajorInfo(user.campus, user.major)" :time="parseUserRole(user.role)">
-				</uni-list-chat>
-			</view>
-		</scroll-view> -->
-
-		<!-- <modal v-if="showPop" :title="showPopTitle" content="收款人需与账号一致" confirm-text="冲鸭" cancel-text="再等等"
-			@cancel="showPop = false" @confirm="confirmDrawPrize">
-			<input type='text' placeholder="收款支付宝账号" v-model="bankAccount" />
-			<input type='text' placeholder="支付宝收款人" v-model="payee" />
-		</modal> -->
-
-		<!-- <text>内推记录</text>
-		<scroll-view scroll-y="true" class="scroll-Y" scroll-top=0>
-			<view class="row" v-for="(user, index) in recommendUserList" :key="index">
-				<uni-list-chat :avatar-circle="false" :title="user.nickname" :avatar="user.avatar_url"
-					:note="joinCampusAndMajorInfo(user.campus, user.major)" :time="parseUserRole(user.role)">
-				</uni-list-chat>
-			</view>
-		</scroll-view>
-
-		<button open-type="share" type="primary" size="normal">生成内推链接</button>
-		<u--image src="/page_subject/static/recommend-draw-btn.png" shape="circle" width="200rpx" height="200rpx"
-			@click="drawBtnOnclick"></u--image>
-
-		<uni-notice-bar text="点击查看幸运儿名单" @click="showPrizeResultBtnOnClick" />
-		<uni-notice-bar v-if="recommendRule" @getmore="showRecommendRule" showGetMore moreText="点击查看内推规则"
-			class="bottom-notice-bar" single text=" " />
-
-		<modal v-if="showPop" title="参与抽奖后本轮内推会清空噢, 内推数越多中奖几率越大哈^ ^" confirm-text="冲鸭" cancel-text="再等等"
-			@cancel="showPop = false" @confirm="confirmDrawPrize">
-			<input type='text' placeholder="输入邮箱接收抽奖结果" v-model="payee" />
-			<input type='text' placeholder="收款支付宝账号" v-model="bankAccount" />
-		</modal> -->
 	</view>
 </template>
 
