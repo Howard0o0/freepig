@@ -211,6 +211,15 @@ export const getUserGoodsList = (userID, pageIndex, pageSize) => uni.$u.http.get
     }
 })
 
+export const getGoodsByID = (id) => uni.$u.http.get('/goods/by-id', {
+    header: {
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
+    },
+    params: {
+        'id': id,
+    }
+})
+
 export const getPrizeUserList = () => uni.$u.http.get('/activity/recommend/prize-list', {
     header: {
         'Content-Type': 'application/x-www-form-urlencoded', 'Token': store.state.vuex_token,
@@ -466,4 +475,5 @@ export const api = {
     getArticle,
     readArticle,
     postArticle,
+    getGoodsByID,
 }

@@ -91,9 +91,6 @@ export default {
 		},
 
 		modifyGoodsBtnOnClick(goods) {
-			// getApp().globalData.selectedGoodsToModify = goods
-			// uni.navigateTo({ url: '/page_subject/pages/modify_goods' })
-
 			let item = JSON.stringify(goods);
 			uni.navigateTo({ url: '/page_subject/pages/publish_goods?goods=' + item })
 		},

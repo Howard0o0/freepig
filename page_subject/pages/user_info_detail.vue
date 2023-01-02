@@ -208,6 +208,7 @@ export default {
 				goods_images: goods.images,
 				campus: this.userInfo.campus,
 				major: this.userInfo.major,
+				goods_id: goods.id,
 			}
 			uni.navigateTo({
 				url: '/page_subject/pages/goods_detail'

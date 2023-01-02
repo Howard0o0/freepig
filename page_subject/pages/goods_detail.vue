@@ -19,7 +19,7 @@
                     size="small" :plain="true" text="编辑" @click="editGoodsOnClick" />
             </view>
         </view>
-        <textarea :value="selectedGoodsToShowInDetail.goods_description" disabled="true" auto-height="true"></textarea>
+        <text class="uni-body">{{ selectedGoodsToShowInDetail.goods_description }}</text>
         <view style="margin-top: 30rpx;">
             <telPic :imageArr="swipImages" :lineNum="3" :spacingNumber="5"></telPic>
         </view>
@@ -63,6 +63,17 @@ export default {
     onShow() {
     },
     methods: {
+
+        async editGoodsOnClick() {
+            console.debug("editGoodsOnClick: ", this.selectedGoodsToShowInDetail.goods_id)
+            uni.showLoading({})
+            console.debug("goods id: ", parseInt(this.selectedGoodsToShowInDetail.goods_id))
+            const resp = await api.getGoodsByID(parseInt(this.selectedGoodsToShowInDetail.goods_id))
+            uni.hideLoading()
+            if (resp.code != api.SUCCESS_CODE) { return; }
+            let item = JSON.stringify(resp.data);
+            uni.navigateTo({ url: '/page_subject/pages/publish_goods?goods=' + item })
+        },
 
         async sendMessageBtnOnClick() {
             uni.showLoading({
