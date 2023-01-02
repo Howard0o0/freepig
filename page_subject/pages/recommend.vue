@@ -7,8 +7,8 @@
 				<view style=" font-weight:700">专属邀请码</view>
 				<view style=" margin-top:30rpx"></view>
 				<text user-select="true" style="color: #fbb462; font-weight:700" @click="recommendCodeOnClick">{{
-						recommendCode
-				}}</text>
+		recommendCode
+}}</text>
 				<view style=" margin-top:30rpx"></view>
 				<view class="invite-btn">
 					<u-button shape="circle" color="#ffda45" type="primary" size="normal" text="邀请好友"
@@ -110,6 +110,17 @@ export default {
 		}
 		return {
 			title: '高校出闲置 上兜兜 新人领红包',
+			path: '/pages/index/index?recommend-code=' + this.$store.state.vuex_user.wx_open_id,
+			imageUrl: '/page_subject/static/activity_bg_for_new_user.png',
+		}
+	},
+
+	// TODO 分享朋友圈领红包
+	onShareTimeline() {
+		//这里我是直接调取的接口
+		console.debug("sharing to friend-circle")
+		return {
+			title: "兜兜 | 看校园新鲜事·扩列新同学",
 			path: '/pages/index/index?recommend-code=' + this.$store.state.vuex_user.wx_open_id,
 			imageUrl: '/page_subject/static/activity_bg_for_new_user.png',
 		}

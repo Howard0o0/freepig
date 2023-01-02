@@ -4,7 +4,6 @@
             <u-back-top :scroll-top="scrollTop"></u-back-top>
         </view>
 
-
         <view v-for="(article) in articleList" :key="article.id">
             <uni-card :title="article.username" :sub-title="generatePostDesc(article)" extra=" "
                 :thumbnail="article.user_avatar" @click="toUserHomePage(article.user_id)">
