@@ -177,6 +177,7 @@ export default {
 			if (resp.code != api.SUCCESS_CODE) { return; }
 
 			let article = resp.data
+			article.scrollToCommentID = comment.id
 			this.articleOnClick(article)
 		},
 

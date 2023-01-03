@@ -75,6 +75,7 @@ export default {
 
         this.article = JSON.parse(options.article);
         console.debug('article detail: ', this.article)
+        let scrollToCommentID = this.article.scrollToCommentID
 
         uni.showLoading({})
         const resp = await api.getArticle(this.article.id)
@@ -91,12 +92,19 @@ export default {
 
         this.commentData.readNumer = this.article.read_num
         api.readArticle(parseInt(this.article.id))
-        this.reloadComment()
+        await this.reloadComment()
 
         uni.onUserCaptureScreen(function () {
             console.debug("onUserCaptureScreen")
             this.shareBtnOnClick()
         });
+
+        console.debug("scrolling to comment ", scrollToCommentID)
+        if (scrollToCommentID) {
+            this.$refs.hbComment.scrollToComment(scrollToCommentID)
+            console.debug("scrolled to comment ", scrollToCommentID)
+        }
+
     },
 
     // async onShareAppMessage(res) {
