@@ -206,7 +206,7 @@
                     "path": "pages/article_detail",
                     "style": {
                         "navigationBarTitleText": "",
-                        "enablePullDownRefresh": false
+                        "onReachBottomDistance": 120
                     }
                 },
                 {

@@ -133,8 +133,9 @@
 						<view class="btn-click" @click="add">发布</view>
 					</view>
 				</view>
-				<textarea class="textarea" v-model="commentReq.content" :placeholder="placeholder"="blur"
-					@focus="focusOn" :focus="focus" maxlength="800"></textarea>
+				<textarea class="textarea" v-model="commentReq.content" :placeholder="placeholder"
+					:adjust-position="false" :show-confirm-bar="false" @blur="blur" @focus="focusOn" :focus="focus"
+					maxlength="800"></textarea>
 			</view>
 		</view>
 		<!-- 新增评论-end -->

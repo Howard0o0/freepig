@@ -25,6 +25,8 @@
             :deleteTip="'确认删除？'" :cmData="commentData" v-if="commentData"></hb-comment>
 
         <l-painter ref="painter" custom-style="position: fixed; left: 200%" />
+        <view class="loading-text">{{ loadingText }}</view>
+        <view >.</view>
 
     </view>
 </template>
@@ -64,10 +66,15 @@ export default {
                 "comment": [],
             },
 
-            commentsFromServer: {
-                "readNumber": 0,
-                "commentList": []
-            },
+            commentsFromServer: [],
+
+            TEXT_NO_MORE: "hoops 木有更多啦",
+            TEXT_LOADING: "正在加载...",
+            loadingText: "",
+            noMoreComment: false,
+
+            currPageIndex: 0,
+            PAGE_SIZE: 5,
         }
     },
 
@@ -121,6 +128,22 @@ export default {
     //     }
     // },
 
+    //上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
+    async onReachBottom() {
+        console.debug("onReachBottom")
+        uni.showLoading({
+            title: '加载中',
+        });
+        await this.reloadComment()
+        uni.hideLoading()
+        if (this.noMoreComment) {
+            this.loadingText = this.TEXT_NO_MORE;
+            return false;
+        } else {
+            this.loadingText = this.TEXT_LOADING;
+        }
+    },
+
     methods: {
         focusOn() {
 
@@ -137,19 +160,23 @@ export default {
         },
 
         async reloadComment() {
-            const resp = await api.getArticleCommentList(parseInt(this.article.id))
+            const resp = await api.getArticleCommentList(parseInt(this.article.id), this.currPageIndex, this.PAGE_SIZE)
             if (resp.code != api.SUCCESS_CODE) { return; }
-            console.debug("article comment list: ", resp.data)
-            this.commentsFromServer = {
-                commentList: resp.data,
-                readNumber: this.article.read_num,
+            let commentListFromServer = resp.data
+            if (commentListFromServer.commentSize < this.PAGE_SIZE) { this.noMoreComment = true }
+            console.debug("article comment list: ", commentListFromServer)
+            for (let i = 0; i < commentListFromServer.length; i++) {
+                commentListFromServer[i].createTime = utils.timeFormatToNAgo(commentListFromServer[i].createTime)
+                for (let j in commentListFromServer[i].children) {
+                    commentListFromServer[i].children[j].createTime = utils.timeFormatToNAgo(commentListFromServer[i].children[j])
+                }
             }
-            for (let i = 0; i < this.commentsFromServer.commentList.length; i++) {
-                this.commentsFromServer.commentList[i].createTime = utils.timeFormatToNAgo(this.commentsFromServer.commentList[i].createTime)
-            }
-            this.commentData.commentSize = this.commentsFromServer.commentList.length
-            this.commentData.comment = this.getTree(this.commentsFromServer.commentList)
 
+            this.commentData.commentSize += commentListFromServer.commentSize
+            this.commentData.comment.push(...commentListFromServer.commentData)
+
+            console.debug("this.commentData.comment: ", this.commentData.comment)
+            this.currPageIndex++
         },
 
         async publishComment(e) {
