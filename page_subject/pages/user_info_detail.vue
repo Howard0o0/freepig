@@ -91,7 +91,7 @@
 		</view>
 
 		<view v-if="currTabIndex == LIKE_TAB_INDEX">
-			<view v-for="(like) in likeArticleList" :key="like.id">
+			<view v-for="(like) in articleLikeList" :key="like.id">
 				<div class="box" style="margin-right: 3rpx;">
 					<div class="comment" @click="articleLikeOnClick(like)">
 						<u-avatar :src="userInfo.avatar_url" shape="circle" />
@@ -109,7 +109,7 @@
 			</view>
 		</view>
 		<view v-if="currTabIndex == LIKE_TAB_INDEX">
-			<view v-for="(like) in likeArticleList" :key="like.id">
+			<view v-for="(like) in commentLikeList" :key="like.id">
 				<div class="box" style="margin-right: 3rpx;">
 					<div class="comment" @click="commentLikeOnClick(like)">
 						<u-avatar :src="userInfo.avatar_url" shape="circle" />
@@ -118,7 +118,7 @@
 								<text style="font-weight: bold;">{{ userInfo.nickname }}</text>
 								<text>·{{ generateReadableCommentTime(like) }}</text>
 							</view>
-							<text>赞了这个帖子</text>
+							<text>赞了这个评论</text>
 						</view>
 						<div class="comment-right-block"> <u--text :lines="3" color="#707980"
 								:text="like.comment_content" size="10" /> </div>
@@ -167,8 +167,8 @@ export default {
 			articleList: [],
 			goodsList: [],
 			commentList: [],
-			likeArticleList: [],
-			likeCommentList: [],
+			articleLikeList: [],
+			commentLikeList: [],
 
 			TEXT_NO_MORE: "hoops 木有更多啦",
 			TEXT_LOADING: "正在加载...",
@@ -711,7 +711,7 @@ export default {
 	display: flex;
 	align-items: flex-start;
 	flex-direction: column;
-	width: 60%;
+	width: 450rpx;
 	height: 180rpx;
 	padding: 0;
 
@@ -722,7 +722,7 @@ export default {
 }
 
 .comment-right-block {
-	width: 20%;
+	width: 150rpx;
 	height: 100%;
 }
 
