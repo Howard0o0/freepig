@@ -26,8 +26,9 @@
 
         <l-painter ref="painter" custom-style="position: fixed; left: 200%" />
         <view class="loading-text">{{ loadingText }}</view>
-        <view >.</view>
+        <view>.</view>
 
+        <add-tip tip="点击「添加小程序」下次访问不迷路" duration="5" />
     </view>
 </template>
 
@@ -36,6 +37,7 @@
 import { api } from '../../config/api.js';
 import { utils } from '../../common/common.js';
 import { telPic } from "@/components/tel-pic/tel-pic.vue"
+import addTip from "@/wxcomponents/struggler-uniapp-add-tip/struggler-uniapp-add-tip.vue"
 
 import {
     mapMutations
@@ -43,7 +45,8 @@ import {
 
 export default {
     components: {
-        telPic
+        telPic,
+        addTip
     },
     data() {
         return {
@@ -175,7 +178,7 @@ export default {
             this.commentData.commentSize = commentListFromServer.commentSize
             for (let i in commentListFromServer.commentData) {
                 let comment = commentListFromServer.commentData[i]
-                if(comment.id in this.loadedRootCommentIDSet) { continue; }
+                if (comment.id in this.loadedRootCommentIDSet) { continue; }
                 this.commentData.comment.push(comment)
                 this.loadedRootCommentIDSet[comment.id] = true;
             }
