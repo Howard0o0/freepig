@@ -51,7 +51,7 @@ export default {
 			tagList: [],
 			selectedTagID: -1,
 			price: "",
-			goodsID: "",
+			goodsID: "0",
 			MAX_IMAGE_SIZE_BYTE: (20 << 20),
 		}
 	},
@@ -76,10 +76,10 @@ export default {
 				this.isModifyGoodsMode = false;
 				console.log('[DEBUG] publish goods')
 
-				// get uuid from server and set it as goods_id
-				var resp = await api.getUUID()
-				this.goodsID = resp.data
-				console.log("[DEBUG] goodsID: ", this.goodsID)
+				// // get uuid from server and set it as goods_id
+				// var resp = await api.getUUID()
+				// this.goodsID = resp.data
+				// console.log("[DEBUG] goodsID: ", this.goodsID)
 			}
 
 		},
