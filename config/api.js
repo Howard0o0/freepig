@@ -379,6 +379,28 @@ export const getArticleCommentListByUser = (userID, pageIndex, pageSize) => uni.
     }
 })
 
+export const getArticleLikeListByUser = (userID, pageIndex, pageSize) => uni.$u.http.get('article/like-article/by-user', {
+    header: {
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
+    },
+    params: {
+        user_id: userID,
+        page_index: pageIndex,
+        page_size: pageSize,
+    }
+})
+
+export const getCommentLikeListByUser = (userID, pageIndex, pageSize) => uni.$u.http.get('article/like-comment/by-user', {
+    header: {
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
+    },
+    params: {
+        user_id: userID,
+        page_index: pageIndex,
+        page_size: pageSize,
+    }
+})
+
 export const getArticle = (articleID) => uni.$u.http.get('article/by-id', {
     header: {
         'Content-Type': 'application/json', 'Token': store.state.vuex_token,
@@ -491,4 +513,6 @@ export const api = {
     postArticle,
     getGoodsByID,
     getArticleCommentListByUser,
+    getArticleLikeListByUser,
+    getCommentLikeListByUser,
 }

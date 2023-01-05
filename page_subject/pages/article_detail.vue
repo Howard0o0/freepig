@@ -168,10 +168,10 @@ export default {
             let commentListFromServer = resp.data
             if (commentListFromServer.commentSize < this.PAGE_SIZE) { this.noMoreComment = true }
             console.debug("article comment list: ", commentListFromServer)
-            for (let i = 0; i < commentListFromServer.length; i++) {
-                commentListFromServer[i].createTime = utils.timeFormatToNAgo(commentListFromServer[i].createTime)
-                for (let j in commentListFromServer[i].children) {
-                    commentListFromServer[i].children[j].createTime = utils.timeFormatToNAgo(commentListFromServer[i].children[j])
+            for (let i = 0; i < commentListFromServer.commentData.length; i++) {
+                commentListFromServer.commentData[i].createTime = utils.timeFormatToNAgo(commentListFromServer.commentData[i].createTime)
+                for (let j in commentListFromServer.commentData[i].children) {
+                    commentListFromServer.commentData[i].children[j].createTime = utils.timeFormatToNAgo(commentListFromServer.commentData[i].children[j].createTime)
                 }
             }
 

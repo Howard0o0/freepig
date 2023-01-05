@@ -90,6 +90,43 @@
 			</view>
 		</view>
 
+		<view v-if="currTabIndex == LIKE_TAB_INDEX">
+			<view v-for="(like) in likeArticleList" :key="like.id">
+				<div class="box" style="margin-right: 3rpx;">
+					<div class="comment" @click="articleLikeOnClick(like)">
+						<u-avatar :src="userInfo.avatar_url" shape="circle" />
+						<view class="comment-center-block">
+							<view class="flex-row">
+								<text style="font-weight: bold;">{{ userInfo.nickname }}</text>
+								<text>·{{ generateReadableCommentTime(like) }}</text>
+							</view>
+							<text>赞了这个帖子</text>
+						</view>
+						<div class="comment-right-block"> <u--text :lines="3" color="#707980"
+								:text="like.article_content" size="10" /> </div>
+					</div>
+				</div>
+			</view>
+		</view>
+		<view v-if="currTabIndex == LIKE_TAB_INDEX">
+			<view v-for="(like) in likeArticleList" :key="like.id">
+				<div class="box" style="margin-right: 3rpx;">
+					<div class="comment" @click="commentLikeOnClick(like)">
+						<u-avatar :src="userInfo.avatar_url" shape="circle" />
+						<view class="comment-center-block">
+							<view class="flex-row">
+								<text style="font-weight: bold;">{{ userInfo.nickname }}</text>
+								<text>·{{ generateReadableCommentTime(like) }}</text>
+							</view>
+							<text>赞了这个帖子</text>
+						</view>
+						<div class="comment-right-block"> <u--text :lines="3" color="#707980"
+								:text="like.comment_content" size="10" /> </div>
+					</div>
+				</div>
+			</view>
+		</view>
+
 		<view class="loading-text">{{ loadingText }}</view>
 		<view>.</view>
 	</view>
@@ -130,6 +167,8 @@ export default {
 			articleList: [],
 			goodsList: [],
 			commentList: [],
+			likeArticleList: [],
+			likeCommentList: [],
 
 			TEXT_NO_MORE: "hoops 木有更多啦",
 			TEXT_LOADING: "正在加载...",
@@ -175,6 +214,29 @@ export default {
 	},
 
 	methods: {
+		async articleLikeOnClick(like) {
+			console.debug("articleLikeOnClick: ", like)
+			uni.showLoading({})
+			const resp = await api.getArticle(like.article_id)
+			uni.hideLoading()
+			if (resp.code != api.SUCCESS_CODE) { return; }
+
+			let article = resp.data
+			this.articleOnClick(article)
+		},
+
+		async commentLikeOnClick(like) {
+			console.debug("commentLikeOnClick: ", like)
+			uni.showLoading({})
+			const resp = await api.getArticle(like.article_id)
+			uni.hideLoading()
+			if (resp.code != api.SUCCESS_CODE) { return; }
+
+			let article = resp.data
+			article.scrollToCommentID = like.comment_id
+			this.articleOnClick(article)
+		},
+
 		async commentOnClick(comment) {
 			console.debug("commentOnClick: ", comment)
 			uni.showLoading({})
@@ -269,6 +331,7 @@ export default {
 				case this.ARTICLE_TAB_INDEX:
 					this.reloadUserArticle()
 					break;
+
 				case this.GOODS_TAB_INDEX:
 					this.reloadUserGoods()
 					break;
@@ -276,6 +339,12 @@ export default {
 				case this.COMMENT_TAB_INDEX:
 					this.reloadUserArticleComment()
 					break;
+
+				case this.LIKE_TAB_INDEX:
+					this.reloadUserLike()
+					break;
+
+
 				default:
 					break;
 			}
@@ -285,6 +354,8 @@ export default {
 			this.currPageIndex = 0
 			this.articleList = []
 			this.goodsList = []
+			this.articleLikeList = []
+			this.commentLikeList = []
 			this.reloadList(index)
 		},
 
@@ -328,6 +399,33 @@ export default {
 			if (resp.code != api.SUCCESS_CODE) { return }
 			uni.$u.toast("宝贝上架成功")
 			this.setGoodsStatus(goodsId, true)
+		},
+
+		async reloadUserLike(){
+			uni.showLoading({})
+			const resp1 = await api.getArticleLikeListByUser(this.userInfo.id, this.currPageIndex, this.PAGE_SIZE)
+			uni.hideLoading()
+			if (resp1.code != api.SUCCESS_CODE) { return; }
+
+			let articleLikeList = resp1.data
+			console.debug("fetched articleLikeList: ", articleLikeList)
+			this.articleLikeList.push(...articleLikeList)
+			console.debug("articleLikeList: ", this.articleLikeList)
+
+			uni.showLoading({})
+			const resp2 = await api.getCommentLikeListByUser(this.userInfo.id, this.currPageIndex, this.PAGE_SIZE)
+			uni.hideLoading()
+			if (resp2.code != api.SUCCESS_CODE) { return; }
+
+			let commentLikeList = resp2.data
+			console.debug("fetched commentLikeList: ", commentLikeList)
+			this.commentLikeList.push(...commentLikeList)
+			console.debug("commentLikeList: ", this.commentLikeList)
+
+			if (articleLikeList.length < this.PAGE_SIZE && commentLikeList.length < this.PAGE_SIZE) {
+				this.loadingText = this.TEXT_NO_MORE
+			}
+			this.currPageIndex++
 		},
 
 		async reloadUserArticleComment() {
