@@ -28,7 +28,7 @@
 			<view class="comment-box" v-for="(item, index) in commentData.comment" :key="item.id">
 				<view class="comment-box-item">
 					<view>
-						<image :src="item.avatarUrl || emptyAvatar" mode="aspectFill" class="avatar"></image>
+						<image :src="item.avatarUrl || emptyAvatar" mode="aspectFill" class="avatar" @click="avatarOnClick(item.userId)" ></image>
 					</view>
 					<view class="comment-main" :id="generateCommentID(item.id)">
 						<!-- 父评论体-start -->
@@ -258,6 +258,10 @@ export default {
 		// 点赞评论
 		like(comment) {
 			this.$emit('like', comment);
+		},
+		// 点击用户头像
+		avatarOnClick(userID) {
+			this.$emit('avatarOnClick', userID);
 		},
 		// 新增完成
 		addComplete() {

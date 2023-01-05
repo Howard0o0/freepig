@@ -21,7 +21,7 @@
             </view>
         </uni-card>
 
-        <hb-comment ref="hbComment" @add="publishComment" @del="del" @like="likeCommentOnClick" @focusOn="focusOn"
+        <hb-comment ref="hbComment" @add="publishComment" @del="del" @like="likeCommentOnClick" @avatarOnClick="avatarOnClick" @focusOn="focusOn"
             :deleteTip="'确认删除？'" :cmData="commentData" v-if="commentData"></hb-comment>
 
         <l-painter ref="painter" custom-style="position: fixed; left: 200%" />
@@ -462,6 +462,11 @@ export default {
             this.likeBtnColor = "#ff0000"
             this.article.like_num += 1
             this.article.has_like = true
+        },
+
+        avatarOnClick(userID) {
+            console.debug("avatarOnClick, userID: " + userID)
+            this.toUserHomePage(userID)
         },
 
         async likeCommentOnClick(comment) {
