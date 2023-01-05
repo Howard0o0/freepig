@@ -356,7 +356,7 @@ export const postArticleComment = (articleID, content, parentID) => uni.$u.http.
     }
 })
 
-export const getArticleCommentList = (articleID, pageIndex, pageSize) => uni.$u.http.get('article/comment', {
+export const getArticleCommentList = (articleID, pageIndex, pageSize, mustIncludeCommentID = null) => uni.$u.http.get('article/comment', {
     header: {
         'Content-Type': 'application/json', 'Token': store.state.vuex_token,
     },
@@ -364,6 +364,7 @@ export const getArticleCommentList = (articleID, pageIndex, pageSize) => uni.$u.
         article_id: articleID,
         page_index: pageIndex,
         page_size: pageSize,
+        must_include_comment_id: mustIncludeCommentID,
     }
 })
 

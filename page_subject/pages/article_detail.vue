@@ -66,7 +66,7 @@ export default {
                 "comment": [],
             },
 
-            commentsFromServer: [],
+            loadedRootCommentIDSet: {},
 
             TEXT_NO_MORE: "hoops 木有更多啦",
             TEXT_LOADING: "正在加载...",
@@ -99,7 +99,7 @@ export default {
 
         this.commentData.readNumer = this.article.read_num
         api.readArticle(parseInt(this.article.id))
-        await this.reloadComment()
+        await this.reloadComment(scrollToCommentID)
 
         uni.onUserCaptureScreen(function () {
             console.debug("onUserCaptureScreen")
@@ -159,8 +159,8 @@ export default {
             });
         },
 
-        async reloadComment() {
-            const resp = await api.getArticleCommentList(parseInt(this.article.id), this.currPageIndex, this.PAGE_SIZE)
+        async reloadComment(mustIncludeCommentID = null) {
+            const resp = await api.getArticleCommentList(parseInt(this.article.id), this.currPageIndex, this.PAGE_SIZE, mustIncludeCommentID)
             if (resp.code != api.SUCCESS_CODE) { return; }
             let commentListFromServer = resp.data
             if (commentListFromServer.commentSize < this.PAGE_SIZE) { this.noMoreComment = true }
@@ -172,8 +172,13 @@ export default {
                 }
             }
 
-            this.commentData.commentSize += commentListFromServer.commentSize
-            this.commentData.comment.push(...commentListFromServer.commentData)
+            this.commentData.commentSize = commentListFromServer.commentSize
+            for (let i in commentListFromServer.commentData) {
+                let comment = commentListFromServer.commentData[i]
+                if(comment.id in this.loadedRootCommentIDSet) { continue; }
+                this.commentData.comment.push(comment)
+                this.loadedRootCommentIDSet[comment.id] = true;
+            }
 
             console.debug("this.commentData.comment: ", this.commentData.comment)
             this.currPageIndex++
