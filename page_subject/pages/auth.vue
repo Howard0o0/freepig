@@ -7,10 +7,10 @@
         </lyg-popup>
 
         <u--form labelPosition="left" :model="formData">
-            <u-form-item label="真实姓名" labelWidth="80" borderBottom>
+            <!-- <u-form-item label="真实姓名" labelWidth="80" borderBottom>
                 <u--input v-model="formData.realname" placeholder="仅用于身份认证" inputAlign="center" border="none">
                 </u--input>
-            </u-form-item>
+            </u-form-item> -->
             <u-form-item label="学校" labelWidth="80" borderBottom>
                 <u--text :text="formData.selectedCampus.name" align="center" @click="pickCampusOnClick"></u--text>
             </u-form-item>
@@ -71,7 +71,7 @@ export default {
     data() {
         return {
             formData: {
-                realname: "",
+                realname: ".",
                 selectedCampus: {
                     id: 0,
                     name: "请选择学校"
