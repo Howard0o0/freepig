@@ -41,8 +41,8 @@ export default {
 					text: "身份认证",
 				},
 				{
-					icon: "/static/mine/grid-mygoods.png",
-					text: "我的宝贝",
+					icon: "/static/mine/grid-homepage.png",
+					text: "我的主页",
 				},
 				{
 					icon: "/static/mine/grid-contact-us.png",
@@ -149,7 +149,7 @@ export default {
 					break
 				case 1:
 					console.log("jumping to mygoods page")
-					uni.navigateTo({ url: '/page_subject/pages/my_goods' })
+					utils.toUserHomePage(store.state.vuex_user.id)
 					break
 				case 2:
 					console.log("jumping to contact-us page")

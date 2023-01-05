@@ -159,6 +159,12 @@ function getFirstImage(imageURLs) {
     return tokens[0]
 }
 
+function toUserHomePage(userID) {
+    uni.navigateTo({
+        url: '/page_subject/pages/user_info_detail?user_id=' + userID
+    });
+}
+
 function timeFormatToNAgo(gmtTime) {
     var date = new Date(gmtTime);
     let ts = date.getTime()
@@ -176,6 +182,7 @@ export default {
     promiseRequestSubscribeMessage,
     timeFormatToNAgo,
     getFirstImage,
+    toUserHomePage,
 }
 
 export const utils = {
@@ -189,4 +196,5 @@ export const utils = {
     promiseRequestSubscribeMessage,
     timeFormatToNAgo,
     getFirstImage,
+    toUserHomePage,
 }

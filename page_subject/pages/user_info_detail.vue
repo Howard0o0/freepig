@@ -101,6 +101,7 @@ import { utils } from '../../common/common.js';
 import { api } from '../../config/api.js';
 import HmGoodsCard from '@/components/hm-goods-card/index.vue'
 import { telPic } from "@/components/tel-pic/tel-pic.vue"
+import store from '@/store/index.js';
 import {
 	mapState
 } from "vuex";
@@ -139,6 +140,11 @@ export default {
 	async onLoad(options) {
 		console.debug("user_id: ", options.user_id)
 		this.userID = options.user_id
+		if (this.userID == store.state.vuex_user.id) {
+			for (let i in this.tabNameList) {
+				this.tabNameList[i] = this.tabNameList[i].replace("Ta", "我")
+			}
+		}
 		this.reload()
 	},
 	onShow() {
