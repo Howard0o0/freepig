@@ -146,17 +146,24 @@
                         "enablePullDownRefresh": false
                     }
                 },
-                {
-                    "path": "pages/my_goods",
-                    "style": {
-                        "navigationBarTitleText": "朕的宝贝",
-                        "enablePullDownRefresh": true
-                    }
-                },
+                // {
+                //     "path": "pages/my_goods",
+                //     "style": {
+                //         "navigationBarTitleText": "朕的宝贝",
+                //         "enablePullDownRefresh": true
+                //     }
+                // },
                 {
                     "path": "pages/contact_us",
                     "style": {
                         "navigationBarTitleText": "联系我们",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
+                    "path": "pages/report_offense",
+                    "style": {
+                        "navigationBarTitleText": "举报",
                         "enablePullDownRefresh": false
                     }
                 },

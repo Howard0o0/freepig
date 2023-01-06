@@ -3,13 +3,20 @@
 		<view class="header">
 			<view class="uesr">
 				<image class="bg-img" src="/page_subject/static/userinfo_background.png"></image>
-				<view class="top-xh">
+				<view class="flex-row top-xh" style="justify-content: space-between;">
 					<view class="h2">
 						个人主页
 					</view>
-					<view class="pic">
-						<image src="/page_subject/static/msg.png" style="width: 40rpx;" mode="widthFix"
-							@click="sendMessageBtnOnClick(userInfo.id)"></image>
+					<view class="top-button-row">
+						<view style="width: 90rpx; height: 12rpx;">
+							<u-button type="primary" shape="circle" size="small" :plain="true" text="举报"
+								@click="reportOffenseOnClick(userInfo.id)" color="#ff6633" />
+						</view>
+						<view style="margin-left: 20rpx; padding-left: 20rpx;">
+							<!-- <image src="/page_subject/static/msg.png" style="width: 40rpx;margin-left: 10rpx;"
+								mode="widthFix" @click="sendMessageBtnOnClick(userInfo.id)"></image> -->
+							<u-icon name="chat" size="30" color="#2979ff" @click="sendMessageBtnOnClick(userInfo.id)" />
+						</view>
 					</view>
 				</view>
 				<view class="fot-xh">
@@ -214,6 +221,13 @@ export default {
 	},
 
 	methods: {
+		async reportOffenseOnClick(toUserID) {
+			console.debug("reportOffenseOnClick, toUserID: ", + toUserID)
+			uni.navigateTo({
+				url: '/page_subject/pages/report_offense?to_user_id=' + toUserID
+			});
+		},
+
 		async articleLikeOnClick(like) {
 			console.debug("articleLikeOnClick: ", like)
 			uni.showLoading({})
@@ -401,7 +415,7 @@ export default {
 			this.setGoodsStatus(goodsId, true)
 		},
 
-		async reloadUserLike(){
+		async reloadUserLike() {
 			uni.showLoading({})
 			const resp1 = await api.getArticleLikeListByUser(this.userInfo.id, this.currPageIndex, this.PAGE_SIZE)
 			uni.hideLoading()
@@ -736,5 +750,13 @@ export default {
 	margin-right: 30rpx;
 	height: 194.81rpx;
 	justify-content: space-between;
+}
+
+.top-button-row {
+	float: right;
+	display: flex;
+	justify-content: right;
+	width: 200rpx;
+	padding-right: 2rpx;
 }
 </style>

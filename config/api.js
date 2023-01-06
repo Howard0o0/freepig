@@ -356,6 +356,16 @@ export const postArticleComment = (articleID, content, parentID) => uni.$u.http.
     }
 })
 
+export const reportOffense = (toUserID, text, images) => uni.$u.http.post('user/report-offence', {
+    to_user_id: toUserID,
+    text: text,
+    images: images,
+}, {
+    header: {
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
+    }
+})
+
 export const getArticleCommentList = (articleID, pageIndex, pageSize, mustIncludeCommentID = null) => uni.$u.http.get('article/comment', {
     header: {
         'Content-Type': 'application/json', 'Token': store.state.vuex_token,
@@ -515,4 +525,5 @@ export const api = {
     getArticleCommentListByUser,
     getArticleLikeListByUser,
     getCommentLikeListByUser,
+    reportOffense,
 }
