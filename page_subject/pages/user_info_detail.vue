@@ -7,7 +7,7 @@
 					<view class="h2">
 						个人主页
 					</view>
-					<view class="top-button-row">
+					<view class="top-button-row" v-if="!isOwner">
 						<view style="width: 90rpx; height: 12rpx;">
 							<u-button type="primary" shape="circle" size="small" :plain="true" text="举报"
 								@click="reportOffenseOnClick(userInfo.id)" color="#ff6633" />
@@ -157,6 +157,8 @@ export default {
 	},
 	data() {
 		return {
+			isOwner: false,
+
 			userID: 0,
 			userInfo: null,
 			ARTICLE_TAB_INDEX: 0,
@@ -190,6 +192,7 @@ export default {
 			for (let i in this.tabNameList) {
 				this.tabNameList[i] = this.tabNameList[i].replace("Ta", "我")
 			}
+			this.isOwner = true
 		}
 		this.reload()
 	},
