@@ -13,8 +13,6 @@
 								@click="reportOffenseOnClick(userInfo.id)" color="#ff6633" />
 						</view>
 						<view style="margin-left: 20rpx; padding-left: 20rpx;">
-							<!-- <image src="/page_subject/static/msg.png" style="width: 40rpx;margin-left: 10rpx;"
-								mode="widthFix" @click="sendMessageBtnOnClick(userInfo.id)"></image> -->
 							<u-icon name="chat" size="30" color="#2979ff" @click="sendMessageBtnOnClick(userInfo.id)" />
 						</view>
 					</view>
@@ -278,29 +276,7 @@ export default {
 
 		async sendMessageBtnOnClick(toUserID) {
 			console.debug("sendMessageBtnOnClick: ", toUserID)
-			uni.showLoading({
-				title: '建立会话',
-			});
-			console.log('[DEBUG] create conversation with user ', toUserID)
-			const resp = await api.createConversation(toUserID)
-			if (resp.code != api.SUCCESS_CODE) {
-				uni.showToast({
-					title: '网络好像不太好',
-					icon: "fail",
-					duration: 1000,
-				})
-				return
-			}
-			const conversationID = resp.data.conversation_id
-			console.log('[DEBUG] conversation id created: ', conversationID)
-			this.$store.commit('createConversationActive', {
-				conversationID: conversationID,
-				toUserId: toUserID.toString(),
-			})
-			uni.hideLoading();
-			uni.navigateTo({
-				url: '/page_subject/pages/chat'
-			})
+            utils.gotoChatRoomWithUser(toUserID)
 		},
 
 		getFirstImage(imageURLs) {

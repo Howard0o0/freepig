@@ -1,5 +1,8 @@
 import { api } from '../config/api.js';
 import store from '../store/index.js';
+import {
+	mapState
+} from "vuex";
 
 async function refreshUserInfo() {
     var resp = await api.getUserInfoFromServer()
@@ -171,6 +174,32 @@ function timeFormatToNAgo(gmtTime) {
     return getDateDiff(ts)
 }
 
+async function gotoChatRoomWithUser(toUserID) {
+    uni.showLoading({
+        title: '建立会话',
+    });
+    console.log('[DEBUG] create conversation with user ', toUserID)
+    const resp = await api.createConversation(toUserID)
+    if (resp.code != api.SUCCESS_CODE) {
+        uni.showToast({
+            title: '网络好像不太好',
+            icon: "fail",
+            duration: 1000,
+        })
+        return
+    }
+    const conversationID = resp.data.conversation_id
+    console.log('[DEBUG] conversation id created: ', conversationID)
+    store.commit('createConversationActive', {
+        conversationID: conversationID,
+        toUserId: toUserID.toString(),
+    })
+    uni.hideLoading();
+    uni.navigateTo({
+        url: '/page_subject/pages/chat'
+    })
+}
+
 export default {
     refreshUserInfo,
     interceptUnauthorizedPageCallback,
@@ -183,6 +212,7 @@ export default {
     timeFormatToNAgo,
     getFirstImage,
     toUserHomePage,
+    gotoChatRoomWithUser,
 }
 
 export const utils = {
@@ -197,4 +227,5 @@ export const utils = {
     timeFormatToNAgo,
     getFirstImage,
     toUserHomePage,
+    gotoChatRoomWithUser,
 }

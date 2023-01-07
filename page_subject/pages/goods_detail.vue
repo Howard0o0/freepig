@@ -76,29 +76,8 @@ export default {
         },
 
         async sendMessageBtnOnClick() {
-            uni.showLoading({
-                title: '建立会话',
-            });
-            console.log('[DEBUG] create conversation with user ', this.selectedGoodsToShowInDetail.user_id)
-            const resp = await api.createConversation(this.selectedGoodsToShowInDetail.user_id)
-            if (resp.code != api.SUCCESS_CODE) {
-                uni.showToast({
-                    title: '网络好像不太好',
-                    icon: "fail",
-                    duration: 1000,
-                })
-                return
-            }
-            const conversationID = resp.data.conversation_id
-            console.log('[DEBUG] conversation id created: ', conversationID)
-            this.$store.commit('createConversationActive', {
-                conversationID: conversationID,
-                toUserId: this.selectedGoodsToShowInDetail.user_id.toString(),
-            })
-            uni.hideLoading();
-            uni.navigateTo({
-                url: '/page_subject/pages/chat'
-            })
+            console.debug("sendMessageBtnOnClick")
+            utils.gotoChatRoomWithUser(this.selectedGoodsToShowInDetail.user_id)
         },
 
         imagePreview(imageURL) {

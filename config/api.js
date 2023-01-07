@@ -389,6 +389,14 @@ export const getArticleCommentListByUser = (userID, pageIndex, pageSize) => uni.
     }
 })
 
+export const getAdminUserID = () => uni.$u.http.get('user/admin-userid', {
+    header: {
+        'Content-Type': 'application/json', 'Token': store.state.vuex_token,
+    },
+    params: {
+    }
+})
+
 export const getArticleLikeListByUser = (userID, pageIndex, pageSize) => uni.$u.http.get('article/like-article/by-user', {
     header: {
         'Content-Type': 'application/json', 'Token': store.state.vuex_token,
@@ -526,4 +534,5 @@ export const api = {
     getArticleLikeListByUser,
     getCommentLikeListByUser,
     reportOffense,
+    getAdminUserID, 
 }
