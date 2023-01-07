@@ -199,7 +199,14 @@ export default {
             if (resp.code != api.SUCCESS_CODE) { return; }
             uni.$u.toast("发表评论成功")
             this.$refs.hbComment.addComplete()
-            this.reloadComment()
+
+            this.currPageIndex = 0
+            this.commentData.comment = []
+            this.loadedRootCommentIDSet = {}
+            let newCommentID = resp.data
+            await this.reloadComment(newCommentID)
+            this.$refs.hbComment.scrollToComment(newCommentID)
+            console.debug("scrolled to comment ", newCommentID)
         },
 
         imagePreview(imageURL) {
