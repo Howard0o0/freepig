@@ -97,7 +97,7 @@ export default {
             })
             uni.hideLoading();
             uni.navigateTo({
-                url: '/pages/tim/room'
+                url: '/page_subject/pages/chat'
             })
         },
 

@@ -124,7 +124,7 @@ export default {
 		toRoom(item) {
 			this.$store.commit('updateConversationActive', item)
 			uni.navigateTo({
-				url: '/pages/tim/room'
+				url: '/page_subject/pages/chat'
 			})
 		}
 	},

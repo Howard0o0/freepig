@@ -5,7 +5,7 @@ const whiteList = [
     "/pages/square/square",
     "/pages/index/index",
     "/pages/mine/mine",
-    "/pages/tim/room",
+    "/page_subject/pages/chat",
     "/page_subject/pages/auth",
     "/page_subject/pages/auth_by_certification",
     "/page_subject/pages/auth_by_email",

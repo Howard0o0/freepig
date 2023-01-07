@@ -18,8 +18,8 @@
 				<view class="row" v-for="(item, index) in msgList" :key="index" :id="generateMessageViewID(item.ID)">
 					<!-- 用户消息 -->
 					<view class="centerAlign time" v-if="item.shouldShowTime">{{
-							timeFliter(item.time)
-					}}</view>
+		timeFliter(item.time)
+}}</view>
 					<block>
 						<!-- 自己发出的消息 -->
 						<view class="my" v-if="item.flow == 'out'">
@@ -75,7 +75,7 @@
 			<swiper class="emoji-swiper" :class="{ hidden: hideEmoji }" indicator-dots="true" duration="150">
 				<swiper-item v-for="(page, pid) in emojiList" :key="pid">
 					<view v-for="(em, eid) in page" :key="eid" @tap="addEmoji(em)">
-						<image :src="'/static/img/emoji/' + em.url" mode="aspectFit"></image>
+						<image :src="'/page_subject/static/emoji/' + em.url" mode="aspectFit"></image>
 					</view>
 				</swiper-item>
 			</swiper>
@@ -566,8 +566,8 @@ export default {
 						if (EM.alt == item) {
 							//在线表情路径，图文混排必须使用网络路径，请上传一份表情到你的服务器后再替换此路径 
 							//比如你上传服务器后，你的100.gif路径为https://www.xxx.com/emoji/100.gif 则替换onlinePath填写为https://www.xxx.com/emoji/
-							let onlinePath = 'https://s2.ax1x.com/2019/04/12/'
-							let imgstr = '<img src="' + onlinePath + this.onlineEmoji[EM.url] + '">';
+							let onlinePath = 'https://192.168.14.53/emoji/'
+							let imgstr = '<img src="' + onlinePath + EM.url + '">';
 							console.log("imgstr: " + imgstr);
 							return imgstr;
 						}
