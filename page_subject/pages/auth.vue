@@ -255,7 +255,7 @@ export default {
             var date = new Date();
             var currYear = date.getFullYear();
             var startYear = 2010
-            for (var i = startYear; i <= currYear; i++) {
+            for (var i = currYear; i >= startYear; i--) {
                 kickoffYearList.push({ value: i, text: i })
             }
             this.kickoffYearList = kickoffYearList
