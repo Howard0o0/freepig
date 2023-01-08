@@ -63,7 +63,7 @@ export default {
 			uni.hideLoading()
 			if (resp.code != api.SUCCESS_CODE) {
 				uni.$u.toast("验证失败: " + resp.msg)
-				return 
+				return
 			}
 
 			uni.showToast({
@@ -108,23 +108,30 @@ export default {
 				uni.showLoading({
 					title: '正在获取验证码'
 				})
-				var getEmailVerifyCodeSuccess = false
+				// var getEmailVerifyCodeSuccess = false
 				setTimeout(() => {
-					uni.hideLoading();
-					// 这里此提示会被this.start()方法中的提示覆盖
-					if (getEmailVerifyCodeSuccess) {
-						uni.$u.toast('验证码已发送');
-					} else {
-						uni.$u.toast('获取验证码失败');
-					}
+					// uni.hideLoading();
+					// // 这里此提示会被this.start()方法中的提示覆盖
+					// if (getEmailVerifyCodeSuccess) {
+					// 	uni.$u.toast('验证码已发送');
+					// } else {
+					// 	uni.$u.toast('获取验证码失败');
+					// }
 					// 通知验证码组件内部开始倒计时
 					this.$refs.uCode.start();
 				}, 2000);
+
+				uni.showLoading({
+					title: '正在获取验证码'
+				})
 				var resp = await api.getEmailVerifyCode(this.formData.email)
+				uni.hideLoading();
 				if (resp.code == api.SUCCESS_CODE) {
-					getEmailVerifyCodeSuccess = true
+					// getEmailVerifyCodeSuccess = true
+					uni.$u.toast('验证码已发送');
 				} else {
-					getEmailVerifyCodeSuccess = false
+					// getEmailVerifyCodeSuccess = false
+					uni.$u.toast('获取验证码失败');
 				}
 			} else {
 				uni.$u.toast('等等嘛 太频繁啦');
